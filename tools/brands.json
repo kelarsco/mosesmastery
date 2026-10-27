@@ -1,0 +1,127 @@
+{
+  "categories": {
+    "apparel": "Apparel & Streetwear",
+    "jewelry": "Jewelry",
+    "wellness": "Supplements & Wellness",
+    "skincare": "Skincare",
+    "food": "Food & Drink",
+    "pet": "Pet",
+    "other": "More brands"
+  },
+  "brands": [
+    {
+      "slug": "notoxskinlab",
+      "name": "NOTOX Skin Lab",
+      "url": "https://notoxskinlab.com/",
+      "category": "skincare"
+    },
+    {
+      "slug": "ramblinfeverprovisions",
+      "name": "Ramblin Fever Provisions",
+      "url": "https://ramblinfeverprovisions.com/",
+      "category": "apparel"
+    },
+    {
+      "slug": "d42multiverse-shop",
+      "name": "D42 Multiverse",
+      "url": "https://d42multiverse-shop.com/",
+      "category": "apparel"
+    },
+    {
+      "slug": "weareluxe",
+      "name": "WEARELUXE",
+      "url": "https://weareluxe.shop/",
+      "category": "apparel"
+    },
+    {
+      "slug": "coofandy",
+      "name": "COOFANDY",
+      "url": "https://coofandy.com/",
+      "category": "apparel"
+    },
+    {
+      "slug": "aerosoul",
+      "name": "Aerosoul",
+      "url": "https://aerosoul.co.uk/",
+      "category": "apparel"
+    },
+    {
+      "slug": "urban-ridge",
+      "name": "Urban Ridge",
+      "url": "https://www.urban-ridge.com/",
+      "category": "other"
+    },
+    {
+      "slug": "farmyardfinedining",
+      "name": "Farmyard Fine Dining",
+      "url": "https://farmyardfinedining.com/",
+      "category": "food"
+    },
+    {
+      "slug": "mormelanin",
+      "name": "Mormelanin",
+      "url": "https://www.mormelanin.com/",
+      "category": "other"
+    },
+    {
+      "slug": "mewyoo",
+      "name": "Mewyoo",
+      "url": "https://mewyoo.com/",
+      "category": "pet"
+    },
+    {
+      "slug": "incarnie",
+      "name": "Incarnie",
+      "url": "https://incarnie.com/",
+      "category": "apparel"
+    },
+    {
+      "slug": "ritual",
+      "name": "Ritual",
+      "url": "https://ritual.com/",
+      "category": "wellness"
+    },
+    {
+      "slug": "levels",
+      "name": "Levels",
+      "url": "https://www.levels.com/",
+      "category": "wellness"
+    },
+    {
+      "slug": "drinkag1",
+      "name": "AG1",
+      "url": "https://drinkag1.com/",
+      "category": "wellness"
+    },
+    {
+      "slug": "rosieray",
+      "name": "Rosie Ray",
+      "url": "https://rosieray.com/",
+      "category": "jewelry"
+    },
+    {
+      "slug": "sibellaatelier",
+      "name": "Si'bella Atelier",
+      "url": "https://sibellaatelier.com/",
+      "category": "jewelry"
+    },
+    {
+      "slug": "diamond-land",
+      "name": "Diamond Land",
+      "url": "https://diamond-land.be/",
+      "category": "jewelry"
+    },
+    {
+      "slug": "lushstonez",
+      "name": "LushStonez",
+      "url": "https://www.lushstonez.com/",
+      "category": "jewelry"
+    },
+    {
+      "slug": "mtljewelry",
+      "name": "MTL Jewelry",
+      "url": "https://mtljewelry.com/",
+      "category": "jewelry"
+    }
+  ]
+}

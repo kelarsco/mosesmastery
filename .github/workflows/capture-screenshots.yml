@@ -1,0 +1,23 @@
+name: Capture store screenshots
+on:
+  workflow_dispatch:
+  push:
+    paths: ["tools/brands.json", "tools/capture-screenshots.mjs"]
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm i --no-save playwright && npx playwright install --with-deps chromium
+      - name: Capture (failures are skipped, placeholders stay)
+        run: node tools/capture-screenshots.mjs || true
+      - name: Commit screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add asset/brands/*.jpg || true
+          git diff --cached --quiet || (git commit -m "Add store homepage screenshots" && git push)

@@ -75,6 +75,7 @@ let startX = 0;
 let isDragging = false;
 
 const slider = document.querySelector('.testimonial-slider');
+if (slider) {
 
 slider.addEventListener('mousedown', (e) => {
   startX = e.clientX;
@@ -96,6 +97,7 @@ slider.addEventListener('touchend', (e) => {
   const endX = e.changedTouches[0].clientX;
   handleSwipe(endX - startX);
 });
+}
 
 function handleSwipe(deltaX) {
   if (Math.abs(deltaX) > 50) {
