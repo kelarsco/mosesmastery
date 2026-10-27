@@ -1,0 +1,32 @@
+# Moses Mastery
+
+> Moses Mastery is a Shopify and eCommerce growth studio founded by Moses Daniel. It designs, builds and grows Shopify stores: store design and development, conversion rate optimization (CRO), Meta and Google Ads, eCommerce SEO, brand design and AI automation for online stores.
+
+Website: https://mosesmastery.com/
+Contact: info@mosesecom.com, +1 (581) 809-5630, https://mosesmastery.com/contact.html
+Social: https://www.instagram.com/moses__mastery, https://x.com/moses_mastery, https://pin.it/7k7AHvYYQ, https://t.me/moses_mastery
+
+## Main pages
+- [Home](https://mosesmastery.com/): services, packages and FAQ
+- [Projects](https://mosesmastery.com/projects.html): Shopify stores, analytics dashboards and screen recordings
+- [Contact](https://mosesmastery.com/contact.html): book a strategy call or request a quote
+- [Blog](https://mosesmastery.com/blog/): practical Shopify, CRO, SEO, ads and AI guides
+
+## Services
+- Shopify store design and development, theme customization and redesigns
+- Conversion rate optimization (CRO) and store audits
+- Meta Ads and Google Ads management
+- eCommerce SEO and Google Merchant Center
+- AI automation, AI content and creative, AI chatbots and assistants
+
+## Pricing (starting points, quoted per project)
+- Store Launch packages (one-time): Starter from $500, Growth from $950, Premium from $1,500
+- Growth Marketing packages (monthly, ad spend not included): Launch from $2,000, Accelerate from $6,000, Elite from $10,500
+
+## Blog
+- [Shopify SEO: A Practical Guide](https://mosesmastery.com/blog/shopify-seo-guide/)
+- [Shopify Conversion Rate Optimization: 12 Fixes](https://mosesmastery.com/blog/shopify-conversion-rate-optimization-checklist/)
+- [Meta Ads for Shopify Stores](https://mosesmastery.com/blog/meta-ads-for-shopify-stores/)
+- [AI Automation for Shopify Stores](https://mosesmastery.com/blog/ai-automation-for-shopify-stores/)
+- [Shopify Store Audit Checklist](https://mosesmastery.com/blog/shopify-store-audit-checklist/)
+- [Shopify Redesign vs Optimization](https://mosesmastery.com/blog/shopify-redesign-or-optimize/)
