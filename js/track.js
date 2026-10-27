@@ -26,7 +26,7 @@
       device: device, browser: browser, os: os, w: w, tz: tz || null, utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'), utm_campaign: q.get('utm_campaign'), meta: meta || {} };
     try {
       fetch(C.supabaseUrl.replace(/\/$/, '') + '/rest/v1/events', { method: 'POST', keepalive: true,
-        headers: { apikey: C.supabaseAnonKey, Authorization: 'Bearer ' + C.supabaseAnonKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(body) }).catch(function () {});
+        headers: { apikey: C.supabaseAnonKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(body) }).catch(function () {});
     } catch (_) {}
   }
   window.mmTrack = send;

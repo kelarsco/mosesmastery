@@ -4,7 +4,7 @@
   'use strict';
   var C = window.MM_CONFIG || {}, grid = document.querySelector('.pj-grid');
   if (!grid || !C.supabaseUrl || !C.supabaseAnonKey || !window.fetch) return;
-  var H = { apikey: C.supabaseAnonKey, Authorization: 'Bearer ' + C.supabaseAnonKey };
+  var H = { apikey: C.supabaseAnonKey };
   function safe(u) { return /^(https:\/\/|asset\/)/.test(u || '') ? u : ''; }
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
   function img(src, alt) { var i = el('img'); i.src = src; i.alt = alt || ''; i.loading = 'lazy'; i.decoding = 'async'; return i; }
