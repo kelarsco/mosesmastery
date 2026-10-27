@@ -27,14 +27,14 @@
   }
 
   function isAdmin() {
-    return sb.from('admins').select('email').limit(1).then(function (r) { return !r.error && r.data && r.data.length > 0; });
+    return sb.from('admins').select('email').limit(1).then(function (r) { window.__mmAdminErr = r.error ? (r.error.code + ': ' + r.error.message) : ''; return !r.error && r.data && r.data.length > 0; });
   }
   function showDone(user) {
     form.hidden = true; document.querySelector('.au-tabs').hidden = true;
     $('auDone').hidden = false; $('auTitle').textContent = 'You are signed in.'; $('auSub').textContent = user.email;
     isAdmin().then(function (a) {
       if (a) { $('auDoneText').textContent = 'You have admin access to the analytics dashboard.'; }
-      else { $('auDoneText').textContent = 'Your account is active. It does not have admin access, so there is nothing more to open here.'; $('auGo').hidden = true; }
+      else { $('auDoneText').textContent = 'Your account is active. It does not have admin access, so there is nothing more to open here.' + (window.__mmAdminErr ? ' (Technical detail: ' + window.__mmAdminErr + ')' : ' (Technical detail: the admin list is empty or does not include this email.)'); $('auGo').hidden = true; }
     });
   }
   var recovery = false;
