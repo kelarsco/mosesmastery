@@ -3455,3 +3455,11 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
 .package h3 span { font-weight: inherit; opacity: .85; }
 .package h3 small.pk-bill { display: block; margin-top: .35rem; font: 500 .8rem "Inter", sans-serif; letter-spacing: .02em; opacity: .7; }
 .package-box .pk-note { font: 400 .92rem/1.5 "Inter", sans-serif; opacity: .75; margin: -.3rem 0 1.2rem; max-width: 60ch; }
+
+/* ---- pricing: normal document flow (cards grow with their content, nothing overlaps the FAQ) ---- */
+#price.section { height: auto !important; min-height: 0 !important; padding-bottom: 4rem; }
+#price .main-container { position: static !important; top: auto !important; height: auto !important; margin: 0 auto 1.5rem; padding: 20px 50px; max-width: 1500px; }
+#price .package-box { height: auto !important; min-height: 360px; }
+#price .package-list { height: auto; gap: 1rem 0; }
+@media (max-width: 768px) { #price .main-container { padding: 0 12px; } #price .package-box { min-height: 0; } }
+#price .sec-mini-tit { position: static; padding: 2rem 0 1rem; }
