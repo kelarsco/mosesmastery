@@ -3450,3 +3450,8 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
 .mm-menu-links a.mm-menu-cta:hover { background: #ffd000; color: #111; }
 .mm-menu-auth a { text-decoration-color: #ff5b00; }
 .mm-menu-soc a { color: #ffd000; }
+
+/* ---- pricing cards: price + billing line ---- */
+.package h3 span { font-weight: inherit; opacity: .85; }
+.package h3 small.pk-bill { display: block; margin-top: .35rem; font: 500 .8rem "Inter", sans-serif; letter-spacing: .02em; opacity: .7; }
+.package-box .pk-note { font: 400 .92rem/1.5 "Inter", sans-serif; opacity: .75; margin: -.3rem 0 1.2rem; max-width: 60ch; }
