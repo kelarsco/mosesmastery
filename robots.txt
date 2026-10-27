@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /thankyou.html
+Disallow: /admin.html
+Disallow: /account.html
 Sitemap: https://mosesecom.com/sitemap.xml

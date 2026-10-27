@@ -16,12 +16,6 @@
       "category": "skincare"
     },
     {
-      "slug": "ramblinfeverprovisions",
-      "name": "Ramblin Fever Provisions",
-      "url": "https://ramblinfeverprovisions.com/",
-      "category": "apparel"
-    },
-    {
       "slug": "d42multiverse-shop",
       "name": "D42 Multiverse",
       "url": "https://d42multiverse-shop.com/",
@@ -34,22 +28,10 @@
       "category": "apparel"
     },
     {
-      "slug": "coofandy",
-      "name": "COOFANDY",
-      "url": "https://coofandy.com/",
-      "category": "apparel"
-    },
-    {
       "slug": "aerosoul",
       "name": "Aerosoul",
       "url": "https://aerosoul.co.uk/",
       "category": "apparel"
-    },
-    {
-      "slug": "urban-ridge",
-      "name": "Urban Ridge",
-      "url": "https://www.urban-ridge.com/",
-      "category": "other"
     },
     {
       "slug": "farmyardfinedining",
@@ -82,12 +64,6 @@
       "category": "wellness"
     },
     {
-      "slug": "drinkag1",
-      "name": "AG1",
-      "url": "https://drinkag1.com/",
-      "category": "wellness"
-    },
-    {
       "slug": "rosieray",
       "name": "Rosie Ray",
       "url": "https://rosieray.com/",
@@ -109,12 +85,6 @@
       "slug": "lushstonez",
       "name": "LushStonez",
       "url": "https://www.lushstonez.com/",
-      "category": "jewelry"
-    },
-    {
-      "slug": "mtljewelry",
-      "name": "MTL Jewelry",
-      "url": "https://mtljewelry.com/",
       "category": "jewelry"
     }
   ]

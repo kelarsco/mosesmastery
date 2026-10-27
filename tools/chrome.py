@@ -30,6 +30,7 @@ def header(p, active=""):
       </div>
       <nav class="nav-menu_des" aria-label="Main">{des}</nav>
       <div class="rgt-hd">
+        <a class="hd-sign" href="{p}account.html"><i class="fa-regular fa-user" aria-hidden="true"></i> Sign in</a>
         <div class="hd-cll">
           <a href="{CAL}" rel="noopener" onclick="{CAL_ONCLICK}"><i class="fa-solid fa-circle"><span></span></i> Strategy Call</a>
         </div>
@@ -43,12 +44,13 @@ def header(p, active=""):
   </header>
   <div class="mm-menu" id="mmMenu" aria-hidden="true" role="dialog" aria-label="Site menu">
     <div class="mm-menu-top">
-      <a href="{p}index.html" class="mm-menu-logo" aria-label="Moses Mastery home"><img src="{p}asset/logo.png" alt="" width="256" height="256"><span>Moses Mastery</span></a>
+      <a href="{p}index.html" class="mm-menu-logo" aria-label="Moses Mastery home"><img src="{p}asset/logo-white.png" alt="" width="256" height="256"><span>Moses Mastery</span></a>
       <button type="button" class="mm-menu-close" aria-label="Close menu" onclick="toggleMenu(event)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </div>
     <nav class="mm-menu-links" aria-label="Menu">
       {"".join(f'<a href="{h}"{" class=\"is-active\" aria-current=\"page\"" if k == active else ""} style="--i:{i}">{t}</a>' for i, (t, h, k) in enumerate(links(p)))}
       <a href="{CAL}" class="mm-menu-cta" style="--i:6" onclick="{CAL_ONCLICK}">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      <div class="mm-menu-auth" style="--i:7"><a href="{p}account.html">Sign in</a><span>/</span><a href="{p}account.html?mode=signup">Sign up</a></div>
     </nav>
     <div class="mm-menu-foot">
       <div class="mm-menu-soc">{"".join(f'<a href="{u}" target="_blank" rel="noopener noreferrer" aria-label="{l}">{s}</a>' for l, s, i, u in SOCIALS)}</div>
@@ -79,6 +81,6 @@ def footer(p):
       <nav class="mm-foot-col" aria-label="Services"><h3>Services</h3><ul>{sv}</ul></nav>
       <div class="mm-foot-col mm-foot-book"><h3>Let&rsquo;s talk</h3><p>Have a store to grow? Book a free strategy call.</p><a class="mm-foot-btn" href="{CAL}" onclick="{CAL_ONCLICK}">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
     </div>
-    <div class="mm-foot-bar"><p>&copy; 2026 Moses Mastery. All rights reserved.</p><button type="button" class="mm-totop" aria-label="Back to top" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">Back to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div>
+    <div class="mm-foot-bar"><p>&copy; 2026 Moses Mastery. All rights reserved. <a href="{p}account.html" class="mm-foot-sign">Sign in</a></p><button type="button" class="mm-totop" aria-label="Back to top" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">Back to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div>
   </footer>
   <!-- /mm-footer -->'''

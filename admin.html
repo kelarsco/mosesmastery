@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Dashboard | Moses Mastery</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="asset/favicon-32.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body class="ad-body">
+<div id="adGate" class="ad-gate"><div class="ad-gate-card"><img src="asset/logo.png" alt="" width="56" height="56"><h1>Dashboard</h1><p id="adGateMsg">Checking your session...</p><div class="ad-gate-actions" id="adGateActions"></div></div></div>
+
+<div id="adApp" class="ad-app" hidden>
+  <header class="ad-top">
+    <a class="ad-brand" href="index.html" aria-label="Back to the website"><img src="asset/logo.png" alt="" width="36" height="36"><span>Moses Mastery <em>Dashboard</em></span></a>
+    <div class="ad-top-r">
+      <span class="ad-demo" id="adDemo" hidden>DEMO DATA</span>
+      <span class="ad-user" id="adUser"></span>
+      <button type="button" class="ad-btn ad-ghost" id="adOut">Sign out</button>
+    </div>
+  </header>
+
+  <main class="ad-main">
+    <div class="ad-bar">
+      <div class="ad-bar-l">
+        <label class="ad-sel">Range
+          <select id="adRange"><option value="1">Last 24 hours</option><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option></select>
+        </label>
+        <button type="button" class="ad-btn" id="adRefresh"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>
+        <button type="button" class="ad-btn" id="adCsv"><i class="fa-solid fa-download" aria-hidden="true"></i> Export CSV</button>
+      </div>
+      <div class="ad-bar-r">
+        <button type="button" class="ad-btn" id="adUndo" disabled><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Undo</button>
+        <button type="button" class="ad-btn" id="adRedo" disabled><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Redo</button>
+      </div>
+    </div>
+    <p class="ad-note" id="adNote" role="status" aria-live="polite"></p>
+
+    <section class="ad-kpis" id="adKpis" aria-label="Key numbers"></section>
+
+    <section class="ad-card ad-wide">
+      <div class="ad-card-h"><h2>Traffic over time</h2><div class="ad-legend"><span class="lg-pv">Page views</span><span class="lg-v">Visitors</span></div></div>
+      <div id="adChart" class="ad-chart" role="img" aria-label="Line chart of page views and visitors per day"></div>
+    </section>
+
+    <div class="ad-grid">
+      <section class="ad-card"><div class="ad-card-h"><h2>Top pages</h2></div><div id="adPages"></div></section>
+      <section class="ad-card"><div class="ad-card-h"><h2>Traffic sources</h2></div><div id="adRefs"></div></section>
+      <section class="ad-card"><div class="ad-card-h"><h2>Actions people take</h2></div><div id="adEvents"></div></section>
+      <section class="ad-card"><div class="ad-card-h"><h2>Devices</h2></div><div id="adDevices"></div></section>
+      <section class="ad-card"><div class="ad-card-h"><h2>Browsers</h2></div><div id="adBrowsers"></div></section>
+      <section class="ad-card"><div class="ad-card-h"><h2>Visitor time zones</h2></div><div id="adTz"></div></section>
+    </div>
+
+    <section class="ad-card ad-wide">
+      <div class="ad-card-h">
+        <h2 id="adLogTitle">Latest activity</h2>
+        <div class="ad-card-actions">
+          <button type="button" class="ad-btn ad-sm" id="adTrash" aria-pressed="false"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> <span>Show deleted</span></button>
+          <button type="button" class="ad-btn ad-sm ad-danger" id="adDelSel" disabled>Delete selected</button>
+          <button type="button" class="ad-btn ad-sm ad-danger" id="adDelAll">Delete all in range</button>
+        </div>
+      </div>
+      <div class="ad-table-wrap">
+        <table class="ad-table">
+          <thead><tr><th><input type="checkbox" id="adCheckAll" aria-label="Select all rows"></th><th>Time</th><th>Action</th><th>Page</th><th>Source</th><th>Device</th><th></th></tr></thead>
+          <tbody id="adRows"></tbody>
+        </table>
+      </div>
+      <p class="ad-foot" id="adFoot"></p>
+    </section>
+
+    <section class="ad-card ad-wide">
+      <div class="ad-card-h"><h2>This browser</h2></div>
+      <p class="ad-p">Stop counting your own visits on this device so they don&rsquo;t distort the numbers.</p>
+      <button type="button" class="ad-btn" id="adSelf"></button>
+    </section>
+    <section class="ad-card ad-wide" id="adLogCard" hidden>
+      <div class="ad-card-h"><h2>Admin history</h2></div>
+      <ul class="ad-history" id="adHistory"></ul>
+    </section>
+  </main>
+  <div class="ad-toast" id="adToast" role="status" aria-live="polite" hidden><span id="adToastText"></span><button type="button" id="adToastUndo">Undo</button></div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

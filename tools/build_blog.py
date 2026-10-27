@@ -16,7 +16,7 @@ def W(path, text):
     open(path, "w", encoding="utf8", newline="\n").write(text)
 
 # ---------- 1. shared header / footer on the root pages ----------
-PAGES = {"index.html": "home", "projects.html": "projects", "contact.html": "contact", "thankyou.html": ""}
+PAGES = {"index.html": "home", "projects.html": "projects", "contact.html": "contact", "thankyou.html": "", "account.html": ""}
 for fn, active in PAGES.items():
     p = os.path.join(ROOT, fn); t = open(p, encoding="utf8").read()
     h = header("", active)
@@ -29,6 +29,8 @@ for fn, active in PAGES.items():
         t = re.sub(r"<!-- mm-footer -->.*?<!-- /mm-footer -->", lambda m: f, t, flags=re.S)
     else:
         t, n = re.subn(r'<!-- footer -->.*?<div class="all-right">.*?</div>', lambda m: f, t, count=1, flags=re.S); assert n, fn
+    if fn != "account.html" and "js/track.js" not in t:
+        t = t.replace('<script src="js/index.js"></script>', '<script src="js/config.js"></script>\n<script src="js/track.js"></script>\n<script src="js/index.js"></script>')
     open(p, "w", encoding="utf8", newline="").write(t)
 
 # ---------- 2. blog pages ----------
@@ -80,7 +82,9 @@ def head(title, desc, canon, p, og_img, og_type="website", extra=""):
 def ld(obj): return '  <script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
 ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": "Moses Mastery", "url": SITE + "/", "logo": SITE + "/asset/icon-512.png"}
 PERSON = {"@type": "Person", "@id": SITE + "/#person", "name": "Moses Daniel", "url": SITE + "/", "worksFor": {"@id": SITE + "/#org"}}
-TAIL = '''<script src="%sjs/index.js"></script>
+TAIL = '''<script src="%sjs/config.js"></script>
+<script src="%sjs/track.js"></script>
+<script src="%sjs/index.js"></script>
 <script src="%sjs/sections.js"></script>
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </body>
@@ -130,7 +134,7 @@ page += f'''<body class="bl-page">
     </section>
   </main>
   {footer(p)}
-''' + TAIL % (p, p)
+''' + TAIL % (p, p, p, p)
 W(os.path.join(ROOT, "blog", "index.html"), page)
 
 # --- articles
@@ -173,7 +177,7 @@ for idx, a in enumerate(ARTICLES):
     <section class="bl-related" aria-label="More articles"><h2>Keep reading</h2><div class="bl-grid bl-grid-3">{rel}</div></section>
   </main>
   {footer(p)}
-''' + TAIL % (p, p)
+''' + TAIL % (p, p, p, p)
     W(os.path.join(ROOT, "blog", a["slug"], "index.html"), page)
 
 # ---------- 3. sitemap ----------
