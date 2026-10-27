@@ -3,4 +3,4 @@ Allow: /
 Disallow: /thankyou.html
 Disallow: /admin.html
 Disallow: /account.html
-Sitemap: https://mosesecom.com/sitemap.xml
+Sitemap: https://mosesmastery.com/sitemap.xml

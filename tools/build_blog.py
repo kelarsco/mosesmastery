@@ -8,7 +8,7 @@ from chrome import header, footer
 from articles import ARTICLES
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-SITE = "https://mosesecom.com"
+SITE = "https://mosesmastery.com"
 OG = SITE + "/asset/og-image.jpg"
 esc = html.escape
 def W(path, text):
