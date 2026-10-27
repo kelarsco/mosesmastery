@@ -1,0 +1,212 @@
+#!/usr/bin/env python3
+"""Builds the blog (blog/index.html + blog/<slug>/index.html), refreshes the shared header/menu/footer on every page,
+and rewrites sitemap.xml.   Run from the project root:   python3 tools/build_blog.py [--covers]
+--covers also renders asset/blog/<slug>.jpg (needs: pip install playwright && playwright install chromium)."""
+import os, re, sys, json, html
+sys.path.insert(0, os.path.dirname(__file__))
+from chrome import header, footer
+from articles import ARTICLES
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+SITE = "https://mosesecom.com"
+OG = SITE + "/asset/og-image.jpg"
+esc = html.escape
+def W(path, text):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    open(path, "w", encoding="utf8", newline="\n").write(text)
+
+# ---------- 1. shared header / footer on the root pages ----------
+PAGES = {"index.html": "home", "projects.html": "projects", "contact.html": "contact", "thankyou.html": ""}
+for fn, active in PAGES.items():
+    p = os.path.join(ROOT, fn); t = open(p, encoding="utf8").read()
+    h = header("", active)
+    if "<!-- mm-header -->" in t:
+        t = re.sub(r"<!-- mm-header -->.*?<!-- /mm-header -->", lambda m: h, t, flags=re.S)
+    else:
+        t, n = re.subn(r'(<!-- header start -->\s*)?<header class="header">.*?</header>', lambda m: h, t, count=1, flags=re.S); assert n, fn
+    f = footer("")
+    if "<!-- mm-footer -->" in t:
+        t = re.sub(r"<!-- mm-footer -->.*?<!-- /mm-footer -->", lambda m: f, t, flags=re.S)
+    else:
+        t, n = re.subn(r'<!-- footer -->.*?<div class="all-right">.*?</div>', lambda m: f, t, count=1, flags=re.S); assert n, fn
+    open(p, "w", encoding="utf8", newline="").write(t)
+
+# ---------- 2. blog pages ----------
+def long_date(iso):
+    y, m, d = iso.split("-"); mon = ["January","February","March","April","May","June","July","August","September","October","November","December"][int(m) - 1]
+    return f"{mon} {int(d)}, {y}"
+
+def head(title, desc, canon, p, og_img, og_type="website", extra=""):
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{esc(title)}</title>
+  <meta name="description" content="{esc(desc, True)}">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Moses Daniel">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="canonical" href="{canon}">
+  <meta property="og:type" content="{og_type}">
+  <meta property="og:site_name" content="Moses Mastery">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="{esc(title, True)}">
+  <meta property="og:description" content="{esc(desc, True)}">
+  <meta property="og:url" content="{canon}">
+  <meta property="og:image" content="{og_img}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{esc(title, True)}">
+  <meta name="twitter:description" content="{esc(desc, True)}">
+  <meta name="twitter:image" content="{og_img}">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="{p}asset/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="{p}asset/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="{p}asset/apple-touch-icon.png">
+  <link rel="manifest" href="{p}site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Bebas+Neue&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
+  <link rel="stylesheet" href="{p}css/style.css">
+  <link rel="stylesheet" href="{p}css/blog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" media="print" onload="this.media='all'">
+{extra}</head>
+'''
+
+def ld(obj): return '  <script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
+ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": "Moses Mastery", "url": SITE + "/", "logo": SITE + "/asset/icon-512.png"}
+PERSON = {"@type": "Person", "@id": SITE + "/#person", "name": "Moses Daniel", "url": SITE + "/", "worksFor": {"@id": SITE + "/#org"}}
+TAIL = '''<script src="%sjs/index.js"></script>
+<script src="%sjs/sections.js"></script>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+</body>
+</html>
+'''
+def cover_img(a, p, cls="", eager=False):
+    return (f'<img class="{cls}" src="{p}asset/blog/{a["slug"]}.jpg" alt="{esc(a["title"], True)}" width="1200" height="630" '
+            + ('fetchpriority="high"' if eager else 'loading="lazy" decoding="async"') + '>')
+def excerpt(a): return a["desc"]
+
+# --- listing
+p = "../"
+cards = ""
+for i, a in enumerate(ARTICLES):
+    cards += f'''
+      <article class="bl-card">
+        <a href="{a["slug"]}/" class="bl-card-img" tabindex="-1" aria-hidden="true">{cover_img(a, p)}</a>
+        <div class="bl-card-body">
+          <p class="bl-meta"><span class="bl-tag">{a["tag"]}</span><time datetime="{a["date"]}">{long_date(a["date"])}</time><span>{a["mins"]} min read</span></p>
+          <h2><a href="{a["slug"]}/">{esc(a["title"])}</a></h2>
+          <p>{esc(excerpt(a))}</p>
+          <a class="bl-more" href="{a["slug"]}/">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>'''
+lst_ld = {"@context": "https://schema.org", "@graph": [ORG, PERSON,
+    {"@type": "Blog", "@id": SITE + "/blog/#blog", "name": "Moses Mastery Blog", "url": SITE + "/blog/", "publisher": {"@id": SITE + "/#org"},
+     "blogPost": [{"@type": "BlogPosting", "headline": a["title"], "url": f'{SITE}/blog/{a["slug"]}/', "datePublished": a["date"], "image": f'{SITE}/asset/blog/{a["slug"]}.jpg'} for a in ARTICLES]},
+    {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": SITE + "/blog/"}]}]}
+first = ARTICLES[0]
+page = head("Shopify, eCommerce & AI Blog | Moses Mastery", "Practical guides on Shopify conversion optimization, SEO, Meta ads, AI automation and store audits from Moses Mastery.", SITE + "/blog/", p, f'{SITE}/asset/blog/{first["slug"]}.jpg', extra=ld(lst_ld))
+page += f'''<body class="bl-page">
+  {header(p, "blog")}
+  <main id="main">
+    <section class="bl-hero">
+      <p class="bl-kicker"><span></span>Our blog</p>
+      <h1>Insights &amp; <em>Articles.</em></h1>
+      <p class="bl-lead">Practical guides on Shopify, conversion, SEO, ads and AI for eCommerce brands. No fluff, just what to do next.</p>
+    </section>
+    <section class="bl-list" aria-label="Articles">
+      <div class="bl-grid">{cards}
+      </div>
+    </section>
+    <section class="bl-cta">
+      <h2>Want these ideas applied to <em>your store</em>?</h2>
+      <p>Send me your store link and I&rsquo;ll tell you where I&rsquo;d start.</p>
+      <a class="bl-btn" href="../contact.html">Request a store review <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+    </section>
+  </main>
+  {footer(p)}
+''' + TAIL % (p, p)
+W(os.path.join(ROOT, "blog", "index.html"), page)
+
+# --- articles
+for idx, a in enumerate(ARTICLES):
+    p = "../../"; url = f'{SITE}/blog/{a["slug"]}/'; img = f'{SITE}/asset/blog/{a["slug"]}.jpg'
+    toc = re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', a["body"])
+    toc_html = "".join(f'<li><a href="#{i}">{re.sub(r"^\d+\.\s*", "", t)}</a></li>' for i, t in toc)
+    faq_q = re.findall(r"<h3>(.*?)</h3>\s*<p>(.*?)</p>", a["body"].split('id="faq"')[-1], re.S) if 'id="faq"' in a["body"] else []
+    graph = [ORG, PERSON,
+        {"@type": "BlogPosting", "@id": url + "#post", "mainEntityOfPage": {"@type": "WebPage", "@id": url}, "headline": a["title"], "description": a["desc"],
+         "image": [img], "datePublished": a["date"], "dateModified": a["date"], "author": {"@id": SITE + "/#person"}, "publisher": {"@id": SITE + "/#org"},
+         "articleSection": a["tag"], "inLanguage": "en", "wordCount": len(re.sub(r"<[^>]+>", " ", a["body"]).split())},
+        {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": SITE + "/blog/"}, {"@type": "ListItem", "position": 3, "name": a["title"], "item": url}]}]
+    if faq_q:
+        strip = lambda s: re.sub(r"<[^>]+>", "", html.unescape(s)).strip()
+        graph.append({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": strip(q), "acceptedAnswer": {"@type": "Answer", "text": strip(ans)}} for q, ans in faq_q]})
+    related = [r for r in ARTICLES if r["slug"] != a["slug"]]
+    related = (related[idx:] + related[:idx])[:3] if related else []
+    rel = "".join(f'''<article class="bl-card"><a href="../{r["slug"]}/" class="bl-card-img" tabindex="-1" aria-hidden="true">{cover_img(r, p)}</a><div class="bl-card-body"><p class="bl-meta"><span class="bl-tag">{r["tag"]}</span><span>{r["mins"]} min read</span></p><h3><a href="../{r["slug"]}/">{esc(r["title"])}</a></h3></div></article>''' for r in related)
+    page = head(a["title"] + " | Moses Mastery", a["desc"], url, p, img, "article", ld({"@context": "https://schema.org", "@graph": graph}))
+    page += f'''<body class="bl-page">
+  {header(p, "blog")}
+  <main id="main">
+    <article class="ar" itemscope itemtype="https://schema.org/BlogPosting">
+      <header class="ar-head">
+        <nav class="ar-crumbs" aria-label="Breadcrumb"><a href="{p}index.html">Home</a><span>/</span><a href="../">Blog</a><span>/</span><span aria-current="page">{esc(a["tag"])}</span></nav>
+        <p class="bl-meta"><span class="bl-tag">{a["tag"]}</span><time datetime="{a["date"]}" itemprop="datePublished">{long_date(a["date"])}</time><span>{a["mins"]} min read</span></p>
+        <h1 itemprop="headline">{esc(a["title"])}</h1>
+        <p class="ar-by">By <strong>Moses Daniel</strong>, founder of Moses Mastery</p>
+      </header>
+      <figure class="ar-cover">{cover_img(a, p, eager=True)}</figure>
+      <div class="ar-wrap">
+        <aside class="ar-toc" aria-label="On this page"><p>On this page</p><ol>{toc_html}</ol></aside>
+        <div class="ar-body prose" itemprop="articleBody">{a["body"]}</div>
+      </div>
+      <section class="ar-cta"><h2>Need help with your <em>Shopify store</em>?</h2><p>I design, optimize and grow Shopify stores and set up AI automation for them. Book a free strategy call or send your store link.</p>
+        <div><a class="bl-btn" href="https://calendly.com/onwenmoses/30min" onclick="Calendly.initPopupWidget({{url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'}});return false;">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a> <a class="bl-btn bl-btn-ghost" href="{p}contact.html">Contact me</a></div></section>
+      <section class="ar-author"><img src="{p}asset/logo.png" alt="" width="72" height="72" loading="lazy"><div><p class="ar-author-n">Moses Daniel</p><p>Founder of Moses Mastery. I help eCommerce brands with Shopify design, conversion optimization, SEO, ads and AI automation.</p></div></section>
+    </article>
+    <section class="bl-related" aria-label="More articles"><h2>Keep reading</h2><div class="bl-grid bl-grid-3">{rel}</div></section>
+  </main>
+  {footer(p)}
+''' + TAIL % (p, p)
+    W(os.path.join(ROOT, "blog", a["slug"], "index.html"), page)
+
+# ---------- 3. sitemap ----------
+urls = [("/", "1.0", "2026-10-27"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/blog/", "0.9", "2026-10-27")] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
+print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
+
+# ---------- 4. optional: cover images ----------
+if "--covers" in sys.argv:
+    from playwright.sync_api import sync_playwright
+    font = os.environ.get("COVER_FONT", "")
+    face = f"@font-face{{font-family:'CoverInter';src:url('file://{font}');font-weight:100 900}}" if font else ""
+    logo = "file://" + os.path.join(ROOT, "asset", "logo.png")
+    def title_html(a):
+        t = esc(a["ctitle"])
+        for w in a["chi"]: t = t.replace(esc(w), f'<b>{esc(w)}</b>', 1)
+        return t
+    tpl = """<html><style>{face}*{{margin:0;box-sizing:border-box}}body{{width:1200px;height:630px;background:#0c0806;font-family:'CoverInter','Inter',Arial,sans-serif;position:relative;overflow:hidden;color:#fff}}
+.glow{{position:absolute;inset:0;background:radial-gradient(900px 520px at 85% 0%,rgba(255,91,0,.85),transparent 60%),radial-gradient(700px 420px at 0% 100%,rgba(255,91,0,.35),transparent 65%)}}
+.big{{position:absolute;right:-10px;top:-90px;font-size:{gsize}px;font-weight:900;letter-spacing:-.06em;color:#ff6a00;opacity:.95;line-height:1;text-shadow:0 0 80px rgba(255,91,0,.35)}}
+.logo{{position:absolute;left:56px;top:48px;display:flex;align-items:center;gap:16px;font-weight:700;font-size:30px}}.logo img{{width:56px;height:56px;border-radius:50%}}
+.panel{{position:absolute;left:0;right:0;bottom:0;height:300px;background:linear-gradient(to top,rgba(8,5,4,.96),rgba(8,5,4,.78));backdrop-filter:blur(2px);padding:44px 56px}}
+.tag{{display:inline-block;background:#ffd000;color:#111;font-weight:800;font-size:20px;letter-spacing:.12em;padding:8px 16px;border-radius:999px;margin-bottom:20px}}
+h1{{font-size:62px;line-height:1.06;font-weight:800;letter-spacing:-.035em;max-width:1000px}}h1 b{{color:#ff6a00}}
+.edge{{position:absolute;left:0;bottom:0;width:100%;height:8px;background:linear-gradient(90deg,#ff5b00,#ffd000)}}</style>
+<body><div class="glow"></div><div class="big">{glyph}</div><div class="logo"><img src="{logo}"><span>Moses Mastery</span></div>
+<div class="panel"><span class="tag">{tag}</span><h1>{title}</h1></div><div class="edge"></div></body></html>"""
+    os.makedirs(os.path.join(ROOT, "asset", "blog"), exist_ok=True)
+    with sync_playwright() as pw:
+        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": 1200, "height": 630}, device_scale_factor=1)
+        for a in ARTICLES:
+            open("/tmp/_cover.html", "w", encoding="utf8").write(tpl.format(face=face, glyph=esc(a["cover"]), gsize={1: 600, 2: 600}.get(len(a["cover"]), 430), logo=logo, tag=a["tag"], title=title_html(a)))
+            pg.goto("file:///tmp/_cover.html"); pg.wait_for_timeout(400)
+            pg.screenshot(path=os.path.join(ROOT, "asset", "blog", a["slug"] + ".jpg"), type="jpeg", quality=88)
+        b.close()
+    print("covers rendered")

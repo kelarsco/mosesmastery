@@ -1,17 +1,25 @@
 function toggleMenu(event) {
-    event.stopPropagation(); // Prevents closing when clicking menu icon
-    document.querySelector(".menu-icon").classList.toggle("active");
-    document.querySelector(".nav-menu").classList.toggle("active");
+    if (event && event.stopPropagation) event.stopPropagation();
+    var root = document.querySelector('.pg.on') || document;
+    var menu = root.querySelector('.mm-menu'), btn = root.querySelector('.menu-icon');
+    if (!menu) return;
+    var open = !menu.classList.contains('open');
+    menu.classList.toggle('open', open);
+    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (btn) { btn.classList.toggle('active', open); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    document.documentElement.classList.toggle('mm-lock', open);
+    if (open) { var first = menu.querySelector('.mm-menu-links a'); if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, 350); }
+    else if (btn) btn.focus({ preventScroll: true });
 }
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { var m = document.querySelector('.pg.on .mm-menu.open, .mm-menu.open'); if (m) toggleMenu(); }
+});
+document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('.mm-menu-links a, .mm-menu-logo');
+    if (a && !a.classList.contains('mm-menu-cta')) { var m = document.querySelector('.pg.on .mm-menu.open, .mm-menu.open'); if (m) { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); document.documentElement.classList.remove('mm-lock'); var b = document.querySelector('.pg.on .menu-icon, .menu-icon'); if (b) { b.classList.remove('active'); b.setAttribute('aria-expanded', 'false'); } } }
+});
 
  
-window.onclick = function(event) {
-    if (!document.querySelector(".menu-icon").contains(event.target) &&
-        !document.querySelector(".nav-menu").contains(event.target)) {
-        document.querySelector(".menu-icon").classList.remove("active");
-        document.querySelector(".nav-menu").classList.remove("active");
-    }
-}
 
 
 

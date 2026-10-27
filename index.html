@@ -45,68 +45,40 @@
 
 <body>
 
-  <!-- header start -->
+  <!-- mm-header -->
   <header class="header">
     <div class="hd-cont">
       <div class="logo">
-        <a href="index.html"> <img src="asset/logo.png" class="des_loo" alt="Moses Mastery logo">
-          <a href="index.html"> <img src="asset/logo.png" class="mob_loo" alt="Moses Mastery logo">
-          </a>
+        <a href="index.html" aria-label="Moses Mastery home"><img src="asset/logo.png" class="des_loo" alt="Moses Mastery logo"><img src="asset/logo.png" class="mob_loo" alt=""></a>
       </div>
-
-
-      <div class="nav-menu_des">
-        <a href="#services" onclick="toggleMenu(event)">Services</a>
-        <a href="projects.html" onclick="toggleMenu(event)">projects</a>
-        <a href="#price" onclick="toggleMenu(event)">price</a>
-        <a href="contact.html" onclick="toggleMenu(event)">Contact</a>
-      </div>
+      <nav class="nav-menu_des" aria-label="Main"><a href="index.html#services">Services</a><a href="projects.html">Projects</a><a href="index.html#price">Pricing</a><a href="blog/">Blog</a><a href="contact.html">Contact</a></nav>
       <div class="rgt-hd">
         <div class="hd-cll">
-          <a href="https://calendly.com/onwenmoses/30min" rel="noopener"
-            onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;">
-            <i class="fa-solid fa-circle"><span></span></i> Strategy Call</a>
-
-
-
-
-
-
+          <a href="https://calendly.com/onwenmoses/30min" rel="noopener" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;"><i class="fa-solid fa-circle"><span></span></i> Strategy Call</a>
         </div>
-
-
         <div class="nav-togg">
-          <div class="menu-icon" onclick="toggleMenu(event)">
-            <div class="line line1"></div>
-            <div class="line line2"></div>
-
-          </div>
+          <button type="button" class="menu-icon" aria-label="Open menu" aria-expanded="false" aria-controls="mmMenu" onclick="toggleMenu(event)">
+            <span class="line line1"></span><span class="line line2"></span>
+          </button>
         </div>
       </div>
-
-      <nav class="nav-menu">
-        <a href="#services" onclick="toggleMenu(event)">Services</a>
-        <a href="projects.html" onclick="toggleMenu(event)">projects</a>
-        <a href="#price" onclick="toggleMenu(event)">price</a>
-        <a href="contact.html" onclick="toggleMenu(event)">Contact</a>
-        <a href="https://calendly.com/onwenmoses/30min" rel="noopener"
-          onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;"
-          onclick="toggleMenu(event)"> <span></span></i> book a call</a>
-        <span>
-          <div class="nav-sic">
-            <p>Get in touch</p>
-            <div class="sic-ico">
-              <a href="https://www.instagram.com/moses__mastery" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-              <!-- <a href="https://www.upwork.com/freelancers/~01c6320dad9e3de4eb?mp_source=share" target="_blank" rel="noopener noreferrer" aria-label="Upwork"><i class="fa-brands fa-upwork" aria-hidden="true"></i></a> -->
-              <a href="https://wa.me/15818095630" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-            </div>
-          </div>
-
-      </nav>
-
     </div>
-
   </header>
+  <div class="mm-menu" id="mmMenu" aria-hidden="true" role="dialog" aria-label="Site menu">
+    <div class="mm-menu-top">
+      <a href="index.html" class="mm-menu-logo" aria-label="Moses Mastery home"><img src="asset/logo.png" alt="" width="256" height="256"><span>Moses Mastery</span></a>
+      <button type="button" class="mm-menu-close" aria-label="Close menu" onclick="toggleMenu(event)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <nav class="mm-menu-links" aria-label="Menu">
+      <a href="index.html" class="is-active" aria-current="page" style="--i:0">Home</a><a href="index.html#services" style="--i:1">Services</a><a href="projects.html" style="--i:2">Projects</a><a href="index.html#price" style="--i:3">Pricing</a><a href="blog/" style="--i:4">Blog</a><a href="contact.html" style="--i:5">Contact</a>
+      <a href="https://calendly.com/onwenmoses/30min" class="mm-menu-cta" style="--i:6" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+    </nav>
+    <div class="mm-menu-foot">
+      <div class="mm-menu-soc"><a href="https://www.instagram.com/moses__mastery" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a><a href="https://x.com/moses_mastery" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">X</a><a href="https://pin.it/7k7AHvYYQ" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">PIN</a><a href="https://t.me/moses_mastery" target="_blank" rel="noopener noreferrer" aria-label="Telegram">TG</a><a href="https://wa.me/15818095630" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a></div>
+      <p>&copy; Moses Mastery 2026</p>
+    </div>
+  </div>
+  <!-- /mm-header -->
 
   <!-- header ends -->
 
@@ -386,108 +358,103 @@
       </div>
     </div>
     <ul class="mm-stats" aria-label="Moses Mastery at a glance">
-      <li><b data-count="19">19</b><span>Shopify brands</span></li>
+      <li><b data-count="18">18</b><span>Shopify brands</span></li>
       <li><b data-count="6">6</b><span>Niches</span></li>
       <li><b data-count="7">7</b><span>Services</span></li>
     </ul>
-    <div class="brand-filters" role="group" aria-label="Filter brands by niche"><button type="button" data-filter="all" aria-pressed="true">All<small>19</small></button><button type="button" data-filter="apparel" aria-pressed="false">Apparel &amp; Streetwear<small>6</small></button><button type="button" data-filter="jewelry" aria-pressed="false">Jewelry<small>5</small></button><button type="button" data-filter="wellness" aria-pressed="false">Supplements &amp; Wellness<small>3</small></button><button type="button" data-filter="skincare" aria-pressed="false">Skincare<small>1</small></button><button type="button" data-filter="food" aria-pressed="false">Food &amp; Drink<small>1</small></button><button type="button" data-filter="pet" aria-pressed="false">Pet<small>1</small></button><button type="button" data-filter="other" aria-pressed="false">More brands<small>2</small></button></div>
+    <div class="brand-filters" role="group" aria-label="Filter brands by niche"><button type="button" data-filter="all" aria-pressed="true">All<small>18</small></button><button type="button" data-filter="apparel" aria-pressed="false">Apparel &amp; Streetwear<small>6</small></button><button type="button" data-filter="jewelry" aria-pressed="false">Jewelry<small>5</small></button><button type="button" data-filter="wellness" aria-pressed="false">Supplements &amp; Wellness<small>3</small></button><button type="button" data-filter="skincare" aria-pressed="false">Skincare<small>1</small></button><button type="button" data-filter="food" aria-pressed="false">Food &amp; Drink<small>1</small></button><button type="button" data-filter="pet" aria-pressed="false">Pet<small>1</small></button><button type="button" data-filter="other" aria-pressed="false">More brands<small>1</small></button></div>
     <p class="mm-sr" id="brandCount" aria-live="polite" role="status"></p>
     <div class="bg-viewport">
       <div class="bg-track" id="brandTrack" tabindex="0" aria-label="Brands gallery, use arrow keys to move">
         <a class="bg-tile" data-cat="apparel" href="https://ramblinfeverprovisions.com/" target="_blank" rel="noopener noreferrer" aria-label="Ramblin Fever Provisions, Apparel store (opens in a new tab)">
-          <span class="brand-ph">Ramblin Fever Provisions</span>
+          <span class="brand-ph" aria-hidden="true">R</span>
           <img src="asset/brands/ramblinfeverprovisions.jpg" alt="Ramblin Fever Provisions Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Ramblin Fever Provisions</strong><em>ramblinfeverprovisions.com</em></span><span class="brand-tag">Apparel</span></span>
         </a>
         <a class="bg-tile" data-cat="apparel" href="https://d42multiverse-shop.com/" target="_blank" rel="noopener noreferrer" aria-label="D42 Multiverse, Apparel store (opens in a new tab)">
-          <span class="brand-ph">D42 Multiverse</span>
+          <span class="brand-ph" aria-hidden="true">D</span>
           <img src="asset/brands/d42multiverse-shop.jpg" alt="D42 Multiverse Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>D42 Multiverse</strong><em>d42multiverse-shop.com</em></span><span class="brand-tag">Apparel</span></span>
         </a>
         <a class="bg-tile" data-cat="apparel" href="https://weareluxe.shop/" target="_blank" rel="noopener noreferrer" aria-label="WEARELUXE, Apparel store (opens in a new tab)">
-          <span class="brand-ph">WEARELUXE</span>
+          <span class="brand-ph" aria-hidden="true">W</span>
           <img src="asset/brands/weareluxe.jpg" alt="WEARELUXE Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>WEARELUXE</strong><em>weareluxe.shop</em></span><span class="brand-tag">Apparel</span></span>
         </a>
         <a class="bg-tile" data-cat="apparel" href="https://coofandy.com/" target="_blank" rel="noopener noreferrer" aria-label="COOFANDY, Apparel store (opens in a new tab)">
-          <span class="brand-ph">COOFANDY</span>
+          <span class="brand-ph" aria-hidden="true">C</span>
           <img src="asset/brands/coofandy.jpg" alt="COOFANDY Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>COOFANDY</strong><em>coofandy.com</em></span><span class="brand-tag">Apparel</span></span>
         </a>
         <a class="bg-tile" data-cat="apparel" href="https://aerosoul.co.uk/" target="_blank" rel="noopener noreferrer" aria-label="Aerosoul, Apparel store (opens in a new tab)">
-          <span class="brand-ph">Aerosoul</span>
+          <span class="brand-ph" aria-hidden="true">A</span>
           <img src="asset/brands/aerosoul.jpg" alt="Aerosoul Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Aerosoul</strong><em>aerosoul.co.uk</em></span><span class="brand-tag">Apparel</span></span>
         </a>
         <a class="bg-tile" data-cat="apparel" href="https://incarnie.com/" target="_blank" rel="noopener noreferrer" aria-label="Incarnie, Apparel store (opens in a new tab)">
-          <span class="brand-ph">Incarnie</span>
+          <span class="brand-ph" aria-hidden="true">I</span>
           <img src="asset/brands/incarnie.jpg" alt="Incarnie Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Incarnie</strong><em>incarnie.com</em></span><span class="brand-tag">Apparel</span></span>
         </a>
         <a class="bg-tile" data-cat="jewelry" href="https://rosieray.com/" target="_blank" rel="noopener noreferrer" aria-label="Rosie Ray, Jewelry store (opens in a new tab)">
-          <span class="brand-ph">Rosie Ray</span>
+          <span class="brand-ph" aria-hidden="true">R</span>
           <img src="asset/brands/rosieray.jpg" alt="Rosie Ray Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Rosie Ray</strong><em>rosieray.com</em></span><span class="brand-tag">Jewelry</span></span>
         </a>
         <a class="bg-tile" data-cat="jewelry" href="https://sibellaatelier.com/" target="_blank" rel="noopener noreferrer" aria-label="Si&#x27;bella Atelier, Jewelry store (opens in a new tab)">
-          <span class="brand-ph">Si&#x27;bella Atelier</span>
+          <span class="brand-ph" aria-hidden="true">S</span>
           <img src="asset/brands/sibellaatelier.jpg" alt="Si&#x27;bella Atelier Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Si&#x27;bella Atelier</strong><em>sibellaatelier.com</em></span><span class="brand-tag">Jewelry</span></span>
         </a>
         <a class="bg-tile" data-cat="jewelry" href="https://diamond-land.be/" target="_blank" rel="noopener noreferrer" aria-label="Diamond Land, Jewelry store (opens in a new tab)">
-          <span class="brand-ph">Diamond Land</span>
+          <span class="brand-ph" aria-hidden="true">D</span>
           <img src="asset/brands/diamond-land.jpg" alt="Diamond Land Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Diamond Land</strong><em>diamond-land.be</em></span><span class="brand-tag">Jewelry</span></span>
         </a>
         <a class="bg-tile" data-cat="jewelry" href="https://www.lushstonez.com/" target="_blank" rel="noopener noreferrer" aria-label="LushStonez, Jewelry store (opens in a new tab)">
-          <span class="brand-ph">LushStonez</span>
+          <span class="brand-ph" aria-hidden="true">L</span>
           <img src="asset/brands/lushstonez.jpg" alt="LushStonez Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>LushStonez</strong><em>lushstonez.com</em></span><span class="brand-tag">Jewelry</span></span>
         </a>
         <a class="bg-tile" data-cat="jewelry" href="https://mtljewelry.com/" target="_blank" rel="noopener noreferrer" aria-label="MTL Jewelry, Jewelry store (opens in a new tab)">
-          <span class="brand-ph">MTL Jewelry</span>
+          <span class="brand-ph" aria-hidden="true">M</span>
           <img src="asset/brands/mtljewelry.jpg" alt="MTL Jewelry Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>MTL Jewelry</strong><em>mtljewelry.com</em></span><span class="brand-tag">Jewelry</span></span>
         </a>
         <a class="bg-tile" data-cat="wellness" href="https://ritual.com/" target="_blank" rel="noopener noreferrer" aria-label="Ritual, Wellness store (opens in a new tab)">
-          <span class="brand-ph">Ritual</span>
+          <span class="brand-ph" aria-hidden="true">R</span>
           <img src="asset/brands/ritual.jpg" alt="Ritual Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Ritual</strong><em>ritual.com</em></span><span class="brand-tag">Wellness</span></span>
         </a>
         <a class="bg-tile" data-cat="wellness" href="https://www.levels.com/" target="_blank" rel="noopener noreferrer" aria-label="Levels, Wellness store (opens in a new tab)">
-          <span class="brand-ph">Levels</span>
+          <span class="brand-ph" aria-hidden="true">L</span>
           <img src="asset/brands/levels.jpg" alt="Levels Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Levels</strong><em>levels.com</em></span><span class="brand-tag">Wellness</span></span>
         </a>
         <a class="bg-tile" data-cat="wellness" href="https://drinkag1.com/" target="_blank" rel="noopener noreferrer" aria-label="AG1, Wellness store (opens in a new tab)">
-          <span class="brand-ph">AG1</span>
+          <span class="brand-ph" aria-hidden="true">A</span>
           <img src="asset/brands/drinkag1.jpg" alt="AG1 Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>AG1</strong><em>drinkag1.com</em></span><span class="brand-tag">Wellness</span></span>
         </a>
         <a class="bg-tile" data-cat="skincare" href="https://notoxskinlab.com/" target="_blank" rel="noopener noreferrer" aria-label="NOTOX Skin Lab, Skincare store (opens in a new tab)">
-          <span class="brand-ph">NOTOX Skin Lab</span>
+          <span class="brand-ph" aria-hidden="true">N</span>
           <img src="asset/brands/notoxskinlab.jpg" alt="NOTOX Skin Lab Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>NOTOX Skin Lab</strong><em>notoxskinlab.com</em></span><span class="brand-tag">Skincare</span></span>
         </a>
         <a class="bg-tile" data-cat="food" href="https://farmyardfinedining.com/" target="_blank" rel="noopener noreferrer" aria-label="Farmyard Fine Dining, Food &amp; Drink store (opens in a new tab)">
-          <span class="brand-ph">Farmyard Fine Dining</span>
+          <span class="brand-ph" aria-hidden="true">F</span>
           <img src="asset/brands/farmyardfinedining.jpg" alt="Farmyard Fine Dining Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Farmyard Fine Dining</strong><em>farmyardfinedining.com</em></span><span class="brand-tag">Food &amp; Drink</span></span>
         </a>
         <a class="bg-tile" data-cat="pet" href="https://mewyoo.com/" target="_blank" rel="noopener noreferrer" aria-label="Mewyoo, Pet store (opens in a new tab)">
-          <span class="brand-ph">Mewyoo</span>
+          <span class="brand-ph" aria-hidden="true">M</span>
           <img src="asset/brands/mewyoo.jpg" alt="Mewyoo Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Mewyoo</strong><em>mewyoo.com</em></span><span class="brand-tag">Pet</span></span>
         </a>
         <a class="bg-tile" data-cat="other" href="https://www.urban-ridge.com/" target="_blank" rel="noopener noreferrer" aria-label="Urban Ridge, More store (opens in a new tab)">
-          <span class="brand-ph">Urban Ridge</span>
+          <span class="brand-ph" aria-hidden="true">U</span>
           <img src="asset/brands/urban-ridge.jpg" alt="Urban Ridge Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
           <span class="bg-cap"><span><strong>Urban Ridge</strong><em>urban-ridge.com</em></span><span class="brand-tag">More</span></span>
-        </a>
-        <a class="bg-tile" data-cat="other" href="https://www.mormelanin.com/" target="_blank" rel="noopener noreferrer" aria-label="Mormelanin, More store (opens in a new tab)">
-          <span class="brand-ph">Mormelanin</span>
-          <img src="asset/brands/mormelanin.jpg" alt="Mormelanin Shopify store homepage" loading="lazy" decoding="async" width="1440" height="900" onerror="this.remove()">
-          <span class="bg-cap"><span><strong>Mormelanin</strong><em>mormelanin.com</em></span><span class="brand-tag">More</span></span>
         </a>
       </div>
     </div>
@@ -921,38 +888,26 @@
 
   <!-- contact -->
 
-  <!-- footer -->
-  <section class="foot-sec">
-    <div class="logo">
-      <img loading="lazy" decoding="async" src="asset/blclogo.png" alt="">
-
+  <!-- mm-footer -->
+  <footer class="mm-foot">
+    <div class="mm-foot-in">
+      <div class="mm-foot-brand">
+        <a href="index.html" class="mm-foot-logo" aria-label="Moses Mastery home"><img src="asset/logo.png" alt="" width="256" height="256" loading="lazy"><span>Moses<br>Mastery</span></a>
+        <p class="mm-foot-tag">Shopify design, growth and AI for eCommerce brands.</p>
+        <address class="mm-foot-contact">
+          <span>Contact</span>
+          <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>
+          <a href="tel:+15818095630">+1 (581) 809-5630</a>
+        </address>
+        <div class="mm-foot-soc"><a href="https://www.instagram.com/moses__mastery" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a><a href="https://x.com/moses_mastery" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a><a href="https://pin.it/7k7AHvYYQ" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p" aria-hidden="true"></i></a><a href="https://t.me/moses_mastery" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><i class="fa-brands fa-telegram" aria-hidden="true"></i></a><a href="https://wa.me/15818095630" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a></div>
+      </div>
+      <nav class="mm-foot-col" aria-label="Company"><h3>Company</h3><ul><li><a href="index.html">Home</a></li><li><a href="index.html#services">Services</a></li><li><a href="projects.html">Projects</a></li><li><a href="index.html#price">Pricing</a></li><li><a href="blog/">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
+      <nav class="mm-foot-col" aria-label="Services"><h3>Services</h3><ul><li><a href="index.html#services">Shopify design &amp; development</a></li><li><a href="index.html#services">Conversion optimization</a></li><li><a href="index.html#services">Store audits</a></li><li><a href="index.html#services">Shopify SEO</a></li><li><a href="index.html#services">AI automation</a></li><li><a href="index.html#services">AI content &amp; creative</a></li><li><a href="index.html#services">AI chat support</a></li></ul></nav>
+      <div class="mm-foot-col mm-foot-book"><h3>Let&rsquo;s talk</h3><p>Have a store to grow? Book a free strategy call.</p><a class="mm-foot-btn" href="https://calendly.com/onwenmoses/30min" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
     </div>
-    <div class="links">
-      <ul>
-
-        <li>
-          <h4>Version</h4>2026 © Version
-        </li>
-        <li>
-          <h4>more</h4><a href="#services">services</a>
-        </li>
-        <li>
-          <h4>designed by</h4>kelarswift
-        </li>
-
-      </ul>
-    </div>
-
-    <div class="social">
-      <a href="https://www.instagram.com/moses__mastery" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-              <!-- <a href="https://www.upwork.com/freelancers/~01c6320dad9e3de4eb?mp_source=share" target="_blank" rel="noopener noreferrer" aria-label="Upwork"><i class="fa-brands fa-upwork" aria-hidden="true"></i></a> -->
-              <a href="https://wa.me/15818095630" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-    </div>
-  </section>
-  <div class="hr"></div><!-- footer -->
-  <div class="all-right">
-    <h4>© 2026 Moses Mastery. All rights reserved.</h4>
-  </div>
+    <div class="mm-foot-bar"><p>&copy; 2026 Moses Mastery. All rights reserved.</p><button type="button" class="mm-totop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div>
+  </footer>
+  <!-- /mm-footer -->
 
 <script src="js/index.js"></script>
 <script src="js/sections.js"></script>

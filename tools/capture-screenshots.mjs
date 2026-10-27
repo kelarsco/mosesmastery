@@ -10,7 +10,7 @@
 // Env: BRANDS_FILE=path/to/other.json to use a different list.
 
 import { chromium } from "playwright";
-import { readFileSync, mkdirSync } from "node:fs";
+import { readFileSync, mkdirSync, existsSync, statSync, writeFileSync, unlinkSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -48,28 +48,43 @@ const ctx = await browser.newContext({
 });
 
 const failed = [];
+const report = [];
+const MIN_BYTES = 25000; // smaller JPEGs at 1440x900 are blank or error pages
+const CHALLENGE = /just a moment|attention required|access denied|verify you are human|failed to verify|security checkpoint|captcha|are you a robot|403 forbidden|pardon our interruption|store is currently unavailable/;
+
 for (const b of todo) {
-  const page = await ctx.newPage();
-  try {
-    await page.goto(b.url, { waitUntil: "domcontentloaded", timeout: 45000 });
-    await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
-    await page.waitForTimeout(2500); // let hero images / animations settle
-    await tidy(page);
-    await page.waitForTimeout(600);
-    const title = (await page.title().catch(() => "")).toLowerCase();
-    const body = (await page.locator("body").innerText({ timeout: 3000 }).catch(() => "")).slice(0, 600).toLowerCase();
-    if (/just a moment|attention required|access denied|verify you are human|captcha|are you a robot|403 forbidden|pardon our interruption/.test(title + " " + body)) {
-      throw new Error("bot-challenge page, not saving a screenshot");
+  const file = path.join(outDir, `${b.slug}.jpg`);
+  if (!process.env.FORCE && !only.size && existsSync(file) && statSync(file).size >= MIN_BYTES) { console.log("keep ", b.slug); continue; }
+  let ok = false, why = "";
+  for (let attempt = 1; attempt <= 3 && !ok; attempt++) {
+    const page = await ctx.newPage();
+    try {
+      try { await page.goto(b.url, { waitUntil: "load", timeout: 60000 }); }
+      catch { await page.goto(b.url, { waitUntil: "domcontentloaded", timeout: 60000 }); }
+      await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => {});
+      await page.waitForTimeout(2500 + attempt * 2500);
+      await tidy(page);
+      await page.evaluate(() => window.scrollTo(0, 400)).catch(() => {});
+      await page.waitForTimeout(800);
+      await page.evaluate(() => window.scrollTo(0, 0)).catch(() => {});
+      await page.waitForTimeout(1200);
+      const title = (await page.title().catch(() => "")).toLowerCase();
+      const body = (await page.locator("body").innerText({ timeout: 3000 }).catch(() => "")).slice(0, 800).toLowerCase();
+      if (CHALLENGE.test(title + " " + body)) { why = "bot-check or unavailable page"; break; } // not bypassed on purpose
+      const buf = await page.screenshot({ type: "jpeg", quality: 82 });
+      if (buf.length < MIN_BYTES) { why = `blank render (${buf.length} bytes), attempt ${attempt}`; continue; }
+      writeFileSync(file, buf); ok = true;
+    } catch (e) {
+      why = String(e.message).split("\n")[0];
+    } finally {
+      await page.close();
     }
-    await page.screenshot({ path: path.join(outDir, `${b.slug}.jpg`), type: "jpeg", quality: 82 });
-    console.log("ok   ", b.slug);
-  } catch (e) {
-    failed.push(b.slug);
-    console.log("FAIL ", b.slug, "-", String(e.message).split("\n")[0]);
-  } finally {
-    await page.close();
   }
+  report.push(`${ok ? "ok  " : "FAIL"} ${b.slug}${ok ? "" : " - " + why}`);
+  console.log(report[report.length - 1]);
+  if (!ok) { failed.push(b.slug); if (existsSync(file) && statSync(file).size < MIN_BYTES) unlinkSync(file); }
 }
 await browser.close();
-console.log(`\nDone: ${todo.length - failed.length}/${todo.length} captured.` + (failed.length ? ` Failed: ${failed.join(", ")}` : ""));
-process.exit(failed.length ? 1 : 0);
+writeFileSync(path.join(root, "tools", "capture-report.txt"), report.join("\n") + "\n");
+console.log(`\nDone: ${todo.length - failed.length} ok, failed: ${failed.join(", ") || "none"}`);
+process.exit(0);
