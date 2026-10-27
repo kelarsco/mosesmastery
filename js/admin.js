@@ -203,6 +203,7 @@
   }
   function start(user) {
     adminEmail = user || 'demo'; $('adGate').hidden = true; $('adApp').hidden = false; $('adUser').textContent = DEMO ? '' : user; $('adDemo').hidden = !DEMO;
+    window.MMAdmin = { sb: sb, DEMO: DEMO, email: adminEmail }; if (window.MMProjects) window.MMProjects.init(window.MMAdmin);
     wire(); load().then(history);
     $('adOut').addEventListener('click', function () { if (DEMO) { location.href = 'account.html'; return; } sb.auth.signOut().then(function () { location.href = 'account.html'; }); });
   }

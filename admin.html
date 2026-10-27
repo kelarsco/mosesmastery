@@ -25,7 +25,12 @@
     </div>
   </header>
 
-  <main class="ad-main">
+  <nav class="ad-tabs" role="tablist" aria-label="Dashboard sections">
+    <button type="button" role="tab" id="tabBtnA" aria-selected="true" aria-controls="tabAnalytics">Analytics</button>
+    <button type="button" role="tab" id="tabBtnP" aria-selected="false" aria-controls="tabProjects">Projects</button>
+  </nav>
+
+  <main class="ad-main" id="tabAnalytics" role="tabpanel" aria-labelledby="tabBtnA">
     <div class="ad-bar">
       <div class="ad-bar-l">
         <label class="ad-sel">Range
@@ -85,11 +90,48 @@
       <ul class="ad-history" id="adHistory"></ul>
     </section>
   </main>
+  <main class="ad-main" id="tabProjects" role="tabpanel" aria-labelledby="tabBtnP" hidden>
+    <div class="ad-bar">
+      <div class="ad-bar-l">
+        <button type="button" class="ad-btn ad-primary" id="pjAdd"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add project</button>
+        <button type="button" class="ad-btn" id="pjImport" hidden>Import the current projects</button>
+        <label class="ad-sel">Show
+          <select id="pjFilter"><option value="all">Everything</option><option value="store">Shopify stores</option><option value="video">Screen recordings</option><option value="shot">Dashboard snapshots</option></select>
+        </label>
+        <button type="button" class="ad-btn" id="pjTrash" aria-pressed="false"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> <span>Show deleted</span></button>
+      </div>
+      <div class="ad-bar-r">
+        <button type="button" class="ad-btn" id="pjUndo" disabled><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Undo</button>
+        <button type="button" class="ad-btn" id="pjRedo" disabled><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Redo</button>
+      </div>
+    </div>
+    <p class="ad-note" id="pjNote" role="status" aria-live="polite"></p>
+    <p class="ad-p" id="pjHelp">These are the items shown under <b>All projects</b> on your Projects page. Changes appear on the live site within a minute. Deleted items can be restored.</p>
+    <ul class="pj-list" id="pjList"></ul>
+    <dialog class="pj-dlg" id="pjDlg" aria-labelledby="pjDlgTitle">
+      <form method="dialog" id="pjForm" novalidate>
+        <h2 id="pjDlgTitle">Add project</h2>
+        <label>Type<select name="kind" id="pjKind"><option value="store">Shopify store</option><option value="video">Screen recording (MP4, up to 50 MB)</option><option value="shot">Dashboard snapshot (image)</option></select></label>
+        <label class="pj-f-store pj-f-video">Title<input name="title" maxlength="120" placeholder="e.g. Ritual"></label>
+        <label class="pj-f-store">Website domain shown under the name<input name="subtitle" maxlength="160" placeholder="ritual.com"></label>
+        <label class="pj-f-store">Category tag<input name="tag" maxlength="60" placeholder="Wellness"></label>
+        <label class="pj-f-store">Link (opens in a new tab)<input name="url" type="url" placeholder="https://ritual.com/"></label>
+        <label><span id="pjMediaLbl">Image</span><input type="file" id="pjFile" accept="image/jpeg,image/png,image/webp,video/mp4"></label>
+        <label>&hellip; or paste a link to the file<input name="media_url" placeholder="https://&hellip;"></label>
+        <label class="pj-f-video">Cover image for the video (optional)<input type="file" id="pjPosterFile" accept="image/jpeg,image/png,image/webp"></label>
+        <label class="pj-f-store pj-f-shot">Short description of the picture (for accessibility and Google)<input name="alt" maxlength="200"></label>
+        <p class="ad-note" id="pjErr" role="alert"></p>
+        <div class="pj-dlg-actions"><button type="button" class="ad-btn ad-ghost" id="pjCancel">Cancel</button><button type="submit" class="ad-btn ad-primary" id="pjSave">Save</button></div>
+      </form>
+    </dialog>
+  </main>
   <div class="ad-toast" id="adToast" role="status" aria-live="polite" hidden><span id="adToastText"></span><button type="button" id="adToastUndo">Undo</button></div>
 </div>
 
 <script src="js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/portfolio-seed.js"></script>
+<script src="js/admin-projects.js"></script>
 <script src="js/admin.js"></script>
 </body>
 </html>

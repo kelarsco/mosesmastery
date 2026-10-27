@@ -59,3 +59,50 @@ create policy "admins read log"  on public.admin_log for select to authenticated
 drop policy if exists "admins write log" on public.admin_log;
 create policy "admins write log" on public.admin_log for insert to authenticated with check (public.is_admin());
 -- No DELETE policies exist on purpose: "delete" in the dashboard is a soft delete (deleted_at) that can be undone.
+
+-- =====================================================================
+-- 4) PROJECTS MANAGER (run this part once; safe to re-run)
+--    Lets you add, edit, hide, reorder and delete (with undo) the items in "All projects".
+-- =====================================================================
+create table if not exists public.portfolio_items (
+  id          uuid primary key default gen_random_uuid(),
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now(),
+  kind        text not null check (kind in ('store','video','shot')),
+  title       text not null default '' check (char_length(title) <= 120),
+  subtitle    text not null default '' check (char_length(subtitle) <= 160),
+  tag         text not null default '' check (char_length(tag) <= 60),
+  url         text not null default '' check (url = '' or url ~ '^https?://'),
+  media_url   text not null default '' check (media_url ~ '^(https://|asset/)'),
+  poster_url  text not null default '' check (poster_url = '' or poster_url ~ '^(https://|asset/)'),
+  alt         text not null default '' check (char_length(alt) <= 200),
+  sort        integer not null default 0,
+  visible     boolean not null default true,
+  deleted_at  timestamptz
+);
+create index if not exists portfolio_sort_idx on public.portfolio_items (sort);
+alter table public.portfolio_items enable row level security;
+
+drop policy if exists "public reads visible projects" on public.portfolio_items;
+create policy "public reads visible projects" on public.portfolio_items for select to anon, authenticated using (visible and deleted_at is null);
+drop policy if exists "admins read projects" on public.portfolio_items;
+create policy "admins read projects"   on public.portfolio_items for select to authenticated using (public.is_admin());
+drop policy if exists "admins insert projects" on public.portfolio_items;
+create policy "admins insert projects" on public.portfolio_items for insert to authenticated with check (public.is_admin());
+drop policy if exists "admins update projects" on public.portfolio_items;
+create policy "admins update projects" on public.portfolio_items for update to authenticated using (public.is_admin()) with check (public.is_admin());
+-- no DELETE policy on purpose: delete = soft delete, so it can be undone.
+
+-- Tells the website whether you manage projects here (so hiding everything really hides everything).
+create or replace function public.portfolio_managed() returns boolean
+language sql security definer set search_path = public stable as $$
+  select exists (select 1 from public.portfolio_items where deleted_at is null)
+$$;
+grant execute on function public.portfolio_managed() to anon, authenticated;
+
+-- Public storage bucket for images/videos you upload (50 MB max per file).
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('portfolio', 'portfolio', true, 52428800, array['image/jpeg','image/png','image/webp','video/mp4'])
+on conflict (id) do update set file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
+drop policy if exists "admins upload portfolio files" on storage.objects;
+create policy "admins upload portfolio files" on storage.objects for insert to authenticated with check (bucket_id = 'portfolio' and public.is_admin());

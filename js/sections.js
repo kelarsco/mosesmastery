@@ -21,25 +21,26 @@
   }
 
   /* ---------- all projects: type filter + lazy videos ---------- */
-  var pjChips = document.querySelectorAll('.pj-chips button');
-  pjChips.forEach(function (chip) {
-    chip.addEventListener('click', function () {
-      var scope = chip.closest('.pj-all'), f = chip.getAttribute('data-pj');
-      scope.querySelectorAll('.pj-chips button').forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
-      scope.querySelectorAll('.pj-item').forEach(function (it) { it.hidden = !(f === 'all' || it.getAttribute('data-type') === f); });
-    });
+  document.addEventListener('click', function (e) {
+    var chip = e.target.closest && e.target.closest('.pj-chips button'); if (!chip) return;
+    var scope = chip.closest('.pj-all'), f = chip.getAttribute('data-pj');
+    scope.querySelectorAll('.pj-chips button').forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+    scope.querySelectorAll('.pj-item').forEach(function (it) { it.hidden = !(f === 'all' || it.getAttribute('data-type') === f); });
   });
-  var pjVids = document.querySelectorAll('.pj-video video');
-  if (pjVids.length && 'IntersectionObserver' in window) {
-    var pio = new IntersectionObserver(function (entries) {
+  var pio = null;
+  window.mmPjVideos = function () {
+    var vids = document.querySelectorAll('.pj-video video');
+    if (!vids.length || !('IntersectionObserver' in window)) return;
+    if (!pio) pio = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         var v = e.target;
         if (e.isIntersecting && !reduce) { if (!v.getAttribute('src')) v.src = v.getAttribute('data-src'); v.muted = true; var pp = v.play(); if (pp && pp.catch) pp.catch(function () {}); }
         else v.pause();
       });
     }, { threshold: 0.25 });
-    pjVids.forEach(function (v) { v.muted = true; v.setAttribute('muted', ''); pio.observe(v); });
-  }
+    vids.forEach(function (v) { if (v.__pj) return; v.__pj = 1; v.muted = true; v.setAttribute('muted', ''); pio.observe(v); });
+  };
+  window.mmPjVideos();
 
   /* ---------- contact form: send in the background, then show our own thank-you page ---------- */
   var cf = document.querySelector('form.cont-form');
@@ -257,12 +258,11 @@
   }
 
   /* ---------- dashboard screenshots: lightbox ---------- */
-  document.querySelectorAll('.dash-item').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var dlg = (btn.closest('.pg') || document).querySelector('dialog.lightbox'); if (!dlg) return;
-      var big = dlg.querySelector('img'), im = btn.querySelector('img'); big.src = im.currentSrc || im.src; big.alt = im.alt;
-      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
-    });
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.dash-item'); if (!btn) return;
+    var dlg = (btn.closest('.pg') || document).querySelector('dialog.lightbox'); if (!dlg) return;
+    var big = dlg.querySelector('img'), im = btn.querySelector('img'); big.src = im.currentSrc || im.src; big.alt = im.alt;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
   });
   document.querySelectorAll('dialog.lightbox').forEach(function (dlg) {
     dlg.addEventListener('click', function () { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); });
