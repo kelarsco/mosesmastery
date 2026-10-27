@@ -3437,3 +3437,16 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
 .js-motion .rv { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); will-change: opacity, transform; }
 .js-motion .rv.in { opacity: 1; transform: none; will-change: auto; }
 @media (prefers-reduced-motion: reduce) { .bg-video { transition: none; } .mm-menu-auth { transition: none; } }
+
+/* ---- menu: brand black with brand orange + yellow accents (logo gradient reads best on black) ---- */
+.mm-menu { background: #111; }
+.mm-menu::before { background: rgba(255,91,0,.16); }
+.mm-menu::after { background: rgba(255,208,0,.07); }
+.mm-menu-close { background: rgba(255,255,255,.12); }
+.mm-menu-close:hover { background: rgba(255,255,255,.24); }
+.mm-menu-links a:hover, .mm-menu-links a:focus-visible, .mm-menu-soc a:hover, .mm-menu-auth a:hover { color: #ff5b00; }
+.mm-menu-links a.is-active { color: #ffd000; }
+.mm-menu-links a.mm-menu-cta { background: #ff5b00; color: #111; }
+.mm-menu-links a.mm-menu-cta:hover { background: #ffd000; color: #111; }
+.mm-menu-auth a { text-decoration-color: #ff5b00; }
+.mm-menu-soc a { color: #ffd000; }
