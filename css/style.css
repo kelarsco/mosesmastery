@@ -3476,3 +3476,20 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
   .hero-content .right ul { position: static; top: auto; left: auto; width: 100%; }
   .hero-content .left { position: static; bottom: auto; }
 }
+
+/* ---- Selected Work: stores shown on a phone (dynamic island) ---- */
+.psec-list .ps-li-img.ph-stage { position: relative; display: flex; align-items: center; justify-content: center; border-radius: 22px; background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--ph-tint) 55%, #fff) 0%, color-mix(in srgb, var(--ph-tint) 85%, #111) 100%); }
+.ph-phone { position: relative; height: 94%; aspect-ratio: 9 / 19.2; border-radius: 15% / 7%; padding: 2.6%; background: linear-gradient(145deg, #3a3a3d, #0c0c0d 40%, #2b2b2e); box-shadow: 0 0 0 1.5px #5a5a5e inset, 0 30px 60px -20px rgba(0,0,0,.55), 0 10px 20px rgba(0,0,0,.25); transition: transform .5s ease; }
+.psec-list .ps-li-img:hover .ph-phone { transform: translateY(-6px) scale(1.02); }
+.ph-screen { position: relative; width: 100%; height: 100%; border-radius: 12.5% / 5.8%; overflow: hidden; background: #000; border: 3px solid #000; }
+.ph-screen video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.psec-list .ps-li-img .ph-screen video { transform: none; }
+.ph-island { position: absolute; top: 2.2%; left: 50%; width: 30%; height: 3.3%; transform: translateX(-50%); background: #000; border-radius: 99px; z-index: 2; box-shadow: 0 0 0 1px rgba(255,255,255,.06); }
+.ph-btn { position: absolute; width: 3px; background: #2a2a2d; border-radius: 2px; }
+.ph-b1 { left: -3px; top: 15%; height: 3.5%; }
+.ph-b2 { left: -3px; top: 21%; height: 6%; }
+.ph-b3 { left: -3px; top: 29%; height: 6%; }
+.ph-b4 { right: -3px; top: 25%; height: 10%; }
+@media (max-width: 769px) {
+  .psec-list .ps-li-img.ph-stage { width: 100%; height: 440px; }
+}

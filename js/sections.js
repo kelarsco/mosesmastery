@@ -29,7 +29,7 @@
   });
   var pio = null;
   window.mmPjVideos = function () {
-    var vids = document.querySelectorAll('.pj-video video');
+    var vids = document.querySelectorAll('.pj-video video, .ph-screen video');
     if (!vids.length || !('IntersectionObserver' in window)) return;
     if (!pio) pio = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
