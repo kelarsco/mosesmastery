@@ -3522,3 +3522,14 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
   .ph-phone { height: 90%; }
   .ph-tablet { height: 70%; }
 }
+
+/* founder photo: studio portrait in a rounded frame */
+.founder-img img { border-radius: 22px; display: block; aspect-ratio: 3 / 4; object-position: 50% 20%; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+.fo-im-bx { z-index: 1; border-radius: 0 22px 0 0; }
+@media (max-width: 720px) { .founder-img { width: 100%; max-width: 420px; margin: 0 auto; } .founder-img img { border-radius: 18px; } .fo-im-bx { border-radius: 0 18px 0 0; } }
+/* founder photo: keep it inside its section (no spill onto the next one), with a clean corner accent */
+.founder-grid { padding: 3.5rem 0; }
+.founder-img { bottom: 0 !important; overflow: visible !important; }
+.founder-img img { box-shadow: 0 24px 50px -28px rgba(0,0,0,.7); }
+.fo-im-bx { top: -10px; right: -10px; width: 72px; height: 72px; padding: 0; border-width: 3px; border-color: transparent; border-right-color: var(--secondary); border-top-color: var(--secondary); border-radius: 0 26px 0 0; }
+@media (max-width: 720px) { .founder-grid { padding: 2rem 0 2.5rem; gap: 28px; } .fo-im-bx { top: -8px; right: -8px; width: 56px; height: 56px; border-radius: 0 22px 0 0; } }
