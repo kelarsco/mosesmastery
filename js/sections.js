@@ -9,7 +9,7 @@
   if (hv && !reduce && !(navigator.connection && navigator.connection.saveData)) {
     var startHero = function () {
       hv.muted = true; hv.defaultMuted = true; hv.setAttribute('muted', ''); hv.playsInline = true;
-      if (!hv.getAttribute('src')) hv.src = (window.matchMedia('(max-width: 769px)').matches && hv.getAttribute('data-src-m')) || hv.getAttribute('data-src');
+      if (!hv.getAttribute('src')) hv.src = (window.matchMedia('(max-width: 769px), (max-aspect-ratio: 1/1)').matches && hv.getAttribute('data-src-m')) || hv.getAttribute('data-src');
       hv.addEventListener('playing', function () { hv.classList.add('on'); }, { once: true });
       var pr = hv.play(); if (pr && pr.catch) pr.catch(function () {});
     };
