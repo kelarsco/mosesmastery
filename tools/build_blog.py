@@ -247,8 +247,44 @@ page += f'''<body class="bl-page">
 ''' + TAIL % (p, p, p, p)
 W(os.path.join(ROOT, "services", "index.html"), page)
 
+# privacy page (plain-language; keep in step with js/track.js)
+p = ""; url = SITE + "/privacy.html"
+PRIV = """<h2>The short version</h2>
+<p>This site counts visits so I can see what works. It does not use advertising cookies, it does not sell data, and it never records what you type into a form.</p>
+<h2>What is recorded when you visit</h2>
+<ul>
+<li>The pages you open, how long you stay, and how far you scroll.</li>
+<li>Which buttons and links you click (for example Book a call, WhatsApp or email), and whether you start or send the contact form. The text you type is never recorded.</li>
+<li>Your device type, browser, operating system, screen width, time zone, and the site you came from.</li>
+<li>Your approximate location (country, region and city). To work this out, your browser asks a geolocation service (ipwho.is), which sees your IP address as any website you visit would. I never receive or store your IP address.</li>
+<li>Technical signals that help me fix the site: page speed, and errors your browser hits.</li>
+</ul>
+<p>This data is stored in a database I control (Supabase). It carries a random identifier kept in your browser storage, not your name or email. The identifier is not a cookie and is not shared with advertisers.</p>
+<h2>Session recordings and heatmaps</h2>
+<p>If switched on, this site uses Microsoft Clarity to show me anonymised recordings and heatmaps of how pages are used. Everything typed into form fields is masked. Clarity is not started for visitors in European time zones. Microsoft\u2019s privacy statement is at <a href="https://privacy.microsoft.com/privacystatement" rel="noopener noreferrer">privacy.microsoft.com</a>.</p>
+<h2>When you contact me</h2>
+<p>If you send the contact form, your name, email and message are delivered to me by Web3Forms and are used only to reply to you. If you book a call, Calendly handles that booking under its own privacy policy.</p>
+<h2>Your choices</h2>
+<ul>
+<li>If your browser sends <strong>Do Not Track</strong>, no analytics are recorded.</li>
+<li>You can also block the tracker with any content blocker, and the site still works.</li>
+<li>To ask what is held about you, or to have it deleted, email <a href="mailto:info@mosesecom.com">info@mosesecom.com</a> and include the approximate date and device of your visit.</li>
+</ul>
+<h2>Who is responsible</h2>
+<p>Moses Mastery, run by Moses Daniel. Questions: <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>. Last updated 28 October 2026.</p>"""
+page = head("Privacy | Moses Mastery", "What Moses Mastery records when you visit this website, why, and how to opt out.", url, p, OG, "website")
+page += f'''<body class="bl-page">
+  {header(p, "")}
+  <main id="main">
+    <section class="bl-hero"><p class="bl-kicker"><span></span>Privacy</p><h1>How this site <em>handles data.</em></h1></section>
+    <section class="ar-wrap sv-wrap" style="padding-bottom:4rem"><div class="prose">{PRIV}</div></section>
+  </main>
+  {footer(p)}
+''' + TAIL % (p, p, p, p)
+W(os.path.join(ROOT, "privacy.html"), page)
+
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 

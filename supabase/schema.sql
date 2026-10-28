@@ -106,3 +106,19 @@ values ('portfolio', 'portfolio', true, 52428800, array['image/jpeg','image/png'
 on conflict (id) do update set file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
 drop policy if exists "admins upload portfolio files" on storage.objects;
 create policy "admins upload portfolio files" on storage.objects for insert to authenticated with check (bucket_id = 'portfolio' and public.is_admin());
+
+-- 5) Site controls (Dashboard > Controls): announcement bar, maintenance notice, tracking switch, hero video switch
+create table if not exists public.site_settings (
+  id int primary key default 1 check (id = 1),
+  data jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+insert into public.site_settings (id, data) values (1, '{}'::jsonb) on conflict do nothing;
+alter table public.site_settings enable row level security;
+drop policy if exists "anyone reads settings" on public.site_settings;
+create policy "anyone reads settings" on public.site_settings for select to anon, authenticated using (true);
+drop policy if exists "admins update settings" on public.site_settings;
+create policy "admins update settings" on public.site_settings for update to authenticated using (public.is_admin()) with check (public.is_admin());
+grant select on public.site_settings to anon, authenticated;
+grant update on public.site_settings to authenticated;
+notify pgrst, 'reload schema';

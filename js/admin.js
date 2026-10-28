@@ -24,13 +24,25 @@
     var tzs = ['America/New_York', 'Europe/London', 'Africa/Lagos', 'America/Los_Angeles', 'Australia/Sydney', 'Asia/Dubai'];
     var id = 1, n = 1400;
     function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
+    var geos = [['US', 'United States', 'California', 'Los Angeles'], ['US', 'United States', 'New York', 'New York'], ['US', 'United States', 'Texas', 'Austin'], ['GB', 'United Kingdom', 'England', 'London'], ['NG', 'Nigeria', 'Lagos', 'Lagos'], ['NG', 'Nigeria', 'Abuja', 'Abuja'],
+      ['CA', 'Canada', 'Ontario', 'Toronto'], ['AE', 'United Arab Emirates', 'Dubai', 'Dubai'], ['AU', 'Australia', 'New South Wales', 'Sydney'], ['DE', 'Germany', 'Berlin', 'Berlin'], ['IN', 'India', 'Maharashtra', 'Mumbai'], ['ZA', 'South Africa', 'Gauteng', 'Johannesburg']];
+    var utms = [null, null, null, null, 'instagram', 'facebook', 'newsletter'], errs = ['Cannot read properties of null (reading \'style\')', 'Failed to fetch', 'ResizeObserver loop limit exceeded'], rages = [['button.hd-cll', 'Strategy Call'], ['div.pj-card', ''], ['a.bg-tile', 'Ritual']];
+    var vgeo = {};
     for (var i = 0; i < n; i++) {
       var t = now - Math.pow(Math.random(), 1.4) * 90 * 864e5, vid = 'v' + Math.floor(Math.random() * 420), sid = vid + '-' + Math.floor(t / 36e5);
-      var base = { id: id++, created_at: new Date(t).toISOString(), vid: vid, sid: sid, path: rnd(pages), ref: rnd(refs), device: rnd(devs), browser: rnd(brs), tz: rnd(tzs), meta: {}, deleted_at: null };
+      if (!vgeo[vid]) vgeo[vid] = Math.random() < .08 ? null : rnd(geos);
+      var u = rnd(utms), dv = rnd(devs);
+      var base = { id: id++, created_at: new Date(t).toISOString(), vid: vid, sid: sid, path: rnd(pages), ref: rnd(refs), device: dv, browser: rnd(brs), tz: rnd(tzs), utm_source: u, meta: {}, deleted_at: null };
       rows.push(Object.assign({}, base, { type: 'page_view' }));
+      if (vgeo[vid]) rows.push(Object.assign({}, base, { id: id++, type: 'visitor_geo', meta: { geo: { cc: vgeo[vid][0], country: vgeo[vid][1], region: vgeo[vid][2], city: vgeo[vid][3] } } }));
+      rows.push(Object.assign({}, base, { id: id++, type: 'page_leave', meta: { secs: 4 + Math.floor(Math.pow(Math.random(), 2) * 200), scroll: Math.floor(Math.random() * 100) } }));
       if (Math.random() < .35) rows.push(Object.assign({}, base, { id: id++, type: 'scroll_50' }));
       if (Math.random() < .12) rows.push(Object.assign({}, base, { id: id++, type: rnd(['book_call', 'book_call', 'whatsapp_click', 'instagram_click', 'store_click', 'email_click']), meta: { label: 'Book a call' } }));
+      if (Math.random() < .06) rows.push(Object.assign({}, base, { id: id++, type: 'form_start', path: '/contact.html' }));
       if (Math.random() < .03) rows.push(Object.assign({}, base, { id: id++, type: 'form_submit', path: '/contact.html' }));
+      if (Math.random() < .02) { var rg = rnd(rages); rows.push(Object.assign({}, base, { id: id++, type: 'rage_click', meta: { el: rg[0], text: rg[1] } })); }
+      if (Math.random() < .015) rows.push(Object.assign({}, base, { id: id++, type: 'js_error', meta: { msg: rnd(errs), src: 'sections.js', line: 42 } }));
+      if (Math.random() < .5) rows.push(Object.assign({}, base, { id: id++, type: 'perf', meta: { lcp: Math.round((dv === 'mobile' ? 3200 : 1700) * (.6 + Math.random() * 1.1)), ttfb: Math.round(120 + Math.random() * 380), load: Math.round(2200 + Math.random() * 2600) } }));
     }
     return rows.sort(function (a, b) { return a.created_at < b.created_at ? 1 : -1; });
   }
@@ -51,7 +63,7 @@
     return page(0).then(function () { note(''); render(); }).catch(function (e) { note('Could not load data: ' + (e.message || e), true); });
   }
   function inRange(e) { return e.created_at >= sinceISO(); }
-  function live() { return ev.filter(function (e) { return !e.deleted_at && inRange(e); }); }
+  function live() { return ev.filter(function (e) { return !e.deleted_at && inRange(e) && e.vid !== 'admin-test'; }); }
 
   /* ---------- aggregate + render ---------- */
   function uniq(arr, f) { var s = {}; arr.forEach(function (x) { s[f(x)] = 1; }); return Object.keys(s).length; }
@@ -71,7 +83,8 @@
   function kpi(label, value, sub) {
     var k = el('div', 'ad-kpi'); k.appendChild(el('p', null, label)); k.appendChild(el('b', null, String(value))); if (sub) k.appendChild(el('span', null, sub)); return k;
   }
-  var NAMES = { page_view: 'Page view', scroll_50: 'Scrolled 50%', scroll_90: 'Scrolled 90%', book_call: 'Booked a call click', whatsapp_click: 'WhatsApp click', email_click: 'Email click', phone_click: 'Phone click',
+  var TECH = /^(page_view|visitor_geo|page_leave|perf|test)$/;
+  var NAMES = { form_start: 'Started the form', rage_click: 'Rage click', js_error: 'Site error', page_view: 'Page view', scroll_50: 'Scrolled 50%', scroll_90: 'Scrolled 90%', book_call: 'Booked a call click', whatsapp_click: 'WhatsApp click', email_click: 'Email click', phone_click: 'Phone click',
     instagram_click: 'Instagram click', x_click: 'X click', telegram_click: 'Telegram click', pinterest_click: 'Pinterest click', store_click: 'Store opened', form_submit: 'Contact form sent', sign_in_click: 'Sign in click', contact_click: 'Contact click' };
   function nm(t) { return NAMES[t] || t; }
 
@@ -86,13 +99,14 @@
     chart(pv);
     bars($('adPages'), top(pv, function (e) { return e.path; }, 8));
     bars($('adRefs'), top(pv, function (e) { return e.ref || 'Direct / unknown'; }, 8));
-    bars($('adEvents'), top(L.filter(function (e) { return e.type !== 'page_view'; }), function (e) { return nm(e.type); }, 8), 'No actions recorded yet');
+    bars($('adEvents'), top(L.filter(function (e) { return !TECH.test(e.type); }), function (e) { return nm(e.type); }, 8), 'No actions recorded yet');
     bars($('adDevices'), top(pv, function (e) { return e.device; }, 4));
     bars($('adBrowsers'), top(pv, function (e) { return e.browser; }, 6));
     bars($('adTz'), top(pv, function (e) { return e.tz; }, 6));
     log();
     $('adUndo').disabled = !undoS.length; $('adRedo').disabled = !redoS.length;
     if (truncated) note('Showing the most recent 20,000 events in this range.');
+    if (window.MMInsights) window.MMInsights.update(L, range);
   }
 
   function chart(pv) {
@@ -122,7 +136,7 @@
   }
 
   function log() {
-    var rows = ev.filter(function (e) { return inRange(e) && (showTrash ? !!e.deleted_at : !e.deleted_at); }), tb = $('adRows'); tb.textContent = '';
+    var rows = ev.filter(function (e) { return inRange(e) && !/^(visitor_geo|page_leave|perf|test)$/.test(e.type) && (showTrash ? !!e.deleted_at : !e.deleted_at); }), tb = $('adRows'); tb.textContent = '';
     $('adLogTitle').textContent = showTrash ? 'Deleted activity (can be restored)' : 'Latest activity';
     rows.slice(0, 120).forEach(function (e) {
       var tr = el('tr'), c0 = el('td'), cb = el('input'); cb.type = 'checkbox'; cb.checked = !!selected[e.id]; cb.setAttribute('aria-label', 'Select row'); cb.addEventListener('change', function () { if (cb.checked) selected[e.id] = 1; else delete selected[e.id]; updSel(); }); c0.appendChild(cb); tr.appendChild(c0);
@@ -203,7 +217,7 @@
   }
   function start(user) {
     adminEmail = user || 'demo'; $('adGate').hidden = true; $('adApp').hidden = false; $('adUser').textContent = DEMO ? '' : user; $('adDemo').hidden = !DEMO;
-    window.MMAdmin = { sb: sb, DEMO: DEMO, email: adminEmail }; if (window.MMProjects) window.MMProjects.init(window.MMAdmin);
+    window.MMAdmin = { sb: sb, DEMO: DEMO, email: adminEmail, reload: function () { return load(); } }; if (window.MMProjects) window.MMProjects.init(window.MMAdmin); if (window.MMInsights) window.MMInsights.init(window.MMAdmin);
     wire(); load().then(history);
     $('adOut').addEventListener('click', function () { if (DEMO) { location.href = 'account.html'; return; } sb.auth.signOut().then(function () { location.href = 'account.html'; }); });
   }

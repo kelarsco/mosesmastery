@@ -158,16 +158,12 @@
 
   function init(c) {
     ctx = c; sb = c.sb; DEMO = c.DEMO; form = $('pjForm'); dlg = $('pjDlg');
-    var A = $('tabBtnA'), P = $('tabBtnP');
-    function tab(p) { A.setAttribute('aria-selected', !p); P.setAttribute('aria-selected', !!p); $('tabAnalytics').hidden = !!p; $('tabProjects').hidden = !p; if (p && !loaded) load(); }
-    A.addEventListener('click', function () { tab(false); }); P.addEventListener('click', function () { tab(true); });
     $('pjAdd').addEventListener('click', function () { openDlg(null); });
     $('pjImport').addEventListener('click', importSeed);
     $('pjFilter').addEventListener('change', render);
     $('pjTrash').addEventListener('click', function () { showTrash = !showTrash; $('pjTrash').setAttribute('aria-pressed', showTrash); $('pjTrash').querySelector('span').textContent = showTrash ? 'Show projects' : 'Show deleted'; render(); });
     $('pjUndo').addEventListener('click', undo); $('pjRedo').addEventListener('click', redo);
     $('pjKind').addEventListener('change', syncKind); $('pjCancel').addEventListener('click', closeDlg); form.addEventListener('submit', save);
-    if (/[?&]tab=projects/.test(location.search)) tab(true);
   }
-  window.MMProjects = { init: init };
+  window.MMProjects = { init: init, show: function () { if (!loaded) load(); } };
 })();

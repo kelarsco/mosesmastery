@@ -26,8 +26,12 @@
   </header>
 
   <nav class="ad-tabs" role="tablist" aria-label="Dashboard sections">
-    <button type="button" role="tab" id="tabBtnA" aria-selected="true" aria-controls="tabAnalytics">Analytics</button>
-    <button type="button" role="tab" id="tabBtnP" aria-selected="false" aria-controls="tabProjects">Projects</button>
+    <button type="button" role="tab" id="tabBtnA" aria-selected="true" aria-controls="tabAnalytics"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Analytics</button>
+    <button type="button" role="tab" id="tabBtnL" aria-selected="false" aria-controls="tabLocations"><i class="fa-solid fa-earth-africa" aria-hidden="true"></i> Locations</button>
+    <button type="button" role="tab" id="tabBtnI" aria-selected="false" aria-controls="tabInsights"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Insights</button>
+    <button type="button" role="tab" id="tabBtnR" aria-selected="false" aria-controls="tabRecordings"><i class="fa-solid fa-video" aria-hidden="true"></i> Recordings</button>
+    <button type="button" role="tab" id="tabBtnC" aria-selected="false" aria-controls="tabControls"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Controls</button>
+    <button type="button" role="tab" id="tabBtnP" aria-selected="false" aria-controls="tabProjects"><i class="fa-solid fa-images" aria-hidden="true"></i> Projects</button>
   </nav>
 
   <main class="ad-main" id="tabAnalytics" role="tabpanel" aria-labelledby="tabBtnA">
@@ -90,6 +94,10 @@
       <ul class="ad-history" id="adHistory"></ul>
     </section>
   </main>
+  <main class="ad-main" id="tabLocations" role="tabpanel" aria-labelledby="tabBtnL" hidden></main>
+  <main class="ad-main" id="tabInsights" role="tabpanel" aria-labelledby="tabBtnI" hidden></main>
+  <main class="ad-main" id="tabRecordings" role="tabpanel" aria-labelledby="tabBtnR" hidden></main>
+  <main class="ad-main" id="tabControls" role="tabpanel" aria-labelledby="tabBtnC" hidden></main>
   <main class="ad-main" id="tabProjects" role="tabpanel" aria-labelledby="tabBtnP" hidden>
     <div class="ad-bar">
       <div class="ad-bar-l">
@@ -132,6 +140,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.99.3/dist/umd/supabase.min.js"></script>
 <script src="js/portfolio-seed.js"></script>
 <script src="js/admin-projects.js"></script>
+<script src="js/admin-insights.js"></script>
 <script src="js/admin.js"></script>
 </body>
 </html>

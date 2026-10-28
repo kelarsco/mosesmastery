@@ -6,7 +6,8 @@
 
   /* ---------- hero video: start after load, fade in once playing ---------- */
   var hv = document.querySelector('.bg-video[data-src]');
-  if (hv && !reduce && !(navigator.connection && navigator.connection.saveData)) {
+  var heroOff = false; try { heroOff = (JSON.parse(localStorage.getItem('mm_settings') || '{}') || {}).heroVideo === false; } catch (_) {}
+  if (hv && !reduce && !heroOff && !(navigator.connection && navigator.connection.saveData)) {
     var startHero = function () {
       hv.muted = true; hv.defaultMuted = true; hv.setAttribute('muted', ''); hv.playsInline = true;
       if (!hv.getAttribute('src')) hv.src = (window.matchMedia('(max-width: 769px), (max-aspect-ratio: 1/1)').matches && hv.getAttribute('data-src-m')) || hv.getAttribute('data-src');
