@@ -3505,3 +3505,6 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
 }
 body:not(.bl-page) .hd-sign { color: #fff; }
 body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
+
+/* mobile hero: service list hidden (too much text over the footage); still in the HTML, desktop unchanged */
+@media (max-width: 769px) { .hero-content .right { display: none; } }
