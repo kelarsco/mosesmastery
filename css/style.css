@@ -226,7 +226,7 @@ overflow: hidden;
   object-fit: cover;
   filter: brightness(0.4);
   z-index: 0;
-  background-image: url(/asset/hero-img.webp);
+  background-image: url(../asset/hero-still-d.webp);
   /* make it fill the screen */
   background-size: cover; /* cover ensures it fills screen proportionally */
   background-position: center; /* center the image */
@@ -3533,3 +3533,14 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .founder-img img { box-shadow: 0 24px 50px -28px rgba(0,0,0,.7); }
 .fo-im-bx { top: -10px; right: -10px; width: 72px; height: 72px; padding: 0; border-width: 3px; border-color: transparent; border-right-color: var(--secondary); border-top-color: var(--secondary); border-radius: 0 26px 0 0; }
 @media (max-width: 720px) { .founder-grid { padding: 2rem 0 2.5rem; gap: 28px; } .fo-im-bx { top: -8px; right: -8px; width: 56px; height: 56px; border-radius: 0 22px 0 0; } }
+
+/* comfortable tap targets (44px) for footer, menu and contact links on touch screens */
+@media (max-width: 900px), (pointer: coarse) {
+  .mm-foot-col ul { gap: 0; }
+  .mm-foot-col a, .mm-foot-contact a { display: inline-flex; align-items: center; min-height: 44px; }
+  .mm-foot-contact { gap: 0; }
+  .mm-foot-sign { display: inline-flex; align-items: center; min-height: 44px; }
+  .qbt-lnk { display: inline-flex; align-items: center; min-height: 44px; }
+  .mm-foot-soc a { min-width: 46px; }
+}
+.brand-tag { font-size: max(.75rem, 12px); }
