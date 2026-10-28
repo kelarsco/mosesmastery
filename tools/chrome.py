@@ -13,7 +13,7 @@ SOCIALS = [  # (label, short, icon class, url)
 def links(p):
     return [
         ("Home", p + "index.html", "home"),
-        ("Services", p + "index.html#services", "services"),
+        ("Services", p + "services/", "services"),
         ("Projects", p + "projects.html", "projects"),
         ("Pricing", p + "index.html#price", "price"),
         ("Blog", p + "blog/", "blog"),
@@ -62,8 +62,9 @@ def header(p, active=""):
 def footer(p):
     soc = "".join(f'<a href="{u}" target="_blank" rel="noopener noreferrer" aria-label="{l}"><i class="{i}" aria-hidden="true"></i></a>' for l, s, i, u in SOCIALS)
     co = "".join(f'<li><a href="{h}">{t}</a></li>' for t, h, k in links(p))
-    sv = "".join(f'<li><a href="{p}index.html#services">{t}</a></li>' for t in (
-        "Shopify design &amp; development", "Conversion optimization", "Store audits", "Shopify SEO", "AI automation", "AI content &amp; creative", "AI chat support"))
+    sv = "".join(f'<li><a href="{p}services/{sl}/">{t}</a></li>' for sl, t in (
+        ("shopify-store-design", "Shopify design &amp; development"), ("shopify-conversion-rate-optimization", "Conversion optimization &amp; audits"), ("shopify-seo", "Shopify SEO"),
+        ("meta-ads-for-shopify", "Meta &amp; Google ads"), ("ai-automation-for-shopify", "AI automation, content &amp; chat")))
     return f'''<!-- mm-footer -->
   <footer class="mm-foot">
     <div class="mm-foot-in">

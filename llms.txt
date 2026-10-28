@@ -12,12 +12,13 @@ Social: https://www.instagram.com/moses__mastery, https://x.com/moses_mastery, h
 - [Contact](https://mosesmastery.com/contact.html): book a strategy call or request a quote
 - [Blog](https://mosesmastery.com/blog/): practical Shopify, CRO, SEO, ads and AI guides
 
-## Services
-- Shopify store design and development, theme customization and redesigns
-- Conversion rate optimization (CRO) and store audits
-- Meta Ads and Google Ads management
-- eCommerce SEO and Google Merchant Center
-- AI automation, AI content and creative, AI chatbots and assistants
+## Services (one page each)
+- [Shopify store design and development](https://mosesmastery.com/services/shopify-store-design/): new stores, theme customization, redesigns
+- [Conversion rate optimization and store audits](https://mosesmastery.com/services/shopify-conversion-rate-optimization/)
+- [Shopify SEO and Google Merchant Center](https://mosesmastery.com/services/shopify-seo/)
+- [Meta and Google ads for Shopify](https://mosesmastery.com/services/meta-ads-for-shopify/)
+- [AI automation, AI content and chatbots for Shopify](https://mosesmastery.com/services/ai-automation-for-shopify/)
+- [All services](https://mosesmastery.com/services/)
 
 ## Pricing (starting points, quoted per project)
 - Store Launch packages (one-time): Starter from $500, Growth from $950, Premium from $1,500

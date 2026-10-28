@@ -6,6 +6,7 @@ import os, re, sys, json, html
 sys.path.insert(0, os.path.dirname(__file__))
 from chrome import header, footer
 from articles import ARTICLES
+from services import SERVICES
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SITE = "https://mosesmastery.com"
@@ -114,7 +115,7 @@ lst_ld = {"@context": "https://schema.org", "@graph": [ORG, PERSON,
      "blogPost": [{"@type": "BlogPosting", "headline": a["title"], "url": f'{SITE}/blog/{a["slug"]}/', "datePublished": a["date"], "image": f'{SITE}/asset/blog/{a["slug"]}.jpg'} for a in ARTICLES]},
     {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": SITE + "/blog/"}]}]}
 first = ARTICLES[0]
-page = head("Shopify, eCommerce & AI Blog | Moses Mastery", "Practical guides on Shopify conversion optimization, SEO, Meta ads, AI automation and store audits from Moses Mastery.", SITE + "/blog/", p, f'{SITE}/asset/blog/{first["slug"]}.jpg', extra=ld(lst_ld))
+page = head("Shopify, eCommerce & AI Blog | Moses Mastery", "Practical guides on Shopify conversion rate optimization, SEO, Meta ads, AI automation and store audits, written by Shopify growth specialist Moses Daniel of Moses Mastery.", SITE + "/blog/", p, f'{SITE}/asset/blog/{first["slug"]}.jpg', extra=ld(lst_ld))
 page += f'''<body class="bl-page">
   {header(p, "blog")}
   <main id="main">
@@ -138,6 +139,14 @@ page += f'''<body class="bl-page">
 W(os.path.join(ROOT, "blog", "index.html"), page)
 
 # --- articles
+STITLES = {
+    "shopify-conversion-rate-optimization-checklist": "Shopify CRO Checklist: 12 Fixes to Lift Conversions",
+    "shopify-seo-guide": "Shopify SEO Guide: Rank Your Store on Google",
+    "ai-automation-for-shopify-stores": "AI Automation for Shopify: 7 Workflows to Set Up",
+    "meta-ads-for-shopify-stores": "Meta Ads for Shopify: Setup, Creative & Scaling",
+    "shopify-store-audit-checklist": "Shopify Store Audit Checklist (Before You Run Ads)",
+    "shopify-redesign-or-optimize": "Shopify Redesign vs Optimization: Which to Choose",
+}
 for idx, a in enumerate(ARTICLES):
     p = "../../"; url = f'{SITE}/blog/{a["slug"]}/'; img = f'{SITE}/asset/blog/{a["slug"]}.jpg'
     toc = re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', a["body"])
@@ -154,7 +163,7 @@ for idx, a in enumerate(ARTICLES):
     related = [r for r in ARTICLES if r["slug"] != a["slug"]]
     related = (related[idx:] + related[:idx])[:3] if related else []
     rel = "".join(f'''<article class="bl-card"><a href="../{r["slug"]}/" class="bl-card-img" tabindex="-1" aria-hidden="true">{cover_img(r, p)}</a><div class="bl-card-body"><p class="bl-meta"><span class="bl-tag">{r["tag"]}</span><span>{r["mins"]} min read</span></p><h3><a href="../{r["slug"]}/">{esc(r["title"])}</a></h3></div></article>''' for r in related)
-    page = head(a["title"] + " | Moses Mastery", a["desc"], url, p, img, "article", ld({"@context": "https://schema.org", "@graph": graph}))
+    page = head(STITLES.get(a["slug"], a["title"] + " | Moses Mastery"), a["desc"], url, p, img, "article", ld({"@context": "https://schema.org", "@graph": graph}))
     page += f'''<body class="bl-page">
   {header(p, "blog")}
   <main id="main">
@@ -180,8 +189,66 @@ for idx, a in enumerate(ARTICLES):
 ''' + TAIL % (p, p, p, p)
     W(os.path.join(ROOT, "blog", a["slug"], "index.html"), page)
 
+# ---------- 2b. service landing pages ----------
+def strip_tags(t): return re.sub(r"<[^>]+>", "", html.unescape(t)).strip()
+TODAY = "2026-10-28"
+for sv in SERVICES:
+    p = "../../"; url = f'{SITE}/services/{sv["slug"]}/'
+    graph = [ORG, PERSON,
+        {"@type": "Service", "@id": url + "#service", "name": sv["title"], "description": sv["desc"], "url": url, "provider": {"@id": SITE + "/#org"}, "areaServed": "Worldwide", "serviceType": sv["title"]},
+        {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Services", "item": SITE + "/services/"}, {"@type": "ListItem", "position": 3, "name": sv["title"], "item": url}]},
+        {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a_}} for q, a_ in sv["faqs"]]}]
+    page = head(sv["stitle"], sv["desc"], url, p, OG, "website", ld({"@context": "https://schema.org", "@graph": graph}))
+    secs = "".join(f'<h2 id="s{i}">{h}</h2>{b}' for i, (h, b) in enumerate(sv["sections"]))
+    faq = "".join(f'<details><summary>{esc(q)}</summary><p>{esc(a_)}</p></details>' for q, a_ in sv["faqs"])
+    rel = [a for a in ARTICLES if a["slug"] in sv["related"]]
+    relh = "".join(f'<article class="bl-card"><a href="{p}blog/{r["slug"]}/" class="bl-card-img" tabindex="-1" aria-hidden="true">{cover_img(r, p)}</a><div class="bl-card-body"><p class="bl-meta"><span class="bl-tag">{r["tag"]}</span><span>{r["mins"]} min read</span></p><h3><a href="{p}blog/{r["slug"]}/">{esc(r["title"])}</a></h3></div></article>' for r in rel).replace('src="{}asset'.format(p), 'src="{}asset'.format(p))
+    others = "".join(f'<li><a href="../{o["slug"]}/">{o["nav"]}</a></li>' for o in SERVICES if o["slug"] != sv["slug"])
+    page += f'''<body class="bl-page">
+  {header(p, "services")}
+  <main id="main">
+    <article class="ar">
+      <header class="ar-head">
+        <nav class="ar-crumbs" aria-label="Breadcrumb"><a href="{p}index.html">Home</a><span>/</span><a href="../">Services</a><span>/</span><span aria-current="page">{esc(sv["title"])}</span></nav>
+        <h1>{esc(sv["h1"])}</h1>
+        <p class="ar-by">By <strong>Moses Daniel</strong>, founder of Moses Mastery</p>
+        <p class="bl-lead">{esc(sv["lead"])}</p>
+      </header>
+      <div class="ar-wrap sv-wrap"><div class="ar-body prose">{secs}
+        <h2 id="faq">Frequently asked questions</h2><div class="sv-faq">{faq}</div>
+        <h2 id="more">Other services</h2><ul>{others}</ul>
+      </div></div>
+      <section class="ar-cta"><h2>Ready to <em>get started</em>?</h2><p>Send your store link and goals. You will get a clear reply with where I would start and a fixed quote.</p>
+        <div><a class="bl-btn" href="{p}contact.html">Request a quote <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a> <a class="bl-btn bl-btn-ghost" href="https://calendly.com/onwenmoses/30min" onclick="Calendly.initPopupWidget({{url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'}});return false;">Book a call</a></div></section>
+    </article>
+    <section class="bl-related" aria-label="Related guides"><h2>Related guides</h2><div class="bl-grid bl-grid-3">{relh}</div></section>
+  </main>
+  {footer(p)}
+''' + TAIL % (p, p, p, p)
+    W(os.path.join(ROOT, "services", sv["slug"], "index.html"), page)
+
+# hub page
+p = "../"; url = SITE + "/services/"
+hub_ld = {"@context": "https://schema.org", "@graph": [ORG, PERSON,
+    {"@type": "CollectionPage", "@id": url + "#page", "name": "Shopify services", "url": url, "isPartOf": {"@id": SITE + "/#org"}},
+    {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{SITE}/services/{sv["slug"]}/', "name": sv["title"]} for i, sv in enumerate(SERVICES)]},
+    {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Services", "item": url}]}]}
+page = head("Shopify Services: Design, CRO, SEO, Ads & AI | Moses Mastery", "Shopify store design, conversion optimization, SEO, Meta and Google ads, and AI automation for eCommerce brands, from Moses Mastery.", url, p, OG, "website", ld(hub_ld))
+cards = "".join(f'''<article class="bl-card"><div class="bl-card-body"><h2><a href="{sv["slug"]}/">{esc(sv["title"])}</a></h2><p>{esc(sv["desc"])}</p><a class="bl-more" href="{sv["slug"]}/">Learn more <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>''' for sv in SERVICES)
+page += f'''<body class="bl-page">
+  {header(p, "services")}
+  <main id="main">
+    <section class="bl-hero"><p class="bl-kicker"><span></span>Services</p><h1>Shopify <em>services.</em></h1>
+      <p class="bl-lead">Design, conversion, search, ads and AI automation for Shopify stores, from one specialist. Choose what you need, or send your store link and I will tell you where I would start.</p></section>
+    <section class="bl-list" aria-label="Services"><div class="bl-grid">{cards}</div></section>
+    <section class="bl-cta"><h2>Not sure where to <em>start</em>?</h2><p>Send me your store link and I will tell you what I would fix first.</p><a class="bl-btn" href="{p}contact.html">Request a store review <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></section>
+  </main>
+  {footer(p)}
+''' + TAIL % (p, p, p, p)
+W(os.path.join(ROOT, "services", "index.html"), page)
+
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-27"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/blog/", "0.9", "2026-10-27")] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 

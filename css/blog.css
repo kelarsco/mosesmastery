@@ -85,3 +85,12 @@
 }
 @media (prefers-reduced-motion: reduce) { .bl-card-img img, .bl-btn, .bl-more i { transition: none; } }
 @media (max-width: 640px) { .ar-toc { display: none; } }
+
+/* ---- service pages ---- */
+.prose ul, .prose ol { margin: 0 0 1.4rem; padding-left: 1.3rem; } .prose li { margin-bottom: .6rem; }
+.prose a { color: #c24200; text-underline-offset: 3px; }
+.sv-faq details { border-bottom: 1px solid rgba(0,0,0,.14); padding: .2rem 0; }
+.sv-faq summary { cursor: pointer; font-weight: 700; padding: .9rem 0; min-height: 44px; }
+.sv-faq details p { margin: 0 0 1rem; }
+.ar-head .bl-lead { margin-top: 1rem; max-width: 62ch; }
+.ar-wrap.sv-wrap { display: block; } .sv-wrap .prose { max-width: 760px; }
