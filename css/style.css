@@ -3463,3 +3463,16 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
 #price .package-list { height: auto; gap: 1rem 0; }
 @media (max-width: 768px) { #price .main-container { padding: 0 12px; } #price .package-box { min-height: 0; } }
 #price .sec-mini-tit { position: static; padding: 2rem 0 1rem; }
+
+/* ---- mobile hero: service list sits above the headline, never behind it ---- */
+@media (max-width: 769px) {
+  .hero { height: auto; min-height: 100svh; }
+  .hero-content { flex-direction: column; flex-wrap: nowrap; justify-content: flex-end; align-items: stretch; gap: 1.4rem; min-height: 100svh; height: auto; padding: 6rem 1.2rem 2rem; }
+  .hero-content .right { order: -1; width: 100%; height: auto; margin: 0; padding: 0; text-align: right; position: static; }
+  .hero-content .left { flex: none; width: 100%; }
+  .hero-content .right li { margin-bottom: .15rem; }
+}
+@media (max-width: 769px) {
+  .hero-content .right ul { position: static; top: auto; left: auto; width: 100%; }
+  .hero-content .left { position: static; bottom: auto; }
+}
