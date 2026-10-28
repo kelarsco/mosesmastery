@@ -22,4 +22,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://mosesmastery.com/sitemap.xml
+Sitemap: https://www.mosesmastery.com/sitemap.xml

@@ -4,7 +4,7 @@ Done in the site: unique titles/descriptions (titles kept near 60 characters), c
 
 No one can guarantee position #1 on Google, ChatGPT or any platform. Rankings depend on competition, links, content and time (usually 3-6 months). These steps move the needle, in order:
 
-1. Google Search Console: add `https://mosesmastery.com`, verify (send me the meta tag and I will add it), submit `sitemap.xml`, then use "Request indexing" on the home page, /services/ and each service and blog page.
+1. Google Search Console: add `https://www.mosesmastery.com`, verify (send me the meta tag and I will add it), submit `sitemap.xml`, then use "Request indexing" on the home page, /services/ and each service and blog page.
 2. Bing Webmaster Tools: import from Search Console. Bing powers much of ChatGPT search and Copilot.
 3. Redirect the old mosesecom.com to mosesmastery.com with a 301 redirect in your domain settings, and make `www.` redirect to the non-www address.
 4. Google Business Profile (if you serve clients by location or want a brand panel) and consistent profiles: same name, site link and description on Instagram, X, Pinterest, Telegram, LinkedIn, Clutch, Shopify Experts, Upwork/Fiverr. These are also backlinks.

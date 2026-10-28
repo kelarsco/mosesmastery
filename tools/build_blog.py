@@ -9,7 +9,7 @@ from articles import ARTICLES
 from services import SERVICES
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-SITE = "https://mosesmastery.com"
+SITE = "https://www.mosesmastery.com"
 OG = SITE + "/asset/og-image.jpg"
 esc = html.escape
 def W(path, text):
