@@ -261,7 +261,7 @@ PRIV = """<h2>The short version</h2>
 <h2>Session recordings and heatmaps</h2>
 <p>If switched on, this site uses Microsoft Clarity to show me anonymised recordings and heatmaps of how pages are used. Everything typed into form fields is masked. Clarity is not started for visitors in European time zones. Microsoft\u2019s privacy statement is at <a href="https://privacy.microsoft.com/privacystatement" rel="noopener noreferrer">privacy.microsoft.com</a>.</p>
 <h2>When you contact me</h2>
-<p>If you send the contact form, your name, email and message are delivered to me by Web3Forms and are used only to reply to you. If you book a call, Calendly handles that booking under its own privacy policy.</p>
+<p>If you send the contact form or the calculator review form, your answers, name and email are delivered to me by Web3Forms and are also saved in my database (Supabase) so a request is never lost. They are used only to reply to you. If you book a call, Calendly handles that booking under its own privacy policy.</p>
 <h2>Your choices</h2>
 <ul>
 <li>If your browser sends <strong>Do Not Track</strong>, no analytics are recorded.</li>

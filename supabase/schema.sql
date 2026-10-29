@@ -122,3 +122,32 @@ create policy "admins update settings" on public.site_settings for update to aut
 grant select on public.site_settings to anon, authenticated;
 grant update on public.site_settings to authenticated;
 notify pgrst, 'reload schema';
+
+-- 6. Leads: every contact-form and calculator request is also saved here, so none can be lost if email fails.
+create table if not exists public.leads (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  source text not null default 'contact' check (source in ('contact','calculator')),
+  name text check (char_length(name) <= 120),
+  email text check (char_length(email) <= 200),
+  link text check (char_length(link) <= 300),
+  services text check (char_length(services) <= 400),
+  stage text check (char_length(stage) <= 120),
+  budget text check (char_length(budget) <= 80),
+  timeline text check (char_length(timeline) <= 80),
+  how_heard text check (char_length(how_heard) <= 80),
+  message text check (char_length(message) <= 3000),
+  numbers jsonb,
+  status text not null default 'new' check (status in ('new','contacted','won','lost')),
+  notes text check (char_length(notes) <= 2000)
+);
+alter table public.leads enable row level security;
+drop policy if exists "visitors send leads" on public.leads;
+create policy "visitors send leads" on public.leads for insert to anon, authenticated with check (status = 'new' and notes is null);
+drop policy if exists "admins read leads" on public.leads;
+create policy "admins read leads" on public.leads for select to authenticated using (public.is_admin());
+drop policy if exists "admins update leads" on public.leads;
+create policy "admins update leads" on public.leads for update to authenticated using (public.is_admin()) with check (public.is_admin());
+grant insert on public.leads to anon, authenticated;
+grant select, update on public.leads to authenticated;
+notify pgrst, 'reload schema';

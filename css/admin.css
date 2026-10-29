@@ -158,3 +158,20 @@
 .ad-test { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
 @media (max-width: 1000px) { .ad-grid2 { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .ad-grid2 { grid-template-columns: 1fr; } .ad-fn { grid-template-columns: 1fr auto; } .ad-fn-b { grid-column: 1 / -1; order: 3; } .ad-fn small { grid-column: 1 / -1; } .ad-tabs { padding: .6rem .5rem 0; } .ad-tabs button { padding: .6rem .8rem; } }
+
+/* Leads */
+.ad-badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; margin-left: .4rem; border-radius: 99px; background: #ff5b00; color: #fff; font-size: .72rem; font-weight: 700; }
+.ld-item { border: 1.5px solid #ece6df; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: .8rem; background: #fff; }
+.ld-item.is-new { border-color: #ffd000; background: #fffbea; }
+.ld-top { display: flex; justify-content: space-between; gap: .8rem; flex-wrap: wrap; align-items: flex-start; }
+.ld-who { display: grid; gap: .1rem; min-width: 0; }
+.ld-who b { font-size: 1.05rem; }
+.ld-who a { color: #ff5b00; font-weight: 600; overflow-wrap: anywhere; }
+.ld-meta { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; font-size: .8rem; color: #6d655d; }
+.ld-meta select { min-height: 38px; border: 1.5px solid #15120f; border-radius: 10px; padding: 0 .6rem; font: 600 .85rem "Inter", sans-serif; background: #fff; }
+.ld-tag { background: #15120f; color: #fff; border-radius: 99px; padding: .15rem .6rem; font-weight: 600; }
+.ld-dl { display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; margin: .8rem 0 0; font-size: .88rem; }
+.ld-dl dt { color: #6d655d; font-weight: 600; }
+.ld-dl dd { margin: 0; overflow-wrap: anywhere; }
+.ld-dl a { color: #ff5b00; }
+.ld-msg { margin: .8rem 0 0; padding: .7rem .9rem; background: #f6f2ed; border-radius: 10px; font-size: .9rem; white-space: pre-wrap; overflow-wrap: anywhere; }

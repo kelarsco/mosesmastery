@@ -53,6 +53,7 @@
       var data = {}, fd = new FormData(cf);
       fd.forEach(function (val, k) { data[k] = data[k] ? data[k] + ', ' + val : val; });
       delete data.botcheck; delete data.redirect;
+      if (window.mmLead) window.mmLead({ source: 'contact', name: data.name, email: data.email, link: data.link, services: data.services, stage: data.stage, budget: data.budget, timeline: data.timeline, heard: data.source, mesg: data.mesg || data['mesg'] });
       var label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending...';
       if (st) { st.className = 'cont-status'; st.textContent = ''; }
       fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })

@@ -25,3 +25,7 @@ Run the whole of `supabase/schema.sql` again (section 4 is new, safe to re-run).
 3. Recordings: create a free project at clarity.microsoft.com, copy the Project ID, paste it in Dashboard > Recordings. No code change needed.
 4. Controls: announcement bar, maintenance notice, tracking switch, Clarity switch, hero video switch, plus a health check and a test-event button.
 5. `privacy.html` explains all of the above to visitors. Keep it in step with `js/track.js`.
+
+
+## Leads (section 6)
+Run section 6 of `supabase/schema.sql` once. After that every contact-form and calculator request is also saved and appears in the dashboard's Leads tab, where you can mark it New, Contacted, Won or Lost and export a CSV.

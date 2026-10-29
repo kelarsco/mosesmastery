@@ -4,6 +4,15 @@
 (function () {
   'use strict';
   var C = window.MM_CONFIG || {};
+  /* save a form request to the database as a backup to the email (runs only when the visitor sends a form) */
+  window.mmLead = function (d) {
+    try {
+      if (!C.supabaseUrl || !C.supabaseAnonKey) return;
+      var cut = function (v, n) { return v == null || v === '' ? null : String(v).slice(0, n); };
+      var row = { source: d.source === 'calculator' ? 'calculator' : 'contact', name: cut(d.name, 120), email: cut(d.email, 200), link: cut(d.link || d.store, 300), services: cut(d.services, 400), stage: cut(d.stage, 120), budget: cut(d.budget, 80), timeline: cut(d.timeline, 80), how_heard: cut(d.source_how || d.heard, 80), message: cut(d.mesg || d.message, 3000), numbers: d.numbers ? (typeof d.numbers === 'string' ? JSON.parse(d.numbers) : d.numbers) : null };
+      fetch(C.supabaseUrl.replace(/\/$/, '') + '/rest/v1/leads', { method: 'POST', keepalive: true, headers: { apikey: C.supabaseAnonKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(row) }).catch(function () {});
+    } catch (_) {}
+  };
 
   /* ---------- site controls (Dashboard > Controls): announcement bar, maintenance notice, switches ---------- */
   var T = {}; try { T = JSON.parse(localStorage.getItem('mm_settings') || '{}') || {}; } catch (_) {}

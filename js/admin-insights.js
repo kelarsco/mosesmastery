@@ -5,7 +5,7 @@
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
   var ctx = null, sb = null, DEMO = false, L = [], range = 30, settings = {}, setLoaded = false, setErr = '', undoS = [], redoS = [], current = 'A', liveTimer = null;
-  var TABS = { A: 'tabAnalytics', L: 'tabLocations', I: 'tabInsights', R: 'tabRecordings', C: 'tabControls', P: 'tabProjects' };
+  var TABS = { D: 'tabLeads', A: 'tabAnalytics', L: 'tabLocations', I: 'tabInsights', R: 'tabRecordings', C: 'tabControls', P: 'tabProjects' };
   var SAFE_LINK = /^(https?:\/\/|\/|[a-z0-9\-]+\.html)/i, CLARITY_ID = /^[a-z0-9]{6,16}$/i;
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -312,6 +312,7 @@
     Object.keys(TABS).forEach(function (k) { var b = $('tabBtn' + k), p = $(TABS[k]); if (b) b.setAttribute('aria-selected', k === key ? 'true' : 'false'); if (p) p.hidden = k !== key; });
     clearInterval(liveTimer); liveTimer = null;
     if (key === 'L') { renderLocations(); liveTimer = setInterval(function () { if (!document.hidden && ctx.reload && !DEMO) ctx.reload(); }, 30000); }
+    if (key === 'D' && window.MMLeads) window.MMLeads.show();
     if (key === 'I') renderInsights();
     if (key === 'R') renderRecordings();
     if (key === 'C') renderControls();
@@ -319,9 +320,10 @@
   }
   function init(c) {
     ctx = c; sb = c.sb; DEMO = c.DEMO;
+    if (window.MMLeads) window.MMLeads.init(c);
     Object.keys(TABS).forEach(function (k) { var b = $('tabBtn' + k); if (b) b.addEventListener('click', function () { show(k); }); });
-    var m = /[?&]tab=(analytics|locations|insights|recordings|controls|projects)/.exec(location.search);
-    loadSettings().then(function () { if (m) show({ analytics: 'A', locations: 'L', insights: 'I', recordings: 'R', controls: 'C', projects: 'P' }[m[1]]); else if (current === 'C') renderControls(); });
+    var m = /[?&]tab=(analytics|leads|locations|insights|recordings|controls|projects)/.exec(location.search);
+    loadSettings().then(function () { if (m) show({ analytics: 'A', leads: 'D', locations: 'L', insights: 'I', recordings: 'R', controls: 'C', projects: 'P' }[m[1]]); else if (current === 'C') renderControls(); });
   }
   /* called by admin.js after every (re)load of events */
   function update(events, r) {

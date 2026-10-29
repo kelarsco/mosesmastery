@@ -37,6 +37,7 @@
     var data = {}, fd = new FormData(f);
     fd.forEach(function (v, k) { data[k] = v; });
     delete data.botcheck;
+    if (window.mmLead) window.mmLead({ source: 'calculator', name: data.name, email: data.email, store: data.store, numbers: data.numbers });
     data.message = 'Store: ' + data.store + '\nNumbers: ' + data.numbers;
     var btn = f.querySelector('button'), label = btn.querySelector('.mm-cta-tx').textContent;
     btn.disabled = true; btn.querySelector('.mm-cta-tx').textContent = 'Sending...'; st.className = 'calc-status'; st.textContent = '';
