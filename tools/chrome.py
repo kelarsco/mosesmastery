@@ -17,6 +17,7 @@ def links(p):
         ("Projects", p + "projects.html", "projects"),
         ("Pricing", p + "index.html#price", "price"),
         ("Blog", p + "blog/", "blog"),
+        ("Free Calculator", p + "calculator.html", "calc"),
         ("Contact", p + "contact.html", "contact"),
     ]
 
@@ -49,7 +50,7 @@ def header(p, active=""):
     </div>
     <nav class="mm-menu-links" aria-label="Menu">
       {"".join(f'<a href="{h}"{" class=\"is-active\" aria-current=\"page\"" if k == active else ""} style="--i:{i}">{t}</a>' for i, (t, h, k) in enumerate(links(p)))}
-      <a href="{CAL}" class="mm-menu-cta" style="--i:6" onclick="{CAL_ONCLICK}">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      <a href="{CAL}" class="mm-menu-cta" style="--i:7" onclick="{CAL_ONCLICK}">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       <div class="mm-menu-auth" style="--i:7"><a href="{p}account.html">Sign in</a><span>/</span><a href="{p}account.html?mode=signup">Sign up</a></div>
     </nav>
     <div class="mm-menu-foot">
@@ -61,7 +62,7 @@ def header(p, active=""):
 
 def footer(p):
     soc = "".join(f'<a href="{u}" target="_blank" rel="noopener noreferrer" aria-label="{l}"><i class="{i}" aria-hidden="true"></i></a>' for l, s, i, u in SOCIALS)
-    co = "".join(f'<li><a href="{h}">{t}</a></li>' for t, h, k in links(p) + [("Free calculator", p + "calculator.html", "calc")])
+    co = "".join(f'<li><a href="{h}">{t}</a></li>' for t, h, k in links(p))
     sv = "".join(f'<li><a href="{p}services/{sl}/">{t}</a></li>' for sl, t in (
         ("shopify-store-design", "Shopify design &amp; development"), ("shopify-conversion-rate-optimization", "Conversion optimization &amp; audits"), ("shopify-seo", "Shopify SEO"),
         ("meta-ads-for-shopify", "Meta &amp; Google ads"), ("ai-automation-for-shopify", "AI automation, content &amp; chat")))
