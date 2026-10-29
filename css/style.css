@@ -3557,3 +3557,9 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .skill-list li:hover,.skill-list li.active{opacity:1}
 .bx-rgt-no p{color:#fff}
 .pj-ft-txt a img{height:auto}
+
+/* Services headline */
+.ser-big{font:700 clamp(2.1rem,6vw,4.4rem)/1.05 "Inter",sans-serif;letter-spacing:-.035em;color:#fff;text-transform:none;margin:2.2rem 0 1rem;padding:0 20px;max-width:16ch}
+.ser-big em{font-style:normal;color:var(--mm-yellow,#f7cb1a)}
+#services .ser-tit p{font-weight:600;letter-spacing:.04em}
+@media(min-width:770px){.ser-big{max-width:22ch;padding:0 40px}}
