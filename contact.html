@@ -163,71 +163,45 @@
 
 
         <div class="form-lft contact">
-          <form action="https://api.web3forms.com/submit" method="POST" class="cont-form">
-
+          <form action="https://api.web3forms.com/submit" method="POST" class="cont-form qf" novalidate>
             <input type="hidden" name="access_key" value="1779dbb2-90ce-45b1-8e8a-e47a698d3bac">
             <input type="hidden" name="redirect" value="thankyou.html">
-            <input type="hidden" name="subject" value="New message from mosesmastery.com">
+            <input type="hidden" name="subject" value="New project request from mosesmastery.com">
             <input type="hidden" name="from_name" value="Moses Mastery website">
             <input type="checkbox" name="botcheck" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
+            <div class="qf-head"><p class="qf-step" id="qfStep" aria-live="polite">Step 1 of 3</p><div class="qf-bar" aria-hidden="true"><i id="qfBar"></i></div></div>
 
+            <fieldset class="qf-pane is-on" data-step="1">
+              <legend>What do you need help with?</legend>
+              <p class="qf-hint">Pick all that apply.</p>
+              <div class="qf-chips" role="group"><label class="qf-chip"><input type="checkbox" name="services" value="Store design &amp; build"><span>Store design &amp; build</span></label><label class="qf-chip"><input type="checkbox" name="services" value="Conversion optimization"><span>Conversion optimization</span></label><label class="qf-chip"><input type="checkbox" name="services" value="Meta &amp; Google ads"><span>Meta &amp; Google ads</span></label><label class="qf-chip"><input type="checkbox" name="services" value="Shopify SEO"><span>Shopify SEO</span></label><label class="qf-chip"><input type="checkbox" name="services" value="AI automation &amp; content"><span>AI automation &amp; content</span></label><label class="qf-chip"><input type="checkbox" name="services" value="Not sure yet"><span>Not sure yet</span></label></div>
+            </fieldset>
 
+            <fieldset class="qf-pane" data-step="2">
+              <legend>Tell me about your store</legend>
+              <p class="qf-q">Where are you at?</p>
+              <div class="qf-chips" role="radiogroup"><label class="qf-chip"><input type="radio" name="stage" value="New store, not launched" required><span>New store, not launched</span></label><label class="qf-chip"><input type="radio" name="stage" value="Live, under $10k/month"><span>Live, under $10k/month</span></label><label class="qf-chip"><input type="radio" name="stage" value="Live, $10k+/month"><span>Live, $10k+/month</span></label></div>
+              <p class="qf-q">Budget</p>
+              <div class="qf-chips" role="radiogroup"><label class="qf-chip"><input type="radio" name="budget" value="Under $500" required><span>Under $500</span></label><label class="qf-chip"><input type="radio" name="budget" value="$500 - $2k"><span>$500 - $2k</span></label><label class="qf-chip"><input type="radio" name="budget" value="$2k - $5k"><span>$2k - $5k</span></label><label class="qf-chip"><input type="radio" name="budget" value="$5k+"><span>$5k+</span></label><label class="qf-chip"><input type="radio" name="budget" value="Not sure yet"><span>Not sure yet</span></label></div>
+              <p class="qf-q">When do you want to start?</p>
+              <div class="qf-chips" role="radiogroup"><label class="qf-chip"><input type="radio" name="timeline" value="As soon as possible" required><span>As soon as possible</span></label><label class="qf-chip"><input type="radio" name="timeline" value="In 1-2 months"><span>In 1-2 months</span></label><label class="qf-chip"><input type="radio" name="timeline" value="Just exploring"><span>Just exploring</span></label></div>
+              <label class="qf-f"><span>Store link (optional)</span><input type="url" name="link" autocomplete="url" placeholder="https://yourstore.com"></label>
+            </fieldset>
 
-            <div class="input-wrap w-100">
-              <input type="text" name="name" autocomplete="name" class="cont-inp" placeholder="Full Name" required>
-              <i class="  icon fa-solid fa-address-card"></i>
-            </div>
-
-
-
-
-            <div class="input-wrap w-100">
-              <input type="email" name="email" autocomplete="email" class="cont-inp" placeholder="Email" required>
-              <i class="  icon fa-solid fa-envelope"></i>
-            </div>
-
-            <div class="input-wrap w-100">
-              <input type="url" name="link" autocomplete="off" placeholder=" Site URL" class="cont-inp">
-              <i class="icon fa-solid fa-link"></i>
-            </div>
-
-            <div class="input-wrap w-100">
-              <select name="where?" id="hear" class="cont-inp">
-                <option value=""> How did you hear about us?</option>
-                <option value="google">google</option>
-                <option value="shopify experts">shopify experts</option>
-                <option value="Friend/Refferal client">Friend/Refferal client</option>
-                <option value="other">other</option>
-              </select>
-              <i class="icon fa-solid fa-earth-americas"></i>
-
-            </div>
-
-
-            <div class="input-wrap w-100">
-              <select name="bugt" id="budget" class="cont-inp">
-                <option value=" "> budget</option>
-                <option value="100 - 500">100 - 500</option>
-                <option value="500 - 5k">500 - 5k</option>
-                <option value="10k - 20k">10k - 20k</option>
-                <option value="50k +">50k +</option>
-              </select>
-              <i class=" icon fa-solid fa-dollar-sign"></i>
-
-            </div>
-
-
-            <div class="input-wrap textarea w-100">
-              <textarea name="mesg" autocomplete="off" class="cont-inp" placeholder="Message" required></textarea>
-
-              <i class="  icon fa-solid fa-inbox"></i>
-            </div>
+            <fieldset class="qf-pane" data-step="3">
+              <legend>Where should I send my reply?</legend>
+              <label class="qf-f"><span>Full name</span><input type="text" name="name" autocomplete="name" required></label>
+              <label class="qf-f"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
+              <label class="qf-f"><span>Anything else I should know? (optional)</span><textarea name="mesg" rows="4" autocomplete="off"></textarea></label>
+              <label class="qf-f"><span>How did you hear about me? (optional)</span><select name="source"><option value="">Choose one</option><option>Google</option><option>Instagram</option><option>Shopify experts</option><option>Friend or past client</option><option>Other</option></select></label>
+            </fieldset>
 
             <p class="cont-status" id="contStatus" role="status" aria-live="polite"></p>
-            <div class="cont-butt ">
-              <button type="submit" class="btn-prj ">Send Message</button>
-
+            <div class="qf-nav">
+              <button type="button" class="qf-back" id="qfBack" hidden>Back</button>
+              <button type="button" class="mm-cta qf-next" id="qfNext">Next</button>
+              <button type="submit" class="mm-cta qf-send" id="qfSend" hidden>Send my request</button>
             </div>
           </form>
         </div>
@@ -272,6 +246,7 @@
 <script src="js/track.js"></script>
 <script src="js/index.js"></script>
 <script src="js/sections.js"></script>
+<script src="js/quote-form.js"></script>
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </body>
 </html>
