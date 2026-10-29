@@ -3563,3 +3563,21 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .ser-big em{font-style:normal;color:var(--mm-yellow,#f7cb1a)}
 #services .ser-tit p{font-weight:600;letter-spacing:.04em}
 @media(min-width:770px){.ser-big{max-width:22ch;padding:0 40px}}
+
+/* Primary CTA */
+.mm-cta-wrap{display:flex;justify-content:center;padding:3rem 1rem 2rem;width:100%}
+.mm-cta{position:relative;display:inline-flex;align-items:center;gap:.8rem;padding:.95rem .95rem .95rem 1.7rem;min-height:56px;border-radius:999px;overflow:hidden;isolation:isolate;
+  background:linear-gradient(135deg,#ffe04d 0%,#f7cb1a 45%,#e9a800 100%);color:#111;font:700 1.05rem/1 "Inter",sans-serif;letter-spacing:.01em;text-decoration:none;
+  box-shadow:0 0 0 0 rgba(247,203,26,.55),0 10px 28px -8px rgba(247,203,26,.55),inset 0 1px 0 rgba(255,255,255,.55);
+  animation:mmPulse 2.4s ease-out infinite;transition:transform .25s ease,box-shadow .25s ease}
+.mm-cta::before{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;z-index:-1;transform:skewX(-22deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:mmShine 3.2s ease-in-out infinite}
+.mm-cta-ar{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#111;color:#f7cb1a;transition:transform .25s ease}
+.mm-cta:hover,.mm-cta:focus-visible{transform:translateY(-2px) scale(1.03);box-shadow:0 0 0 6px rgba(247,203,26,.18),0 16px 34px -8px rgba(247,203,26,.7),inset 0 1px 0 rgba(255,255,255,.55)}
+.mm-cta:hover .mm-cta-ar{transform:translateX(4px)}
+.mm-cta:active{transform:scale(.98)}
+.mm-cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@keyframes mmShine{0%,55%{left:-70%}100%{left:130%}}
+@keyframes mmPulse{0%{box-shadow:0 0 0 0 rgba(247,203,26,.5),0 10px 28px -8px rgba(247,203,26,.55),inset 0 1px 0 rgba(255,255,255,.55)}70%,100%{box-shadow:0 0 0 18px rgba(247,203,26,0),0 10px 28px -8px rgba(247,203,26,.55),inset 0 1px 0 rgba(255,255,255,.55)}}
+@media(max-width:480px){.mm-cta{font-size:1rem;padding-left:1.4rem}}
+@media(prefers-reduced-motion:reduce){.mm-cta,.mm-cta::before{animation:none}}
