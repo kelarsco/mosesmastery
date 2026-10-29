@@ -61,7 +61,7 @@ def header(p, active=""):
 
 def footer(p):
     soc = "".join(f'<a href="{u}" target="_blank" rel="noopener noreferrer" aria-label="{l}"><i class="{i}" aria-hidden="true"></i></a>' for l, s, i, u in SOCIALS)
-    co = "".join(f'<li><a href="{h}">{t}</a></li>' for t, h, k in links(p))
+    co = "".join(f'<li><a href="{h}">{t}</a></li>' for t, h, k in links(p) + [("Free calculator", p + "calculator.html", "calc")])
     sv = "".join(f'<li><a href="{p}services/{sl}/">{t}</a></li>' for sl, t in (
         ("shopify-store-design", "Shopify design &amp; development"), ("shopify-conversion-rate-optimization", "Conversion optimization &amp; audits"), ("shopify-seo", "Shopify SEO"),
         ("meta-ads-for-shopify", "Meta &amp; Google ads"), ("ai-automation-for-shopify", "AI automation, content &amp; chat")))

@@ -281,8 +281,59 @@ page += f'''<body class="bl-page">
 ''' + TAIL % (p, p, p, p)
 W(os.path.join(ROOT, "privacy.html"), page)
 
+# revenue-leak calculator page
+p = ""; url = SITE + "/calculator.html"
+CALC = """
+<div class="calc" id="calc">
+  <form class="calc-in" id="calcForm" onsubmit="return false" aria-label="Store numbers">
+    <h2>Your store today</h2>
+    <label class="calc-f"><span>Monthly visitors</span><input id="cVis" type="number" inputmode="numeric" min="0" step="100" value="10000"></label>
+    <label class="calc-f"><span>Conversion rate (%)</span><input id="cCr" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="1.2"></label>
+    <label class="calc-f"><span>Average order value ($)</span><input id="cAov" type="number" inputmode="decimal" min="0" step="1" value="60"></label>
+    <p class="calc-note">Find these in Shopify under Analytics. Use last month's numbers. Nothing here is sent anywhere until you choose to request a review.</p>
+  </form>
+  <div class="calc-out" aria-live="polite">
+    <h2>What a better conversion rate is worth</h2>
+    <p class="calc-now">Right now your store makes about <strong id="oNow">$0</strong> a month from this traffic.</p>
+    <div class="calc-rows">
+      <div class="calc-row"><span class="calc-l">Small lift <em>+15% conversion</em></span><span class="calc-v" id="o1">$0</span><i class="calc-bar"><b id="b1"></b></i></div>
+      <div class="calc-row"><span class="calc-l">Realistic <em>+30% conversion</em></span><span class="calc-v" id="o2">$0</span><i class="calc-bar"><b id="b2"></b></i></div>
+      <div class="calc-row"><span class="calc-l" id="l3">Healthy benchmark</span><span class="calc-v" id="o3">$0</span><i class="calc-bar"><b id="b3"></b></i></div>
+    </div>
+    <p class="calc-big">Extra revenue per year at the realistic level: <strong id="oYear">$0</strong></p>
+    <p class="calc-note">These are estimates from simple math (visitors &times; conversion rate &times; order value), not a promise. Real results depend on your traffic quality, product and offer. Many Shopify stores sit between 1% and 3% conversion.</p>
+  </div>
+</div>
+<section class="calc-lead" id="calcLead">
+  <h2>Want me to find where <em>your</em> store leaks?</h2>
+  <p>Send your store link. I will review it and email you the three biggest fixes I would make first. Free, no obligation.</p>
+  <form id="calcLeadForm" class="calc-lf">
+    <input type="hidden" name="access_key" value="1779dbb2-90ce-45b1-8e8a-e47a698d3bac">
+    <input type="hidden" name="subject" value="Calculator lead: store review request">
+    <input type="hidden" name="from_name" value="Moses Mastery calculator">
+    <input type="hidden" name="numbers" id="lNum" value="">
+    <input type="checkbox" name="botcheck" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label><span>Your name</span><input name="name" required autocomplete="name"></label>
+    <label><span>Email</span><input name="email" type="email" required autocomplete="email"></label>
+    <label class="calc-wide"><span>Store link</span><input name="store" type="url" required placeholder="https://yourstore.com" autocomplete="url"></label>
+    <button type="submit" class="mm-cta"><span class="mm-cta-tx">Send my free review</span><span class="mm-cta-ar" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+    <p class="calc-status" id="calcStatus" role="status"></p>
+  </form>
+</section>
+"""
+page = head("Free Shopify Revenue Calculator | Moses Mastery", "See how much more revenue your Shopify store could make from a better conversion rate. Free calculator, plus a free store review.", url, p, OG, "website")
+page += f'''<body class="bl-page">
+  {header(p, "")}
+  <main id="main">
+    <section class="bl-hero"><p class="bl-kicker"><span></span>Free tool</p><h1>How much is your store <em>leaving on the table?</em></h1></section>
+    <section class="ar-wrap sv-wrap" style="padding-bottom:4rem">{CALC}</section>
+  </main>
+  {footer(p)}
+''' + (TAIL % (p, p, p, p)).replace("</body>", '<script src="js/calculator.js"></script>\n</body>')
+W(os.path.join(ROOT, "calculator.html"), page)
+
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/calculator.html", "0.7", "2026-10-29"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 
