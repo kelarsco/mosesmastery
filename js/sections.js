@@ -4,7 +4,7 @@
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-  /* ---------- hero video: start after load, fade in once playing ---------- */
+  /* ---------- hero video: starts immediately, fades in over an identical still frame ---------- */
   var hv = document.querySelector('.bg-video[data-src]');
   var heroOff = false; try { heroOff = (JSON.parse(localStorage.getItem('mm_settings') || '{}') || {}).heroVideo === false; } catch (_) {}
   if (hv && !reduce && !heroOff && !(navigator.connection && navigator.connection.saveData)) {
@@ -14,7 +14,7 @@
       hv.addEventListener('playing', function () { hv.classList.add('on'); }, { once: true });
       var pr = hv.play(); if (pr && pr.catch) pr.catch(function () {});
     };
-    if (document.readyState === 'complete') setTimeout(startHero, 150); else window.addEventListener('load', function () { setTimeout(startHero, 150); });
+    startHero(); // start straight away: the still behind it is the video's first frame, so there is no visible jump
     if ('IntersectionObserver' in window) new IntersectionObserver(function (en) {
       if (!hv.getAttribute('src')) return;
       if (en[0].isIntersecting) { var q = hv.play(); if (q && q.catch) q.catch(function () {}); } else hv.pause();

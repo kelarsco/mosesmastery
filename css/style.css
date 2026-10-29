@@ -3362,7 +3362,7 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
 /* =====================================================
    Round 3: hero video, all-projects, thank-you, auth links, mobile type, scroll motion (added)
    ===================================================== */
-.bg-video { opacity: 0; transition: opacity 1.2s ease; }
+.bg-video { opacity: 0; transition: opacity .35s ease; }
 .bg-video.on { opacity: 1; }
 .hd-sign { color: inherit; text-decoration: none; font: 500 .95rem "Inter", sans-serif; margin-right: 1.1rem; display: inline-flex; gap: .45rem; align-items: center; white-space: nowrap; opacity: .9; }
 .hd-sign:hover { color: var(--secondary); opacity: 1; }
