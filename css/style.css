@@ -3548,3 +3548,12 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
   .mm-foot-soc a { min-width: 46px; }
 }
 .brand-tag { font-size: max(.75rem, 12px); }
+
+/* a11y contrast (WCAG AA) */
+.bx-rgt-no p{color:#9b9b9b}
+.qbt-lnk,.sk-qbox-btn .qbt-lnk{color:#111}
+.pj-ft-txt a span{color:#8a6a00}
+.skill-list li{opacity:.62}
+.skill-list li:hover,.skill-list li.active{opacity:1}
+.bx-rgt-no p{color:#fff}
+.pj-ft-txt a img{height:auto}
