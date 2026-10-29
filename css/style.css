@@ -3600,3 +3600,13 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .qbox-btn.qb-cta{background:none;padding:0;width:auto;border-radius:0}
 @media(max-width:769px){.qbox-btn.qb-cta{background:none;padding:1.2rem 0;width:100%;justify-content:flex-start}}
 @media(min-width:770px){.row img{width:auto;object-fit:contain}}
+
+/* Book-a-call buttons (menu + footer) — match .mm-cta */
+.mm-foot-btn,.mm-menu-links a.mm-menu-cta{position:relative;display:inline-flex;align-items:center;gap:.7rem;overflow:hidden;isolation:isolate;border-radius:999px;font:700 1rem/1 "Inter",sans-serif;letter-spacing:.01em;
+  background:linear-gradient(135deg,#ffe04d 0%,#f7cb1a 45%,#e9a800 100%)!important;color:#111!important;padding:.8rem .8rem .8rem 1.4rem;min-height:52px;
+  box-shadow:0 10px 28px -8px rgba(247,203,26,.55),inset 0 1px 0 rgba(255,255,255,.55);animation:mmPulse 2.4s ease-out infinite;transition:transform .25s ease,box-shadow .25s ease}
+.mm-foot-btn::before,.mm-menu-links a.mm-menu-cta::before{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;z-index:-1;transform:skewX(-22deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:mmShine 3.2s ease-in-out infinite}
+.mm-foot-btn i,.mm-menu-cta i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#111;color:#f7cb1a;font-size:.8rem;transition:transform .25s ease}
+.mm-foot-btn:hover,.mm-menu-links a.mm-menu-cta:hover{background:linear-gradient(135deg,#ffe04d,#f7cb1a 45%,#e9a800)!important;color:#111!important;transform:translateY(-2px) scale(1.03)}
+.mm-foot-btn:hover i,.mm-menu-cta:hover i{transform:translateX(4px)}
+@media(prefers-reduced-motion:reduce){.mm-foot-btn,.mm-menu-links a.mm-menu-cta,.mm-foot-btn::before,.mm-menu-cta::before{animation:none}}
