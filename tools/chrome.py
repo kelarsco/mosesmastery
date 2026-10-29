@@ -26,7 +26,7 @@ def header(p, active=""):
   <header class="header">
     <div class="hd-cont">
       <div class="logo">
-        <a href="{p}index.html" aria-label="Moses Mastery home"><img src="{p}asset/logo.png" class="des_loo" alt="Moses Mastery logo"><img src="{p}asset/logo.png" class="mob_loo" alt=""></a>
+        <a href="{p}index.html" aria-label="Moses Mastery home"><img src="{p}asset/logo.webp" class="des_loo" alt="Moses Mastery logo"><img src="{p}asset/logo.webp" class="mob_loo" alt=""></a>
       </div>
       <nav class="nav-menu_des" aria-label="Main">{des}</nav>
       <div class="rgt-hd">
@@ -44,7 +44,7 @@ def header(p, active=""):
   </header>
   <div class="mm-menu" id="mmMenu" aria-hidden="true" role="dialog" aria-label="Site menu">
     <div class="mm-menu-top">
-      <a href="{p}index.html" class="mm-menu-logo" aria-label="Moses Mastery home"><img src="{p}asset/logo.png" alt="" width="256" height="256"><span>Moses Mastery</span></a>
+      <a href="{p}index.html" class="mm-menu-logo" aria-label="Moses Mastery home"><img src="{p}asset/logo.webp" alt="" width="256" height="256"><span>Moses Mastery</span></a>
       <button type="button" class="mm-menu-close" aria-label="Close menu" onclick="toggleMenu(event)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </div>
     <nav class="mm-menu-links" aria-label="Menu">
@@ -69,7 +69,7 @@ def footer(p):
   <footer class="mm-foot">
     <div class="mm-foot-in">
       <div class="mm-foot-brand">
-        <a href="{p}index.html" class="mm-foot-logo" aria-label="Moses Mastery home"><img src="{p}asset/logo.png" alt="" width="256" height="256" loading="lazy"><span>Moses<br>Mastery</span></a>
+        <a href="{p}index.html" class="mm-foot-logo" aria-label="Moses Mastery home"><img src="{p}asset/logo.webp" alt="" width="256" height="256" loading="lazy"><span>Moses<br>Mastery</span></a>
         <p class="mm-foot-tag">Shopify design, growth and AI for eCommerce brands.</p>
         <address class="mm-foot-contact">
           <span>Contact</span>

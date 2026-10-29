@@ -69,10 +69,8 @@ def head(title, desc, canon, p, og_img, og_type="website", extra=""):
   <link rel="icon" type="image/png" sizes="16x16" href="{p}asset/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="{p}asset/apple-touch-icon.png">
   <link rel="manifest" href="{p}site.webmanifest">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Bebas+Neue&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Bebas+Neue&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"></noscript>
+  <link rel="preload" href="/asset/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{p}css/style.css">
   <link rel="stylesheet" href="{p}css/blog.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"></noscript>
@@ -181,7 +179,7 @@ for idx, a in enumerate(ARTICLES):
       </div>
       <section class="ar-cta"><h2>Need help with your <em>Shopify store</em>?</h2><p>I design, optimize and grow Shopify stores and set up AI automation for them. Book a free strategy call or send your store link.</p>
         <div><a class="bl-btn" href="https://calendly.com/onwenmoses/30min" onclick="Calendly.initPopupWidget({{url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'}});return false;">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a> <a class="bl-btn bl-btn-ghost" href="{p}contact.html">Contact me</a></div></section>
-      <section class="ar-author"><img src="{p}asset/logo.png" alt="" width="72" height="72" loading="lazy"><div><p class="ar-author-n">Moses Daniel</p><p>Founder of Moses Mastery. I help eCommerce brands with Shopify design, conversion optimization, SEO, ads and AI automation.</p></div></section>
+      <section class="ar-author"><img src="{p}asset/logo.webp" alt="" width="72" height="72" loading="lazy"><div><p class="ar-author-n">Moses Daniel</p><p>Founder of Moses Mastery. I help eCommerce brands with Shopify design, conversion optimization, SEO, ads and AI automation.</p></div></section>
     </article>
     <section class="bl-related" aria-label="More articles"><h2>Keep reading</h2><div class="bl-grid bl-grid-3">{rel}</div></section>
   </main>

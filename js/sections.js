@@ -280,7 +280,8 @@
       en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
     var lastTop = -1, k = 0;
-    rv.forEach(function (el) { var t = Math.round(el.getBoundingClientRect().top / 40); k = (t === lastTop) ? k + 1 : 0; lastTop = t; el.classList.add('rv'); el.style.setProperty('--d', Math.min(k, 5) * 0.09 + 's'); io.observe(el); });
+    var tops = rv.map(function (el) { return Math.round(el.getBoundingClientRect().top / 40); }); // read every position first, then write: one layout pass instead of one per element
+    rv.forEach(function (el, i) { var t = tops[i]; k = (t === lastTop) ? k + 1 : 0; lastTop = t; el.classList.add('rv'); el.style.setProperty('--d', Math.min(k, 5) * 0.09 + 's'); io.observe(el); });
     var bar = document.createElement('div'); bar.className = 'mm-progress'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar);
     var ticking = false;
     window.addEventListener('scroll', function () {
