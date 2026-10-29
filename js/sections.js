@@ -292,4 +292,13 @@
       });
     }, { passive: true });
   }
+
+  /* ---------- sticky WhatsApp button (shows after the first screen) ---------- */
+  var wa = document.querySelector('.mm-wa');
+  if (wa) {
+    var waOn = false, waT = false;
+    var waCheck = function () { var on = window.scrollY > Math.min(500, window.innerHeight * 0.6); if (on !== waOn) { waOn = on; wa.classList.toggle('is-on', on); } waT = false; };
+    window.addEventListener('scroll', function () { if (!waT) { waT = true; requestAnimationFrame(waCheck); } }, { passive: true });
+    waCheck();
+  }
 })();
