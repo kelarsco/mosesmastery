@@ -22,7 +22,7 @@ def links(p):
     ]
 
 def header(p, active=""):
-    des = "".join(f'<a href="{h}"{" aria-current=\"page\"" if k == active else ""}>{t}</a>' for t, h, k in links(p)[1:])
+    des = "".join(f'<a href="{h}"{" aria-current=\"page\"" if k == active else ""}>{t}</a>' for t, h, k in [(("Calculator" if k == "calc" else t), h, k) for t, h, k in links(p)[1:]])
     return f'''<!-- mm-header -->
   <header class="header">
     <div class="hd-cont">
