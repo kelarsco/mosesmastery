@@ -52,7 +52,11 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ctlInit); else ctlInit();
 
   var off = !C.supabaseUrl || !C.supabaseAnonKey || navigator.doNotTrack === '1' || window.doNotTrack === '1';
+  /* visit the site with ?notrack=1 once to stop counting your own visits on that device (?notrack=0 undoes it) */
+  try { var nt = /[?&]notrack=([01])/.exec(location.search); if (nt) { if (nt[1] === '1') localStorage.setItem('mm_notrack', '1'); else localStorage.removeItem('mm_notrack'); } } catch (_) {}
   try { if (localStorage.getItem('mm_notrack') === '1') off = true; } catch (_) {}
+  /* automated visitors (speed tests, crawlers, headless browsers) are not people: do not count them */
+  if (navigator.webdriver || /HeadlessChrome|Lighthouse|PTST|Googlebot|bingbot|Bingbot|facebookexternalhit|Facebot|crawler|spider|bot\/|Pingdom|GTmetrix|Screaming|python-requests|curl\/|Slurp|DuckDuckBot|Baiduspider|YandexBot|SemrushBot|AhrefsBot|Applebot/i.test(navigator.userAgent || '')) off = true;
   if (/(^|\/)(admin|account)\.html$/.test(location.pathname)) off = true;
   if (T.tracking === false) off = true; // switch in Dashboard > Controls
   window.mmTrack = function () {};
@@ -61,6 +65,12 @@
   function rid() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now().toString(36); }
   function store(area, k) { try { var v = area.getItem(k); if (!v) { v = rid(); area.setItem(k, v); } return v; } catch (_) { return rid(); } }
   var vid = store(localStorage, 'mm_vid'), sid = store(sessionStorage, 'mm_sid');
+  /* a visit ends after 30 minutes without activity, so a tab left open for days is not one endless visit */
+  try {
+    var lastAct = +sessionStorage.getItem('mm_act') || 0;
+    if (lastAct && Date.now() - lastAct > 18e5) { sessionStorage.removeItem('mm_sid'); sessionStorage.removeItem('mm_geo_sent'); sid = store(sessionStorage, 'mm_sid'); }
+    sessionStorage.setItem('mm_act', String(Date.now()));
+  } catch (_) {}
   var ua = navigator.userAgent, w = window.innerWidth;
   var device = /Mobi|Android|iPhone/i.test(ua) ? 'mobile' : (/iPad|Tablet/i.test(ua) || (w >= 600 && w < 1000 && 'ontouchstart' in window)) ? 'tablet' : 'desktop';
   var browser = /Edg\//.test(ua) ? 'Edge' : /OPR\/|Opera/.test(ua) ? 'Opera' : /SamsungBrowser/.test(ua) ? 'Samsung' : /Firefox\//.test(ua) ? 'Firefox' : /Chrome\//.test(ua) ? 'Chrome' : /Safari\//.test(ua) ? 'Safari' : 'Other';
@@ -70,6 +80,10 @@
   var queue = [];
 
   function send(type, meta) {
+    try {
+      if (type !== 'page_view') { var la = +sessionStorage.getItem('mm_act') || 0; if (la && Date.now() - la > 18e5) { sessionStorage.removeItem('mm_sid'); sessionStorage.removeItem('mm_geo_sent'); sid = store(sessionStorage, 'mm_sid'); } }
+      sessionStorage.setItem('mm_act', String(Date.now()));
+    } catch (_) {}
     var body = { vid: vid, sid: sid, type: type, path: location.pathname.slice(0, 300), title: document.title.slice(0, 160), ref: refHost || null,
       device: device, browser: browser, os: os, w: w, tz: tz || null, utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'), utm_campaign: q.get('utm_campaign'), meta: meta || {} };
     try {
@@ -105,12 +119,19 @@
     var c = null; try { c = JSON.parse(localStorage.getItem('mm_geo') || 'null'); } catch (_) {}
     if (c && c.g && Date.now() - c.t < 6048e5) return done(c.g);
     var clip = function (v, n) { return v ? String(v).slice(0, n) : null; };
-    fetch('https://ipwho.is/?fields=success,country,country_code,region,city', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
-      if (!j || !j.success) throw 0;
-      var g = { cc: clip(j.country_code, 2), country: clip(j.country, 60), region: clip(j.region, 60), city: clip(j.city, 60) };
-      try { localStorage.setItem('mm_geo', JSON.stringify({ t: Date.now(), g: g })); } catch (_) {}
-      done(g);
-    }).catch(function () { done({ cc: null, tz: tz || null }); });
+    var tries = [
+      function () { return fetch('https://ipwho.is/?fields=success,country,country_code,region,city', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || !j.success || !j.country_code) throw 0; return { cc: j.country_code, country: j.country, region: j.region, city: j.city }; }); },
+      function () { return fetch('https://get.geojs.io/v1/ip/geo.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || !j.country_code) throw 0; return { cc: j.country_code, country: j.country, region: j.region, city: j.city }; }); },
+      function () { return fetch('https://ipapi.co/json/', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || !j.country_code || j.error) throw 0; return { cc: j.country_code, country: j.country_name, region: j.region, city: j.city }; }); }
+    ];
+    (function next(i) {
+      if (i >= tries.length) return done({ cc: null, tz: tz || null });
+      tries[i]().then(function (j) {
+        var g = { cc: clip(j.cc, 2), country: clip(j.country, 60), region: clip(j.region, 60), city: clip(j.city, 60) };
+        try { localStorage.setItem('mm_geo', JSON.stringify({ t: Date.now(), g: g })); } catch (_) {}
+        done(g);
+      }).catch(function () { next(i + 1); });
+    })(0);
   })();
 
   // time on page + deepest scroll, sent when the visitor leaves or switches tab
@@ -143,7 +164,7 @@
 
   // broken things: JavaScript errors (max 3 per page)
   var errs = 0;
-  function err(msg, src, line) { if (errs++ >= 3) return; send('js_error', { msg: String(msg || '').slice(0, 160), src: String(src || '').split('/').pop().slice(0, 60), line: line || 0 }); }
+  function err(msg, src, line) { if (errs >= 3) return; if (src && String(src).indexOf(location.host) === -1) return; if (!src && !/^Promise/.test(String(msg))) return; errs++; send('js_error', { msg: String(msg || '').slice(0, 160), src: String(src || '').split('/').pop().slice(0, 60), line: line || 0 }); }
   window.addEventListener('error', function (e) { err(e.message, e.filename, e.lineno); });
   window.addEventListener('unhandledrejection', function (e) { err('Promise: ' + (e.reason && e.reason.message || e.reason), '', 0); });
 

@@ -43,16 +43,20 @@
   function prep() {
     var asc = L.slice().sort(function (a, b) { return a.created_at < b.created_at ? -1 : 1; }), S = {}, order = [];
     asc.forEach(function (e) {
-      var s = S[e.sid]; if (!s) { s = S[e.sid] = { sid: e.sid, vid: e.vid, first: e.created_at, last: e.created_at, ev: [], pages: [], geo: null, device: e.device, browser: e.browser, os: e.os, ref: e.ref, utm: e.utm_source || null, secs: 0, scroll: 0 }; order.push(s); }
+      var key = e.ssid || e.sid, s = S[key]; if (!s) { s = S[key] = { sid: key, tz: e.tz, vid: e.vid, first: e.created_at, last: e.created_at, ev: [], pages: [], geo: null, device: e.device, browser: e.browser, os: e.os, ref: e.ref, utm: e.utm_source || null, secs: 0, scroll: 0 }; order.push(s); }
       s.ev.push(e); s.last = e.created_at;
       if (e.type === 'page_view') s.pages.push(e.path);
-      if (e.type === 'visitor_geo' && e.meta && e.meta.geo) s.geo = e.meta.geo;
+      if (e.type === 'visitor_geo' && e.meta && e.meta.geo && e.meta.geo.cc) s.geo = e.meta.geo; if (!s.geo && e._geo) s.geo = e._geo;
       if (e.type === 'page_leave' && e.meta) { s.secs += +e.meta.secs || 0; s.scroll = Math.max(s.scroll, +e.meta.scroll || 0); }
       if (!s.ref && e.ref) s.ref = e.ref; if (!s.utm && e.utm_source) s.utm = e.utm_source;
     });
     return order;
   }
-  function placeOf(g) { if (!g || !g.cc) return null; return { cc: g.cc, country: g.country || g.cc, city: g.city || '', region: g.region || '' }; }
+  function placeOf(g, tz) {
+    if (g && g.cc) return { cc: g.cc, country: g.country || g.cc, city: g.city || '', region: g.region || '' };
+    var m = tz && window.MMAdminUtil && window.MMAdminUtil.TZ_COUNTRY[tz]; if (m) return { cc: m[0], country: m[1], city: '', region: '', est: true };
+    return null;
+  }
 
   /* ---------- LOCATIONS ---------- */
   function renderLocations() {
@@ -60,9 +64,9 @@
     var pvS = S.filter(function (s) { return s.pages.length; });
     var liveSet = {}; L.forEach(function (e) { if (now - new Date(e.created_at).getTime() < 5 * 60e3) liveSet[e.vid] = e; });
     var liveVids = Object.keys(liveSet);
-    var byCountry = {}, byCity = {}, withGeo = 0, cVis = {};
+    var byCountry = {}, byCity = {}, withGeo = 0, estGeo = 0, cVis = {};
     pvS.forEach(function (s) {
-      var p = placeOf(s.geo); if (p) withGeo++;
+      var p = placeOf(s.geo, s.tz); if (p) withGeo++; if (p && p.est) estGeo++;
       var ck = p ? p.country : 'Unknown'; var c = byCountry[ck] || (byCountry[ck] = { cc: p && p.cc, vids: {}, sessions: 0, secs: [], cta: 0 });
       c.vids[s.vid] = 1; c.sessions++; if (s.secs) c.secs.push(s.secs);
       c.cta += s.ev.filter(function (e) { return /^(book_call|whatsapp_click|email_click|phone_click|form_submit)$/.test(e.type); }).length;
@@ -71,13 +75,13 @@
     var kp = el('section', 'ad-kpis'); host.appendChild(kp);
     var countries = Object.keys(byCountry).filter(function (k) { return k !== 'Unknown'; }), topC = countries.sort(function (a, b) { return Object.keys(byCountry[b].vids).length - Object.keys(byCountry[a].vids).length; })[0];
     [kpi('Live now', liveVids.length, 'active in the last 5 minutes'), kpi('Countries', countries.length), kpi('Cities', Object.keys(byCity).length), kpi('Top country', topC ? flag(byCountry[topC].cc) + ' ' + topC : 'None yet', topC ? Object.keys(byCountry[topC].vids).length + ' visitors' : ''),
-      kpi('Location known', pct(withGeo, pvS.length) + '%', 'of sessions')].forEach(function (k) { kp.appendChild(k); });
+      kpi('Location known', pct(withGeo, pvS.length) + '%', estGeo ? 'of visits (' + estGeo + ' estimated from time zone)' : 'of visits')].forEach(function (k) { kp.appendChild(k); });
 
     var lv = card('Live now', 'Updates every 30 seconds while this tab is open.', true); host.appendChild(lv);
     if (!liveVids.length) lv._body.appendChild(el('p', 'ad-empty', 'Nobody on the site right now.'));
     else {
       var rows = liveVids.map(function (v) {
-        var s = S.filter(function (x) { return x.vid === v; }).pop(), p = s && placeOf(s.geo), last = liveSet[v];
+        var s = S.filter(function (x) { return x.vid === v; }).pop(), p = s && placeOf(s.geo, s.tz), last = liveSet[v];
         return [(p ? flag(p.cc) + ' ' + (p.city ? p.city + ', ' : '') + p.country : '🌐 Unknown'), last.path, [last.device, last.browser].filter(Boolean).join(' / '), s && s.ref || 'Direct', ago(last.created_at)];
       });
       lv._body.appendChild(table(['Where', 'On page', 'Device', 'From', 'Last seen'], rows));
@@ -91,15 +95,15 @@
 
     var ct = card('Which countries take action', 'Average time on the site, and calls to action (book, WhatsApp, email, phone, form) per country', true); host.appendChild(ct);
     var crow = Object.keys(byCountry).sort(function (a, b) { return Object.keys(byCountry[b].vids).length - Object.keys(byCountry[a].vids).length; }).slice(0, 12).map(function (k) {
-      var c = byCountry[k]; return [(k === 'Unknown' ? '🌐 ' : flag(c.cc) + ' ') + k, Object.keys(c.vids).length, c.sessions, fmtSecs(avg(c.secs)), c.cta];
+      var c = byCountry[k]; return [(k === 'Unknown' ? '🌐 ' : flag(c.cc) + ' ') + k, Object.keys(c.vids).length, c.sessions, (c.secs.length ? fmtSecs(avg(c.secs)) : '—'), c.cta];
     });
-    if (crow.length) ct._body.appendChild(table(['Country', 'Visitors', 'Sessions', 'Avg time', 'Actions'], crow)); else ct._body.appendChild(el('p', 'ad-empty', 'No data yet'));
+    if (crow.length) ct._body.appendChild(table(['Country', 'Visitors', 'Visits', 'Avg time', 'Actions'], crow)); else ct._body.appendChild(el('p', 'ad-empty', 'No data yet'));
 
     var jr = card('Visitor journeys', 'The latest sessions: where they came from, the pages they opened in order, and what they did. Tap one to open it.', true); host.appendChild(jr);
     var recent = S.filter(function (s) { return s.pages.length; }).slice().sort(function (a, b) { return a.last < b.last ? 1 : -1; }).slice(0, 30);
     if (!recent.length) jr._body.appendChild(el('p', 'ad-empty', 'No sessions in this range yet.'));
     recent.forEach(function (s) {
-      var d = el('details', 'ad-j'), sm = el('summary'), p = placeOf(s.geo);
+      var d = el('details', 'ad-j'), sm = el('summary'), p = placeOf(s.geo, s.tz);
       sm.appendChild(el('span', 'ad-j-w', (p ? flag(p.cc) + ' ' + (p.city ? p.city + ', ' : '') + p.country : '🌐 Unknown location')));
       sm.appendChild(el('span', 'ad-j-m', [s.device, s.browser].filter(Boolean).join(' / ') + ' · ' + (s.ref || 'Direct') + ' · ' + s.pages.length + (s.pages.length === 1 ? ' page' : ' pages') + (s.secs ? ' · ' + fmtSecs(s.secs) : '') + ' · ' + ago(s.last)));
       d.appendChild(sm);
@@ -122,7 +126,7 @@
     function sessionsWith(re) { return S.filter(function (s) { return s.ev.some(function (e) { return re.test(e.type); }); }); }
     var steps = [['Visited', S.length], ['Scrolled halfway', sessionsWith(/^scroll_50$/).length], ['Clicked a call to action', sessionsWith(/^(book_call|whatsapp_click|email_click|phone_click|contact_click)$/).length],
       ['Started the form', sessionsWith(/^form_start$/).length], ['Sent the form', sessionsWith(/^form_submit$/).length]];
-    var fu = card('Conversion funnel', 'Share of sessions that reach each step. The biggest drop is the first thing to fix.', true); host.appendChild(fu);
+    var fu = card('Conversion funnel', 'Share of visits that reach each step. The biggest drop is the first thing to fix.', true); host.appendChild(fu);
     steps.forEach(function (s, i) {
       var row = el('div', 'ad-fn'), lab = el('span', 'ad-fn-l', s[0]), bar = el('div', 'ad-fn-b'), fill = el('i'), val = el('b', null, s[1] + '  (' + pct(s[1], steps[0][1]) + '%)');
       fill.style.width = Math.max(steps[0][1] ? 3 : 0, pct(s[1], steps[0][1])) + '%'; bar.appendChild(fill);
@@ -133,10 +137,10 @@
 
     var secs = S.filter(function (s) { return s.secs; }).map(function (s) { return s.secs; }), scrolls = S.filter(function (s) { return s.scroll; }).map(function (s) { return s.scroll; });
     var byV = {}; S.forEach(function (s) { byV[s.vid] = (byV[s.vid] || 0) + 1; }); var back = Object.keys(byV).filter(function (k) { return byV[k] > 1; }).length;
-    var quick = S.filter(function (s) { return s.pages.length === 1 && s.secs && s.secs < 10; }).length;
+    var quick = S.filter(function (s) { return s.pages.length === 1 && s.secs < 10; }).length;
     var kp = el('section', 'ad-kpis'); host.appendChild(kp);
-    [kpi('Avg time on site', fmtSecs(avg(secs)), 'median ' + fmtSecs(median(secs))), kpi('Avg scroll depth', Math.round(avg(scrolls)) + '%', 'of the page'), kpi('Came back', back, pct(back, vis) + '% of visitors, 2+ sessions'),
-      kpi('Left within 10 s', quick, pct(quick, S.length) + '% of sessions'), kpi('Contact conversion', pct(steps[4][1], steps[0][1]) + '%', steps[4][1] + ' forms from ' + steps[0][1] + ' sessions')].forEach(function (k) { kp.appendChild(k); });
+    [kpi('Avg time on site', fmtSecs(avg(secs)), 'visits that stayed 1s+ · median ' + fmtSecs(median(secs))), kpi('Avg scroll depth', Math.round(avg(scrolls)) + '%', 'of the page'), kpi('Came back', back, pct(back, vis) + '% of visitors, 2+ sessions'),
+      kpi('Left within 10 s', quick, pct(quick, S.length) + '% of visits'), kpi('Contact conversion', pct(steps[4][1], steps[0][1]) + '%', steps[4][1] + ' forms from ' + steps[0][1] + ' visits')].forEach(function (k) { kp.appendChild(k); });
 
     var g = el('div', 'ad-grid ad-grid2'); host.appendChild(g);
     var hh = card('Best hour to be visible', 'Visits by hour of day, in your time'); g.appendChild(hh);
@@ -149,11 +153,11 @@
 
     var cp = card('Campaigns and sources', 'Which sources bring people who act. Tag your links with ?utm_source=instagram&utm_campaign=name to see them here.', true); host.appendChild(cp);
     var src = {}; S.forEach(function (s) { var k = s.utm || s.ref || 'Direct'; var o = src[k] || (src[k] = { v: {}, n: 0, act: 0, secs: [] }); o.v[s.vid] = 1; o.n++; if (s.secs) o.secs.push(s.secs); if (s.ev.some(function (e) { return /^(book_call|whatsapp_click|email_click|phone_click|form_submit)$/.test(e.type); })) o.act++; });
-    var srows = Object.keys(src).sort(function (a, b) { return src[b].n - src[a].n; }).slice(0, 10).map(function (k) { var o = src[k]; return [k, Object.keys(o.v).length, o.n, fmtSecs(avg(o.secs)), o.act + ' (' + pct(o.act, o.n) + '%)']; });
-    if (srows.length) cp._body.appendChild(table(['Source', 'Visitors', 'Sessions', 'Avg time', 'Took action'], srows)); else cp._body.appendChild(el('p', 'ad-empty', 'No data yet'));
+    var srows = Object.keys(src).sort(function (a, b) { return src[b].n - src[a].n; }).slice(0, 10).map(function (k) { var o = src[k]; return [k, Object.keys(o.v).length, o.n, (o.secs.length ? fmtSecs(avg(o.secs)) : '—'), o.act + ' (' + pct(o.act, o.n) + '%)']; });
+    if (srows.length) cp._body.appendChild(table(['Source', 'Visitors', 'Visits', 'Avg time', 'Took action'], srows)); else cp._body.appendChild(el('p', 'ad-empty', 'No data yet'));
 
     var pg = card('Pages people actually read', 'Average time on each page', true); host.appendChild(pg);
-    var pm = {}; L.forEach(function (e) { if (e.type === 'page_leave' && e.meta && e.meta.secs) { var o = pm[e.path] || (pm[e.path] = []); o.push(+e.meta.secs); } });
+    var pm = {}; L.forEach(function (e) { if (e.type === 'page_leave' && e.meta && e.meta.secs) { var pk = window.MMAdminUtil.normPath(e.path), o = pm[pk] || (pm[pk] = []); o.push(+e.meta.secs); } });
     bars(pg._body, Object.keys(pm).map(function (k) { return [k, Math.round(avg(pm[k]))]; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 8), 'Time on page is recorded when visitors leave a page.', fmtSecs);
 
     var g2 = el('div', 'ad-grid ad-grid2'); host.appendChild(g2);
