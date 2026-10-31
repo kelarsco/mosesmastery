@@ -226,7 +226,7 @@
   }
 
   /* ---------- wiring ---------- */
-  function selfLabel() { var off = false; try { off = localStorage.getItem('mm_notrack') === '1'; } catch (_) {} $('adSelf').textContent = off ? 'Start counting my visits again' : 'Stop counting my visits on this device'; }
+  function selfLabel() { var off = false; try { off = localStorage.getItem('mm_notrack') === '1'; } catch (_) {} var sn = $('adSelfNote'); if (sn) sn.textContent = off ? 'This phone/browser is excluded, so your own visits from it are not counted. To test the counter, press the button at the bottom ("Start counting my visits again") or visit from another device.' : ''; $('adSelf').textContent = off ? 'Start counting my visits again' : 'Stop counting my visits on this device'; }
   function wire() {
     $('adRange').addEventListener('change', function (e) { range = +e.target.value; load(); });
     $('adRefresh').addEventListener('click', function () { if (DEMO) ev = []; load(); });
