@@ -119,7 +119,7 @@
   }
   var TECH = /^(page_view|visitor_geo|page_leave|perf|test|form_step)$/;
   var NAMES = { form_start: 'Started the form', rage_click: 'Rage click', js_error: 'Site error', page_view: 'Page view', scroll_50: 'Scrolled 50%', scroll_90: 'Scrolled 90%', book_call: 'Booked a call click', whatsapp_click: 'WhatsApp click', email_click: 'Email click', phone_click: 'Phone click',
-    instagram_click: 'Instagram click', x_click: 'X click', telegram_click: 'Telegram click', pinterest_click: 'Pinterest click', store_click: 'Store opened', form_submit: 'Contact form sent', sign_in_click: 'Sign in click', contact_click: 'Contact click' };
+    instagram_click: 'Instagram click', x_click: 'X click', telegram_click: 'Telegram click', linkedin_click: 'LinkedIn click', pinterest_click: 'Pinterest click', store_click: 'Store opened', form_submit: 'Contact form sent', sign_in_click: 'Sign in click', contact_click: 'Contact click' };
   function nm(t) { return NAMES[t] || t; }
 
   function render() {

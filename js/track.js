@@ -96,7 +96,7 @@
 
   // clicks on calls-to-action and outbound social/contact links
   var KEYS = [['calendly.com', 'book_call'], ['mailto:', 'email_click'], ['tel:', 'phone_click'], ['wa.me', 'whatsapp_click'], ['instagram.com', 'instagram_click'],
-    ['x.com', 'x_click'], ['t.me', 'telegram_click'], ['pin.it', 'pinterest_click'], ['account.html', 'sign_in_click'], ['contact.html', 'contact_click']];
+    ['x.com', 'x_click'], ['t.me', 'telegram_click'], ['linkedin.com', 'linkedin_click'], ['pin.it', 'pinterest_click'], ['account.html', 'sign_in_click'], ['contact.html', 'contact_click']];
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
     var h = a.getAttribute('href') || '', lab = a.getAttribute('data-track') || (a.textContent || '').trim().slice(0, 60);

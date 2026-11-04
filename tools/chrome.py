@@ -7,6 +7,7 @@ SOCIALS = [  # (label, short, icon class, url)
     ("X (Twitter)", "X", "fa-brands fa-x-twitter", "https://x.com/moses_mastery"),
     ("Pinterest", "PIN", "fa-brands fa-pinterest-p", "https://pin.it/7k7AHvYYQ"),
     ("Telegram", "TG", "fa-brands fa-telegram", "https://t.me/moses_mastery"),
+    ("LinkedIn", "IN", "fa-brands fa-linkedin-in", "https://www.linkedin.com/in/moses-daniel-89029b41b/"),
     ("WhatsApp", "WA", "fa-brands fa-whatsapp", "https://wa.me/15818095630"),
 ]
 
