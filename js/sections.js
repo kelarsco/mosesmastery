@@ -294,6 +294,45 @@
     }, { passive: true });
   }
 
+
+  /* ---------- headline word reveal + self-drawing process line ---------- */
+  var heads = document.querySelectorAll('.ser-big, .mm-h, .calc-tease h2, .proc-h');
+  if (!reduce && 'IntersectionObserver' in window && heads.length) {
+    var wi = 0;
+    var split = function (node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function (w) {
+            if (!w) return;
+            if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(' ')); return; }
+            var o = document.createElement('span'), i = document.createElement('span');
+            o.className = 'wd'; i.textContent = w; i.style.transitionDelay = Math.min(wi++, 12) * 0.05 + 's'; o.appendChild(i); frag.appendChild(o);
+          });
+          n.parentNode.replaceChild(frag, n);
+        } else if (n.nodeType === 1 && n.tagName !== 'BR') split(n);
+      });
+    };
+    var wio = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('wr-in'); wio.unobserve(e.target); } }); }, { threshold: 0.3 });
+    Array.prototype.forEach.call(heads, function (h) { wi = 0; h.setAttribute('aria-label', h.textContent.replace(/\s+/g, ' ').trim()); split(h); h.classList.add('wr'); wio.observe(h); });
+  }
+  var pl = document.getElementById('procList');
+  if (pl) {
+    var steps = pl.querySelectorAll('.proc-step');
+    if (reduce || !('IntersectionObserver' in window)) { pl.style.setProperty('--p', 1); Array.prototype.forEach.call(steps, function (s) { s.classList.add('on'); }); }
+    else {
+      var pOn = false, pT = false;
+      var pDraw = function () {
+        var r = pl.getBoundingClientRect(), vh = window.innerHeight, p = (vh * 0.65 - r.top) / r.height;
+        p = Math.max(0, Math.min(1, p)); pl.style.setProperty('--p', p.toFixed(3));
+        Array.prototype.forEach.call(steps, function (s, i) { s.classList.toggle('on', p >= (i + 0.35) / steps.length); });
+        pT = false;
+      };
+      new IntersectionObserver(function (en) { pOn = en[0].isIntersecting; if (pOn) pDraw(); }, { rootMargin: '10% 0px' }).observe(pl);
+      window.addEventListener('scroll', function () { if (pOn && !pT) { pT = true; requestAnimationFrame(pDraw); } }, { passive: true });
+    }
+  }
+
   /* ---------- sticky WhatsApp button (shows after the first screen) ---------- */
   var wa = document.querySelector('.mm-wa');
   if (wa) {

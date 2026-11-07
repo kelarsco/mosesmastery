@@ -3701,3 +3701,33 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 /* desktop nav: keep every link on one line with breathing room */
 .nav-menu_des{width:auto;flex:1 1 auto;max-width:56%;justify-content:center;gap:clamp(1rem,2.4vw,2.2rem);padding:0 1rem}
 .nav-menu_des a{white-space:nowrap}
+
+/* Headline word reveal */
+.js-motion .wr .wd{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.js-motion .wr .wd>span{display:inline-block;transform:translateY(110%);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.js-motion .wr.wr-in .wd>span{transform:none}
+.wr.rv,.js-motion .wr.rv{opacity:1;transform:none}
+
+/* Process timeline */
+.proc{background:#0d0d0d;padding:4rem 1.2rem 1rem}
+.proc-in{max-width:1100px;margin:0 auto}
+.proc-h{font:700 clamp(1.8rem,5vw,3rem)/1.08 "Inter",sans-serif;letter-spacing:-.035em;color:#fff;text-transform:none;margin:0 0 2.2rem;max-width:18ch}
+.proc-h em{font-style:normal;color:#f7cb1a}
+.proc-list{--p:0;list-style:none;margin:0;padding:0 0 0 2.4rem;position:relative;display:grid;gap:2rem}
+.proc-list::before,.proc-list::after{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:3px;border-radius:3px}
+.proc-list::before{background:#262626}
+.proc-list::after{background:linear-gradient(#ffe04d,#f7cb1a);transform-origin:top;transform:scaleY(var(--p));will-change:transform}
+.proc-step{position:relative;opacity:.45;transition:opacity .4s ease}
+.proc-step.on{opacity:1}
+.proc-step::before{content:"";position:absolute;left:-2.4rem;top:.25rem;width:25px;height:25px;border-radius:50%;background:#0d0d0d;border:3px solid #333;transition:border-color .4s,background .4s,box-shadow .4s}
+.proc-step.on::before{border-color:#f7cb1a;background:#f7cb1a;box-shadow:0 0 0 6px rgba(247,203,26,.18)}
+.proc-n{display:block;font:700 .8rem "Inter",sans-serif;letter-spacing:.14em;color:#f7cb1a;margin-bottom:.25rem}
+.proc-step h3{font:700 1.5rem "Inter",sans-serif;color:#fff;margin:0 0 .35rem;text-transform:none;letter-spacing:-.02em}
+.proc-step p{color:#cfcfcf;margin:0;max-width:52ch;line-height:1.55}
+@media(min-width:900px){
+  .proc-list{grid-template-columns:repeat(4,1fr);gap:1.6rem;padding:2.6rem 0 0}
+  .proc-list::before,.proc-list::after{left:0;right:0;top:11px;bottom:auto;width:auto;height:3px}
+  .proc-list::after{transform-origin:left;transform:scaleX(var(--p))}
+  .proc-step::before{left:0;top:-2.6rem}
+}
+@media(prefers-reduced-motion:reduce){.proc-step{opacity:1}}
