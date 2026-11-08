@@ -333,6 +333,42 @@
     }
   }
 
+
+  /* ---------- scroll depth: hero zoom/lift, phone + tablet float, magnetic buttons (motion only, off for reduced-motion) ---------- */
+  if (!reduce) {
+    var hero = document.querySelector('.hero');
+    var stages = Array.prototype.slice.call(document.querySelectorAll('.ph-stage'));
+    var vis = new Set(), heroOn = !!hero, tick = false;
+    var frame = function () {
+      tick = false;
+      if (hero && heroOn) {
+        var hh = hero.offsetHeight || 1, hp = Math.max(0, Math.min(1, window.scrollY / hh));
+        hero.style.setProperty('--hs', hp.toFixed(3));
+      }
+      vis.forEach(function (st) {
+        var r = st.getBoundingClientRect(), vh = window.innerHeight, p = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+        st.style.setProperty('--pp', (p - 0.5).toFixed(3));
+      });
+    };
+    var req = function () { if (!tick) { tick = true; requestAnimationFrame(frame); } };
+    if ('IntersectionObserver' in window) {
+      var sio = new IntersectionObserver(function (en) { en.forEach(function (e) { e.isIntersecting ? vis.add(e.target) : vis.delete(e.target); }); req(); }, { rootMargin: '10% 0px' });
+      stages.forEach(function (st) { sio.observe(st); });
+      if (hero) new IntersectionObserver(function (en) { heroOn = en[0].isIntersecting; }, { threshold: 0 }).observe(hero);
+      window.addEventListener('scroll', req, { passive: true });
+      req();
+    }
+    if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      Array.prototype.forEach.call(document.querySelectorAll('.mm-cta, .mm-foot-btn'), function (b) {
+        b.addEventListener('mousemove', function (e) {
+          var r = b.getBoundingClientRect(), x = (e.clientX - r.left - r.width / 2) / r.width, y = (e.clientY - r.top - r.height / 2) / r.height;
+          b.style.translate = (x * 12).toFixed(1) + 'px ' + (y * 8).toFixed(1) + 'px';
+        });
+        b.addEventListener('mouseleave', function () { b.style.translate = ''; });
+      });
+    }
+  }
+
   /* ---------- sticky WhatsApp button (shows after the first screen) ---------- */
   var wa = document.querySelector('.mm-wa');
   if (wa) {

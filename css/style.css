@@ -3731,3 +3731,13 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
   .proc-step::before{left:0;top:-2.6rem}
 }
 @media(prefers-reduced-motion:reduce){.proc-step{opacity:1}}
+
+/* Scroll depth */
+.hero{--hs:0}
+.hero .bg-video,.hero .bg-image{scale:calc(1 + var(--hs) * .14);will-change:scale}
+.hero .hero-content{translate:0 calc(var(--hs) * -70px);opacity:calc(1 - var(--hs) * 1.15);will-change:translate,opacity}
+.ph-stage{--pp:0}
+.ph-stage .ph-phone{translate:0 calc(var(--pp) * -46px);rotate:calc(var(--pp) * -2.2deg)}
+.ph-stage .ph-tablet{translate:0 calc(var(--pp) * 26px);rotate:calc(var(--pp) * 1.6deg)}
+.mm-cta,.mm-foot-btn{transition:translate .2s ease-out,transform .25s ease,box-shadow .25s ease}
+@media(prefers-reduced-motion:reduce){.hero .bg-video,.hero .bg-image,.hero .hero-content,.ph-stage .ph-phone,.ph-stage .ph-tablet{scale:none;translate:none;rotate:none;opacity:1}}
