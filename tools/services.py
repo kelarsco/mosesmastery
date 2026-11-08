@@ -6,9 +6,9 @@ SERVICES = [
 "slug": "shopify-store-design",
 "nav": "Shopify design &amp; development",
 "title": "Shopify Store Design & Development",
-"stitle": "Shopify Store Design & Development | Moses Mastery",
-"h1": "Shopify store design & development",
-"desc": "Custom Shopify store design, theme customization and redesigns built around conversion. Starter, Growth and Premium packages from $500. Moses Mastery.",
+"stitle": "Shopify Store Design Agency & Website Designer | Moses Mastery",
+"h1": "Shopify store design agency & website designer",
+"desc": "Shopify store design agency and website designer: custom Shopify stores, theme customization and redesigns built to convert. Packages from $500. Moses Mastery.",
 "lead": "A Shopify store that looks good but does not guide shoppers to the buy button is an expensive brochure. I design and build Shopify stores around one question: what makes this visitor confident enough to buy?",
 "sections": [
 ("What I design and build", """<ul><li><strong>New Shopify stores</strong>: structure, theme setup, collections, product pages, payments, shipping and policy pages.</li>
@@ -89,9 +89,9 @@ SERVICES = [
 "slug": "meta-ads-for-shopify",
 "nav": "Meta &amp; Google ads",
 "title": "Meta & Google Ads for Shopify Stores",
-"stitle": "Meta & Google Ads for Shopify Stores | Moses Mastery",
-"h1": "Meta & Google ads for Shopify stores",
-"desc": "Meta (Facebook and Instagram) and Google ad campaigns for Shopify stores: tracking, creative, retargeting and reporting. Plans from $2,000 per month.",
+"stitle": "Shopify Marketing Agency: Meta & Google Ads | Moses Mastery",
+"h1": "Shopify marketing agency: Meta & Google ads for your store",
+"desc": "Shopify marketing agency and expert: Meta (Facebook, Instagram) and Google ad campaigns with tracking, creative, retargeting and reporting. From $2,000 per month.",
 "lead": "Ads work when the store, the tracking and the creative are ready for them. I set up and manage Meta and Google campaigns for Shopify stores so your budget goes to the audiences and products that actually sell.",
 "sections": [
 ("What is included", """<ul><li><strong>Tracking first</strong>: Meta pixel and conversions API, Google tags and purchase tracking, checked before spending.</li>
