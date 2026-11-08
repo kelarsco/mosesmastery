@@ -4,9 +4,10 @@ and rewrites sitemap.xml.   Run from the project root:   python3 tools/build_blo
 --covers also renders asset/blog/<slug>.jpg (needs: pip install playwright && playwright install chromium)."""
 import os, re, sys, json, html
 sys.path.insert(0, os.path.dirname(__file__))
-from chrome import header, footer
+from chrome import header, footer, SOCIALS
 from articles import ARTICLES
 from services import SERVICES
+from niches import NICHES
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SITE = "https://www.mosesmastery.com"
@@ -79,7 +80,7 @@ def head(title, desc, canon, p, og_img, og_type="website", extra=""):
 '''
 
 def ld(obj): return '  <script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
-ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": "Moses Mastery", "url": SITE + "/", "logo": SITE + "/asset/icon-512.png"}
+ORG = {"@type": ["Organization", "ProfessionalService"], "@id": SITE + "/#org", "name": "Moses Mastery", "url": SITE + "/", "logo": SITE + "/asset/icon-512.png", "areaServed": "Worldwide", "email": "info@mosesecom.com", "telephone": "+15818095630", "founder": {"@id": SITE + "/#person"}, "sameAs": ["https://www.linkedin.com/in/moses-daniel-89029b41b/"] + [u for _l, _s, _i, u in SOCIALS if "linkedin" not in u and "wa.me" not in u], "knowsAbout": ["Shopify store design", "Shopify conversion rate optimization", "Shopify SEO", "Meta ads for Shopify", "Google ads for Shopify", "AI automation for eCommerce"]}
 PERSON = {"@type": "Person", "@id": SITE + "/#person", "name": "Moses Daniel", "url": SITE + "/", "worksFor": {"@id": SITE + "/#org"}}
 TAIL = '''<script src="%sjs/config.js"></script>
 <script src="%sjs/track.js"></script>
@@ -190,7 +191,7 @@ for idx, a in enumerate(ARTICLES):
 # ---------- 2b. service landing pages ----------
 def strip_tags(t): return re.sub(r"<[^>]+>", "", html.unescape(t)).strip()
 TODAY = "2026-10-28"
-for sv in SERVICES:
+for sv in SERVICES + NICHES:
     p = "../../"; url = f'{SITE}/services/{sv["slug"]}/'
     graph = [ORG, PERSON,
         {"@type": "Service", "@id": url + "#service", "name": sv["title"], "description": sv["desc"], "url": url, "provider": {"@id": SITE + "/#org"}, "areaServed": "Worldwide", "serviceType": sv["title"]},
@@ -202,6 +203,7 @@ for sv in SERVICES:
     rel = [a for a in ARTICLES if a["slug"] in sv["related"]]
     relh = "".join(f'<article class="bl-card"><a href="{p}blog/{r["slug"]}/" class="bl-card-img" tabindex="-1" aria-hidden="true">{cover_img(r, p)}</a><div class="bl-card-body"><p class="bl-meta"><span class="bl-tag">{r["tag"]}</span><span>{r["mins"]} min read</span></p><h3><a href="{p}blog/{r["slug"]}/">{esc(r["title"])}</a></h3></div></article>' for r in rel).replace('src="{}asset'.format(p), 'src="{}asset'.format(p))
     others = "".join(f'<li><a href="../{o["slug"]}/">{o["nav"]}</a></li>' for o in SERVICES if o["slug"] != sv["slug"])
+    if sv in SERVICES or True: others += "".join(f'<li><a href="../{o["slug"]}/">Shopify for {o["nav"]}</a></li>' for o in NICHES if o["slug"] != sv["slug"])
     page += f'''<body class="bl-page">
   {header(p, "services")}
   <main id="main">
@@ -231,6 +233,7 @@ hub_ld = {"@context": "https://schema.org", "@graph": [ORG, PERSON,
     {"@type": "CollectionPage", "@id": url + "#page", "name": "Shopify services", "url": url, "isPartOf": {"@id": SITE + "/#org"}},
     {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{SITE}/services/{sv["slug"]}/', "name": sv["title"]} for i, sv in enumerate(SERVICES)]},
     {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Services", "item": url}]}]}
+ncards = "".join(f'''<article class="bl-card"><div class="bl-card-body"><h2><a href="{n["slug"]}/">{esc(n["title"])}</a></h2><p>{esc(n["desc"])}</p><a class="bl-more" href="{n["slug"]}/">Learn more <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>''' for n in NICHES)
 page = head("Shopify Services: Design, CRO, SEO, Ads & AI | Moses Mastery", "Shopify store design, conversion optimization, SEO, Meta and Google ads, and AI automation for eCommerce brands, from Moses Mastery.", url, p, OG, "website", ld(hub_ld))
 cards = "".join(f'''<article class="bl-card"><div class="bl-card-body"><h2><a href="{sv["slug"]}/">{esc(sv["title"])}</a></h2><p>{esc(sv["desc"])}</p><a class="bl-more" href="{sv["slug"]}/">Learn more <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>''' for sv in SERVICES)
 page += f'''<body class="bl-page">
@@ -239,6 +242,7 @@ page += f'''<body class="bl-page">
     <section class="bl-hero"><p class="bl-kicker"><span></span>Services</p><h1>Shopify <em>services.</em></h1>
       <p class="bl-lead">Design, conversion, search, ads and AI automation for Shopify stores, from one specialist. Choose what you need, or send your store link and I will tell you where I would start.</p></section>
     <section class="bl-list" aria-label="Services"><div class="bl-grid">{cards}</div></section>
+    <section class="bl-list" aria-label="By industry"><h2 style="max-width:1100px;margin:0 auto 1rem;padding:0 1.4rem">By industry</h2><div class="bl-grid">{ncards}</div></section>
     <section class="bl-cta"><h2>Not sure where to <em>start</em>?</h2><p>Send me your store link and I will tell you what I would fix first.</p><a class="bl-btn" href="{p}contact.html">Request a store review <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></section>
   </main>
   {footer(p)}
@@ -428,7 +432,7 @@ page += f'''<body class="bl-page">
 W(os.path.join(ROOT, "calculator.html"), page)
 
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 
