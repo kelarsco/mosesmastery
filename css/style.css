@@ -3757,14 +3757,12 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .legal-wrap .prose h2{margin-top:2rem}
 
 /* Client feedback */
-.rvw{background:#0d0d0d;color:#fff;padding:clamp(3rem,7vw,5.5rem) 1.4rem}
-.rvw-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(1.5rem,5vw,4rem);align-items:center}
-.rvw h2{font:800 clamp(2rem,5vw,3.4rem)/1.05 "Inter",sans-serif;letter-spacing:-.04em;margin:.4rem 0 1.4rem;color:#fff}
-.rvw blockquote{margin:0;padding-left:1.2rem;border-left:3px solid #f7cb1a}
-.rvw blockquote p{font-size:clamp(1.15rem,2.4vw,1.5rem);line-height:1.45;margin:0 0 .8rem;color:#f1f1f1}
-.rvw blockquote footer{color:#a8a8a8;font-size:.92rem}
-.rvw-link{display:inline-block;margin-top:1.4rem;color:#fff;font-weight:600;border-bottom:2px solid #f7cb1a;text-decoration:none;padding-bottom:2px}
-.rvw-shot{margin:0}
-.rvw-shot img{width:100%;height:auto;display:block;border-radius:18px;border:1px solid #2a2a2a}
-.rvw-shot figcaption{color:#8d8d8d;font-size:.82rem;margin-top:.6rem}
-@media(max-width:820px){.rvw-in{grid-template-columns:1fr}}
+.rvw{background:#0d0d0d;color:#fff;padding:clamp(3rem,7vw,5.5rem) 0}
+.rvw-in{max-width:1100px;margin:0 auto 2rem;padding:0 1.4rem}
+.rvw h2{font:800 clamp(2rem,5vw,3.4rem)/1.05 "Inter",sans-serif;letter-spacing:-.04em;margin:.4rem 0 .8rem;color:#fff}
+.rvw-sub{color:#b5b5b5;margin:0;font-size:1.05rem}
+.rvw-row{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.4rem 1.4rem 1.2rem;align-items:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#f7cb1a #1c1c1c}
+.rvw-card{flex:0 0 min(78vw,320px);margin:0;scroll-snap-align:center;border-radius:18px;overflow:hidden;border:1px solid #2a2a2a;background:#000}
+.rvw-card img{display:block;width:100%;height:auto}
+.rvw-note{max-width:1100px;margin:1rem auto 0;padding:0 1.4rem;color:#8d8d8d;font-size:.82rem;line-height:1.5}
+@media(min-width:1000px){.rvw-row{max-width:1180px;margin:0 auto;overflow:visible;flex-wrap:nowrap;padding:.4rem 1.4rem 1rem}.rvw-card{flex:1 1 0;min-width:0}}
