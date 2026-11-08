@@ -3766,3 +3766,12 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .rvw-card img{display:block;width:100%;height:auto}
 .rvw-note{max-width:1100px;margin:1rem auto 0;padding:0 1.4rem;color:#8d8d8d;font-size:.82rem;line-height:1.5}
 @media(min-width:1000px){.rvw-row{max-width:1180px;margin:0 auto;overflow:visible;flex-wrap:nowrap;padding:.4rem 1.4rem 1rem}.rvw-card{flex:1 1 0;min-width:0}}
+
+.rvw-hint{display:flex;align-items:center;gap:.6rem;max-width:1100px;margin:0 auto .6rem;padding:0 1.4rem;color:#f7cb1a;font:600 .85rem "Inter",sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.rvw-hint i{font-style:normal;font-size:1.3rem;animation:rvwNudge 1.2s ease-in-out infinite}
+@keyframes rvwNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
+.rvw-dots{list-style:none;display:flex;justify-content:center;gap:.5rem;margin:.4rem 0 0;padding:0}
+.rvw-dots li{width:26px;height:4px;border-radius:4px;background:#333;cursor:pointer;transition:background .3s,width .3s}
+.rvw-dots li.is-on{background:#f7cb1a;width:46px}
+@media(min-width:1000px){.rvw-hint,.rvw-dots{display:none}}
+@media(prefers-reduced-motion:reduce){.rvw-hint i{animation:none}}

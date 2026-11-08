@@ -387,6 +387,30 @@
     }
   }
 
+
+  /* ---------- reviews strip: auto-slides on small screens; pauses only when the visitor swipes or holds it ---------- */
+  var rr = document.querySelector('.rvw-row');
+  if (rr) {
+    var rc = rr.children, rd = document.querySelectorAll('.rvw-dots li'), rIdx = 0, rPause = 0, rVis = false, rTX = 0, rTY = 0, rDir = '';
+    var rSet = function (i) { rIdx = i; Array.prototype.forEach.call(rd, function (d, k) { d.classList.toggle('is-on', k === i); }); };
+    var rNear = function () { var best = 0, bd = 1e9, mid = rr.scrollLeft + rr.clientWidth / 2; Array.prototype.forEach.call(rc, function (c, k) { var d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = k; } }); return best; };
+    rr.addEventListener('scroll', function () { rSet(rNear()); }, { passive: true });
+    var rHold = function (ms) { rPause = Date.now() + ms; };
+    rr.addEventListener('touchstart', function (e) { rTX = e.touches[0].clientX; rTY = e.touches[0].clientY; rDir = ''; rHold(1500); }, { passive: true });
+    rr.addEventListener('touchmove', function (e) { var dx = Math.abs(e.touches[0].clientX - rTX), dy = Math.abs(e.touches[0].clientY - rTY); if (!rDir && (dx > 8 || dy > 8)) rDir = dx > dy ? 'h' : 'v'; if (rDir === 'h') rHold(6000); else if (rDir === 'v') rPause = 0; }, { passive: true });
+    rr.addEventListener('pointerdown', function (e) { if (e.pointerType === 'mouse') rHold(6000); });
+    var rDots = document.querySelector('.rvw-dots');
+    if (rDots) Array.prototype.forEach.call(rd, function (d, k) { d.addEventListener('click', function () { rHold(6000); rr.scrollTo({ left: rc[k].offsetLeft - (rr.clientWidth - rc[k].offsetWidth) / 2, behavior: 'smooth' }); }); });
+    if (!reduce && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { rVis = e[0].isIntersecting; }, { threshold: 0.4 }).observe(rr);
+      setInterval(function () {
+        if (!rVis || Date.now() < rPause || rr.scrollWidth <= rr.clientWidth + 4) return;
+        var n = (rNear() + 1) % rc.length, c = rc[n];
+        rr.scrollTo({ left: n === 0 ? 0 : c.offsetLeft - (rr.clientWidth - c.offsetWidth) / 2, behavior: 'smooth' });
+      }, 3500);
+    }
+  }
+
   /* ---------- sticky WhatsApp button (shows after the first screen) ---------- */
   var wa = document.querySelector('.mm-wa');
   if (wa) {
