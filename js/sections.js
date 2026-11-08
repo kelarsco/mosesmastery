@@ -369,6 +369,41 @@
     }
   }
 
+
+  /* ---------- pinned showreel: one phone stays on screen while the client stores change as you scroll ---------- */
+  var sc = document.getElementById('showreel');
+  if (sc) {
+    var scItems = sc.querySelectorAll('.sc-item'), scVids = sc.querySelectorAll('.sc-vid'), scDots = sc.querySelectorAll('.sc-dots li'), scTrack = sc.querySelector('.sc-track');
+    var scCur = -1, scNear = false, scLoaded = false;
+    var scLoad = function () {
+      if (scLoaded) return; scLoaded = true;
+      Array.prototype.forEach.call(scVids, function (v) { if (!v.src && v.dataset.src) { v.src = v.dataset.src; v.load(); } });
+    };
+    var scSet = function (i) {
+      if (i === scCur) return; scCur = i;
+      Array.prototype.forEach.call(scItems, function (el, k) { el.classList.toggle('is-on', k === i); });
+      Array.prototype.forEach.call(scDots, function (el, k) { el.classList.toggle('is-on', k === i); });
+      Array.prototype.forEach.call(scVids, function (v, k) {
+        v.classList.toggle('is-on', k === i);
+        if (k === i) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else { v.pause(); }
+      });
+    };
+    var scT = false, scFrame = function () {
+      scT = false;
+      var r = scTrack.getBoundingClientRect(), total = r.height - window.innerHeight;
+      var p = total > 0 ? Math.max(0, Math.min(0.9999, -r.top / total)) : 0;
+      sc.style.setProperty('--sp', p.toFixed(3));
+      scSet(Math.floor(p * scItems.length));
+    };
+    if (reduce || !('IntersectionObserver' in window)) { scLoad(); }
+    else {
+      new IntersectionObserver(function (en) {
+        scNear = en[0].isIntersecting; if (scNear) { scLoad(); scFrame(); } else { Array.prototype.forEach.call(scVids, function (v) { v.pause(); }); scCur = -1; }
+      }, { rootMargin: '30% 0px' }).observe(sc);
+      window.addEventListener('scroll', function () { if (scNear && !scT) { scT = true; requestAnimationFrame(scFrame); } }, { passive: true });
+    }
+  }
+
   /* ---------- sticky WhatsApp button (shows after the first screen) ---------- */
   var wa = document.querySelector('.mm-wa');
   if (wa) {
