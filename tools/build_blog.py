@@ -275,11 +275,106 @@ page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">
     <section class="bl-hero"><p class="bl-kicker"><span></span>Privacy</p><h1>How this site <em>handles data.</em></h1></section>
-    <section class="ar-wrap sv-wrap" style="padding-bottom:4rem"><div class="prose">{PRIV}</div></section>
+    <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem"><div class="prose">{PRIV}</div></section>
   </main>
   {footer(p)}
 ''' + TAIL % (p, p, p, p)
 W(os.path.join(ROOT, "privacy.html"), page)
+
+# legal pages (terms, refund, cookies) -- plain-language, kept consistent with privacy.html
+LEGAL_UPDATED = "8 November 2026"
+def legal_page(fname, title, kicker, h1, desc, body):
+    p = ""; url = SITE + "/" + fname
+    pg = head(title + " | Moses Mastery", desc, url, p, OG, "website")
+    pg += f'''<body class="bl-page">
+  {header(p, "")}
+  <main id="main">
+    <section class="bl-hero"><p class="bl-kicker"><span></span>{kicker}</p><h1>{h1}</h1></section>
+    <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem"><div class="prose">{body}<p><em>Last updated {LEGAL_UPDATED}.</em></p></div></section>
+  </main>
+  {footer(p)}
+''' + TAIL % (p, p, p, p)
+    W(os.path.join(ROOT, fname), pg)
+
+TERMS = """<h2>1. Who we are</h2>
+<p>These terms apply to this website and to services provided by Moses Mastery, run by Moses Daniel (\u201cI\u201d, \u201cme\u201d, \u201cMoses Mastery\u201d). Contact: <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>. By using the site or hiring me you agree to these terms.</p>
+<h2>2. What I do</h2>
+<p>I provide Shopify store design and development, conversion-rate optimization and audits, Shopify SEO, Meta and Google advertising management, and AI automation, content and chat set-up. The exact scope, deliverables, timeline and price of any project are agreed in writing (a proposal, quote or message thread) before work starts.</p>
+<h2>3. Quotes, payment and timelines</h2>
+<ul>
+<li>A quote stays valid for the period stated on it. Work begins when you accept it and any agreed deposit or first payment is received.</li>
+<li>Invoices are due by the date shown on them. Work may be paused while an invoice is overdue.</li>
+<li>Timelines depend on you providing content, access and feedback promptly. Delays on your side move the dates.</li>
+<li>Ad spend is paid by you directly to the ad platform and is never part of my fee unless the quote says so.</li>
+</ul>
+<h2>4. Your responsibilities</h2>
+<p>You confirm that you own or have the right to use the content, products, images, trademarks and accounts you give me. You are responsible for your store\u2019s products, prices, shipping, taxes, refunds to your own customers and compliance with the laws and platform rules (Shopify, Meta, Google) that apply to your business.</p>
+<h2>5. Results</h2>
+<p>I work to improve your store\u2019s design, speed, conversion and traffic, but I cannot promise a specific increase in sales, rankings or return on ad spend. Results depend on your product, market, budget, competition and platform changes outside my control. Past work shown on this site is not a guarantee of future results.</p>
+<h2>6. Ownership</h2>
+<p>Once a project is paid in full, you own the final deliverables made specifically for you (such as your store design, copy and custom assets). I keep ownership of my own tools, templates, code snippets and know-how, and of third-party items such as themes, apps and fonts, which stay under their own licences. Unless you ask otherwise, I may mention the project and show non-confidential screenshots in my portfolio.</p>
+<h2>7. Confidentiality and access</h2>
+<p>I treat your business information and any store or account access you give me as confidential and use it only to do the agreed work. Please give access through each platform\u2019s proper collaborator or staff invitation rather than sharing passwords, and remove my access when the work ends.</p>
+<h2>8. Third-party services</h2>
+<p>Your store runs on third-party platforms and apps (for example Shopify, Meta, Google, Klaviyo or app developers). Their availability, pricing, policies and outages are outside my control and their own terms apply.</p>
+<h2>9. Liability</h2>
+<p>To the fullest extent the law allows, I am not liable for indirect or consequential loss, such as lost profit, lost sales or lost data. My total liability for any claim relating to a project is limited to the fees you paid me for that project. Nothing in these terms limits liability that cannot be limited by law.</p>
+<h2>10. Ending a project</h2>
+<p>Either of us may end a project by written notice. You pay for work completed up to that point. Refunds are covered in the <a href="refund-policy.html">Refund Policy</a>.</p>
+<h2>11. This website</h2>
+<p>The content, design and code of this site belong to Moses Mastery and may not be copied or resold without permission. The information on the site is general and may change. Please do not misuse the site or try to disrupt it. How your data is handled is explained in the <a href="privacy.html">Privacy Policy</a> and <a href="cookie-policy.html">Cookie Policy</a>.</p>
+<h2>12. Changes and contact</h2>
+<p>I may update these terms; the date at the bottom shows the latest version, and the version you accepted for a project continues to apply to that project. Questions: <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>.</p>"""
+
+REFUND = """<h2>In short</h2>
+<p>I want you to be happy with the work. If something is not right, tell me first and I will fix it. This policy explains what happens if we cannot resolve it, and what is and is not refundable.</p>
+<h2>Free items</h2>
+<p>The strategy call, the store review and the revenue calculator are free, so there is nothing to refund.</p>
+<h2>Fixed-price projects</h2>
+<ul>
+<li><strong>Before work starts:</strong> if you cancel after paying a deposit but before I begin, the deposit is refunded in full, less any payment-processor fees.</li>
+<li><strong>During the project:</strong> if you cancel part-way, you pay for the work completed up to that point and the remainder of any prepayment is refunded.</li>
+<li><strong>After delivery:</strong> I will correct anything that does not match the agreed scope, free of charge, for 14 days after delivery. Once the project is approved and delivered, fees are non-refundable.</li>
+</ul>
+<h2>Monthly and retainer services</h2>
+<p>Monthly services (such as ad management or ongoing optimization) can be cancelled with 14 days\u2019 written notice before the next billing date. The current month is not refunded once the work for it has started, and there are no refunds for past months.</p>
+<h2>What is not refundable</h2>
+<ul>
+<li>Ad spend paid to Meta, Google or any other platform, which is charged by them and not by me.</li>
+<li>Third-party costs such as themes, apps, domains, licences and stock assets.</li>
+<li>Work you asked me to stop using, or changes outside the agreed scope.</li>
+<li>Results that differ from your expectations when the agreed work was delivered as described (see section 5 of the <a href="terms.html">Terms &amp; Conditions</a>).</li>
+</ul>
+<h2>How to ask for a refund</h2>
+<p>Email <a href="mailto:info@mosesecom.com">info@mosesecom.com</a> with your name, the project and what went wrong. I reply within 3 business days. Approved refunds go back to the original payment method and usually arrive within 5 to 10 business days, depending on your bank or payment provider.</p>"""
+
+COOKIES = """<h2>The short version</h2>
+<p>This site does not use advertising or tracking cookies, and it does not sell data. It stores a small random identifier in your browser (not a cookie) for its own visit counting, and a few optional services may set cookies of their own, listed below.</p>
+<h2>What a cookie is</h2>
+<p>A cookie is a small file a website saves on your device. Browser storage (localStorage and sessionStorage) works in a similar way. Both let a site remember something between pages or visits.</p>
+<h2>What this site stores</h2>
+<ul>
+<li><strong>Visit counting (browser storage, not a cookie).</strong> A random identifier and a session marker, so I can count visitors and pages without knowing who you are. It holds no name or email. Details are in the <a href="privacy.html">Privacy Policy</a>.</li>
+<li><strong>Preferences (browser storage).</strong> Small conveniences such as a remembered choice. Nothing here identifies you.</li>
+<li><strong>Sign-in (browser storage).</strong> Only if you or an admin sign in to an account area, to keep you signed in.</li>
+</ul>
+<h2>Third-party services that may set cookies</h2>
+<ul>
+<li><strong>Microsoft Clarity</strong> (session recordings and heatmaps, when switched on): may set its own cookies. It is not started for visitors in European time zones, and form fields are masked. See <a href="https://privacy.microsoft.com/privacystatement" rel="noopener noreferrer">Microsoft\u2019s privacy statement</a>.</li>
+<li><strong>Calendly</strong> (booking a call): loads only when you open the booking widget and may set cookies under its own policy.</li>
+<li><strong>Font and icon providers</strong> and embedded media (for example video) may set cookies when they load.</li>
+<li><strong>WhatsApp</strong> links open WhatsApp, which then follows its own policy.</li>
+</ul>
+<h2>Your choices</h2>
+<ul>
+<li>If your browser sends <strong>Do Not Track</strong>, this site records no analytics.</li>
+<li>You can block or delete cookies and site data in your browser settings, or use a content blocker. The site keeps working.</li>
+<li>To ask what is held about you or to have it removed, email <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>.</li>
+</ul>"""
+
+legal_page("terms.html", "Terms & Conditions", "Legal", "Terms &amp; <em>Conditions.</em>", "Terms and conditions for using the Moses Mastery website and hiring Moses Mastery for Shopify services.", TERMS)
+legal_page("refund-policy.html", "Refund Policy", "Legal", "Refund <em>Policy.</em>", "How refunds and cancellations work for Moses Mastery projects and monthly services.", REFUND)
+legal_page("cookie-policy.html", "Cookie Policy", "Legal", "Cookie <em>Policy.</em>", "What cookies and browser storage the Moses Mastery website uses, and how to control them.", COOKIES)
 
 # revenue-leak calculator page
 p = ""; url = SITE + "/calculator.html"
@@ -326,14 +421,14 @@ page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">
     <section class="bl-hero"><p class="bl-kicker"><span></span>Free tool</p><h1>How much is your store <em>leaving on the table?</em></h1></section>
-    <section class="ar-wrap sv-wrap" style="padding-bottom:4rem">{CALC}</section>
+    <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem">{CALC}</section>
   </main>
   {footer(p)}
 ''' + (TAIL % (p, p, p, p)).replace("</body>", '<script src="js/calculator.js"></script>\n</body>')
 W(os.path.join(ROOT, "calculator.html"), page)
 
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/calculator.html", "0.7", "2026-10-29"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 

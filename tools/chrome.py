@@ -82,6 +82,7 @@ def footer(p):
       </div>
       <nav class="mm-foot-col" aria-label="Company"><h3>Company</h3><ul>{co}</ul></nav>
       <nav class="mm-foot-col" aria-label="Services"><h3>Services</h3><ul>{sv}</ul></nav>
+      <nav class="mm-foot-col" aria-label="Legal"><h3>Legal</h3><ul><li><a href="{p}privacy.html">Privacy Policy</a></li><li><a href="{p}terms.html">Terms &amp; Conditions</a></li><li><a href="{p}refund-policy.html">Refund Policy</a></li><li><a href="{p}cookie-policy.html">Cookie Policy</a></li></ul></nav>
       <div class="mm-foot-col mm-foot-book"><h3>Let&rsquo;s talk</h3><p>Have a store to grow? Book a free strategy call.</p><a class="mm-foot-btn" href="{CAL}" onclick="{CAL_ONCLICK}">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
     </div>
     <div class="mm-foot-bar"><p>&copy; 2026 Moses Mastery. All rights reserved. <a href="{p}account.html" class="mm-foot-sign">Sign in</a><a href="{p}privacy.html" class="mm-foot-sign">Privacy</a></p><button type="button" class="mm-totop" aria-label="Back to top" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">Back to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div>
