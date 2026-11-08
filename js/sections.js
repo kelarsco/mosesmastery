@@ -126,12 +126,18 @@
       if (Math.abs(bt.scrollLeft - bPos) > 2) bPos = bt.scrollLeft;
     }, { passive: true });
 
-    var vp = bt.parentNode;
-    vp.addEventListener('mouseenter', function () { bHover = true; });
-    vp.addEventListener('mouseleave', function () { bHover = false; });
-    bt.addEventListener('focusin', function () { bHover = true; });
-    bt.addEventListener('focusout', function () { bHover = false; });
-    bt.addEventListener('touchstart', function () { bHoldFor(3000); }, { passive: true });
+    /* Keeps sliding while the page scrolls or the pointer merely passes over it.
+       It pauses only on a deliberate action: press-and-hold, drag, horizontal swipe, arrows/keys. */
+    var tX = 0, tY = 0, tDir = '', bTouch = false;
+    bt.addEventListener('touchstart', function (e) { var p = e.touches[0]; tX = p.clientX; tY = p.clientY; tDir = ''; bTouch = true; }, { passive: true });
+    bt.addEventListener('touchmove', function (e) {
+      var p = e.touches[0], dx = Math.abs(p.clientX - tX), dy = Math.abs(p.clientY - tY);
+      if (!tDir && (dx > 8 || dy > 8)) tDir = dx > dy ? 'h' : 'v';
+      if (tDir === 'v') bTouch = false;        // page scroll: keep sliding
+      else if (tDir === 'h') bHoldFor(3000);   // swiping the slider: let them browse
+    }, { passive: true });
+    var tEnd = function () { bTouch = false; };
+    bt.addEventListener('touchend', tEnd, { passive: true }); bt.addEventListener('touchcancel', tEnd, { passive: true });
 
     bt.addEventListener('pointerdown', function (e) {
       if (e.pointerType !== 'mouse' || e.button !== 0) return;
@@ -165,7 +171,7 @@
 
     (function tick(t) {
       var dt = Math.min((t - (bLast || t)) / 1000, 0.1); bLast = t;
-      if (!reduce && bView && !bHover && !bDrag && t > bHold && bSet > 0 && bt.offsetParent !== null && !document.hidden) {
+      if (!reduce && bView && !bTouch && !bDrag && t > bHold && bSet > 0 && bt.offsetParent !== null && !document.hidden) {
         bPos += bSpeed * dt; if (bPos >= bSet) bPos -= bSet; bt.scrollLeft = bPos;
       }
       requestAnimationFrame(tick);
