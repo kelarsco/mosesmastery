@@ -393,7 +393,7 @@ AUDIT = """
     <input type="checkbox" name="botcheck" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
     <label><span>Your name</span><input name="name" required autocomplete="name"></label>
     <label><span>Email</span><input name="email" type="email" required autocomplete="email"></label>
-    <label class="calc-wide"><span>Store link</span><input name="store" type="url" required placeholder="https://yourstore.com" autocomplete="url"></label>
+    <label class="calc-wide"><span>Store link</span><input name="store" type="text" inputmode="url" required placeholder="yourstore.com" autocomplete="url" autocapitalize="off" spellcheck="false" pattern="[^ ]+\\.[^ ]+" title="Enter your store address, for example yourstore.com"></label>
     <label class="calc-wide"><span>Biggest problem right now</span>
       <select name="problem" required>
         <option value="">Choose one</option>
@@ -409,12 +409,23 @@ AUDIT = """
     <p class="calc-status" id="auditStatus" role="status"></p>
   </form>
 </section>
+<section class="aud-what"><h2>What the scan checks</h2><div class="aud-wg">
+  <div><b>Page Speed</b><span>How fast your store loads on a phone, and what slows it down.</span></div>
+  <div><b>Mobile Experience</b><span>Viewport, tap targets and readable text on small screens.</span></div>
+  <div><b>SEO Basics</b><span>Titles, descriptions and the signals Google needs to find you.</span></div>
+  <div><b>Technical Health</b><span>HTTPS, script errors and outdated code.</span></div>
+  <div><b>UX &amp; Accessibility</b><span>Contrast, labels and structure that keep visitors moving.</span></div>
+  <div><b>Marketing Tools</b><span>Analytics, ad pixels, email capture and reviews detected on load.</span></div>
+  <div><b>Trust &amp; Credibility</b><span>Policies, contact details, reviews and payment badges.</span></div>
+  <div><b>Conversion Signals</b><span>Buttons, search, offers, shipping messages and email signup.</span></div>
+  <div><b>Product Page SEO</b><span>Product schema, price data, images and headings.</span></div>
+</div></section>
 <section class="aud-how">
   <h2>How it works</h2>
   <ol>
     <li><strong>You enter the link.</strong> I only need the public store address.</li>
-    <li><strong>The scan runs instantly on this page.</strong> You see your mobile speed score, key timings and the biggest speed problems, powered by Google PageSpeed Insights.</li>
-    <li><strong>I send my personal fixes by email within 24 hours.</strong> The scan covers speed. My review also covers design, trust, product pages, cart and checkout.</li>
+    <li><strong>The scan runs instantly on this page.</strong> You get an overall score plus a score and checklist for each area, powered by Google PageSpeed Insights and my own store checks.</li>
+    <li><strong>I send my personal fixes by email within 24 hours.</strong> The scan measures what can be checked from outside. My review adds design judgment, offer and checkout.</li>
   </ol>
   <p class="aud-talk">Prefer to talk it through? <a href="https://calendly.com/onwenmoses/30min" rel="noopener" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;">Book a free strategy call</a> instead.</p>
   <details><summary>Is it really free?</summary><p>Yes. The scan and my review are free and there is no obligation. If you want help with the fixes, I will send a fixed quote, and you can say no.</p></details>
@@ -422,7 +433,7 @@ AUDIT = """
   <details><summary>Do you guarantee results?</summary><p>No one can honestly promise a sales increase. The scan and review point out real problems and what to fix first; results depend on your product, traffic and market.</p></details>
 </section>
 """
-page = head("Free Shopify Store Audit | Moses Mastery", "Free Shopify store scan: enter your store link and see your mobile speed score and biggest problems in about 30 seconds, then get my personal fixes by email. No obligation.", url, p, OG, "website")
+page = head("Free Shopify Store Audit | Moses Mastery", "Free Shopify store scanner: enter your store link and see an overall score plus speed, mobile, SEO, trust and conversion checks in about 30 seconds. No obligation.", url, p, OG, "website")
 page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">

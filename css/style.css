@@ -3802,3 +3802,19 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .aud-next{color:#e5e5e5;line-height:1.55}.aud-next a{color:#f7cb1a}
 .aud-fine{color:#8d8d8d;font-size:.78rem}
 @media(max-width:480px){.aud-metrics{grid-template-columns:1fr}}
+.aud-cats{display:grid;gap:.6rem;margin:0 0 1.2rem}
+.aud-cat{background:#0b0b0b;border:1px solid #2a2a2a;border-left:4px solid #444;border-radius:12px;padding:0}
+.aud-cat.good{border-left-color:#2fbf6b}.aud-cat.mid{border-left-color:#f7a21a}.aud-cat.bad{border-left-color:#ef4b4b}
+.aud-cat summary,.aud-sum{display:grid;grid-template-columns:1fr auto;gap:.3rem .8rem;padding:.8rem 1rem;cursor:pointer;list-style:none;align-items:center}
+.aud-cat summary::-webkit-details-marker{display:none}
+.aud-cn b{display:block;color:#fff;font-size:1rem}.aud-cn i{display:block;font-style:normal;color:#8d8d8d;font-size:.78rem}
+.aud-cr{text-align:right}.aud-cr strong{color:#fff;font-size:1.4rem;margin-right:.4rem}.aud-cr em{font-style:normal;color:#bdbdbd;font-size:.78rem}
+.aud-bar{grid-column:1/-1;height:6px;border-radius:6px;background:#1f1f1f;overflow:hidden}.aud-bar b{display:block;height:100%;background:#444;border-radius:6px}
+.aud-cat.good .aud-bar b{background:#2fbf6b}.aud-cat.mid .aud-bar b{background:#f7a21a}.aud-cat.bad .aud-bar b{background:#ef4b4b}
+.aud-its{list-style:none;margin:0;padding:.2rem 1rem 1rem}.aud-its li{position:relative;padding:.35rem 0 .35rem 1.5rem;color:#ddd;font-size:.92rem}
+.aud-its li:before{position:absolute;left:0;font-weight:700}.aud-its li.ok:before{content:"\2713";color:#2fbf6b}.aud-its li.no:before{content:"\2715";color:#ef4b4b}
+.aud-cat .aud-fine{padding:0 1rem 1rem;margin:0}
+.aud-soon{border-left-color:#333;opacity:.75}.aud-soon .aud-sum{cursor:default}
+.aud-soon .aud-sum{grid-template-columns:1fr}
+.aud-what{max-width:1000px;margin:2.5rem auto 0;padding:0 1.4rem}.aud-what h2{font:800 clamp(1.6rem,4vw,2.2rem)/1.1 "Inter",sans-serif;letter-spacing:-.03em;margin:0 0 1rem;text-align:center}
+.aud-wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem}.aud-wg div{background:#141414;border:1px solid #262626;border-radius:14px;padding:1rem;color:#cfcfcf}.aud-wg b{display:block;color:#fff;margin-bottom:.3rem}.aud-wg span{font-size:.86rem;line-height:1.45}
