@@ -265,7 +265,7 @@ PRIV = """<h2>The short version</h2>
 <h2>Session recordings and heatmaps</h2>
 <p>If switched on, this site uses Microsoft Clarity to show me anonymised recordings and heatmaps of how pages are used. Everything typed into form fields is masked. Clarity is not started for visitors in European time zones. Microsoft\u2019s privacy statement is at <a href="https://privacy.microsoft.com/privacystatement" rel="noopener noreferrer">privacy.microsoft.com</a>.</p>
 <h2>When you contact me</h2>
-<p>If you send the contact form or the calculator review form, your answers, name and email are delivered to me by Web3Forms and are also saved in my database (Supabase) so a request is never lost. They are used only to reply to you. If you book a call, Calendly handles that booking under its own privacy policy.</p>
+<p>If you send the contact form, the free audit form or the calculator review form, your answers, name and email are delivered to me by Web3Forms and are also saved in my database (Supabase) so a request is never lost. They are used only to reply to you. If you book a call, Calendly handles that booking under its own privacy policy.</p>
 <h2>Your choices</h2>
 <ul>
 <li>If your browser sends <strong>Do Not Track</strong>, no analytics are recorded. Automated visitors such as search crawlers and speed-test tools are not counted.</li>
@@ -380,6 +380,59 @@ legal_page("terms.html", "Terms & Conditions", "Legal", "Terms &amp; <em>Conditi
 legal_page("refund-policy.html", "Refund Policy", "Legal", "Refund <em>Policy.</em>", "How refunds and cancellations work for Moses Mastery projects and monthly services.", REFUND)
 legal_page("cookie-policy.html", "Cookie Policy", "Legal", "Cookie <em>Policy.</em>", "What cookies and browser storage the Moses Mastery website uses, and how to control them.", COOKIES)
 
+# free store audit page
+p = ""; url = SITE + "/audit.html"
+AUDIT = """
+<section class="calc-lead aud" id="audit">
+  <h2>Get your free store audit: <em>3 specific fixes</em></h2>
+  <p>Send your Shopify store link and your biggest problem. I review the store myself and email you the three changes I would make first. Free, no obligation, and no password needed.</p>
+  <form id="auditForm" class="calc-lf" aria-label="Free store audit request">
+    <input type="hidden" name="access_key" value="fd19a73d-7fdc-4f4a-89e9-0a4c99f1ff1e">
+    <input type="hidden" name="subject" value="Free store audit request">
+    <input type="hidden" name="from_name" value="Moses Mastery audit">
+    <input type="checkbox" name="botcheck" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label><span>Your name</span><input name="name" required autocomplete="name"></label>
+    <label><span>Email</span><input name="email" type="email" required autocomplete="email"></label>
+    <label class="calc-wide"><span>Store link</span><input name="store" type="url" required placeholder="https://yourstore.com" autocomplete="url"></label>
+    <label class="calc-wide"><span>Biggest problem right now</span>
+      <select name="problem" required>
+        <option value="">Choose one</option>
+        <option>Visitors do not buy (low conversion)</option>
+        <option>Not enough traffic</option>
+        <option>My ads are not profitable</option>
+        <option>The store looks outdated or untrustworthy</option>
+        <option>The store is slow or hard to use on mobile</option>
+        <option>I am not sure, I just want an expert opinion</option>
+      </select></label>
+    <label class="calc-wide"><span>Anything else I should know? (optional)</span><textarea name="note" rows="3" maxlength="1000" placeholder="Your niche, goals, what you have tried"></textarea></label>
+    <button type="submit" class="mm-cta"><span class="mm-cta-tx">Send my free audit request</span><span class="mm-cta-ar" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+    <p class="calc-status" id="auditStatus" role="status"></p>
+  </form>
+</section>
+<section class="aud-how">
+  <h2>How it works</h2>
+  <ol>
+    <li><strong>You send the link.</strong> Takes about a minute. I only need the public store address.</li>
+    <li><strong>I review the store.</strong> Design and trust, product pages, cart and checkout, mobile speed and how it presents to ad traffic.</li>
+    <li><strong>You get 3 fixes by email within 2 business days.</strong> Specific and in priority order. You can do them yourself or ask me to.</li>
+  </ol>
+  <p class="aud-talk">Prefer to talk it through? <a href="https://calendly.com/onwenmoses/30min" rel="noopener" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;">Book a free strategy call</a> instead.</p>
+  <details><summary>Is it really free?</summary><p>Yes. The audit is free and there is no obligation. If you want help with the fixes, I will send a fixed quote, and you can say no.</p></details>
+  <details><summary>Will you need access to my store?</summary><p>No. I review the public store. Please never send passwords in the form.</p></details>
+  <details><summary>Do you guarantee results?</summary><p>No one can honestly promise a sales increase. The audit points out real problems and what to fix first; results depend on your product, traffic and market.</p></details>
+</section>
+"""
+page = head("Free Shopify Store Audit | Moses Mastery", "Get a free Shopify store audit: send your store link and receive the 3 biggest fixes within 2 business days. No obligation.", url, p, OG, "website")
+page += f'''<body class="bl-page">
+  {header(p, "")}
+  <main id="main">
+    <section class="bl-hero"><p class="bl-kicker"><span></span>Free offer</p><h1>Find out what is <em>costing you sales.</em></h1></section>
+    <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem">{AUDIT}</section>
+  </main>
+  {footer(p)}
+''' + (TAIL % (p, p, p, p)).replace("</body>", '<script src="js/audit.js"></script>\n</body>')
+W(os.path.join(ROOT, "audit.html"), page)
+
 # revenue-leak calculator page
 p = ""; url = SITE + "/calculator.html"
 CALC = """
@@ -432,7 +485,7 @@ page += f'''<body class="bl-page">
 W(os.path.join(ROOT, "calculator.html"), page)
 
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/audit.html", "0.8", "2026-11-10"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 

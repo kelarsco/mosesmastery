@@ -3775,3 +3775,13 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .rvw-dots li.is-on{background:#f7cb1a;width:46px}
 @media(min-width:1000px){.rvw-hint,.rvw-dots{display:none}}
 @media(prefers-reduced-motion:reduce){.rvw-hint i{animation:none}}
+
+/* Free audit page */
+.aud select,.aud textarea{width:100%;padding:.7rem 1rem;border-radius:12px;border:1px solid #333;background:#0b0b0b;color:#fff;font:500 1.05rem "Inter",sans-serif;min-height:48px}
+.aud select:focus,.aud textarea:focus{outline:2px solid #f7cb1a;outline-offset:1px;border-color:#f7cb1a}
+.aud .calc-lf,.aud form{text-align:left}
+.aud-how{max-width:760px;margin:2.5rem auto 0;padding:0 1.4rem}
+.aud-how h2{font:800 clamp(1.6rem,4vw,2.2rem)/1.1 "Inter",sans-serif;letter-spacing:-.03em;margin:0 0 1rem}
+.aud-how ol{padding-left:1.2rem;margin:0 0 1.2rem}.aud-how li{margin-bottom:.8rem;line-height:1.55}
+.aud-talk{margin:1.2rem 0 1.6rem}
+.aud-how details{border-top:1px solid #2a2a2a;padding:.9rem 0}.aud-how summary{cursor:pointer;font-weight:600}.aud-how details p{margin:.6rem 0 0}
