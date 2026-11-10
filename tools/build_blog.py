@@ -384,8 +384,8 @@ legal_page("cookie-policy.html", "Cookie Policy", "Legal", "Cookie <em>Policy.</
 p = ""; url = SITE + "/audit.html"
 AUDIT = """
 <section class="calc-lead aud" id="audit">
-  <h2>Get your free store audit: <em>3 specific fixes</em></h2>
-  <p>Send your Shopify store link and your biggest problem. I review the store myself and email you the three changes I would make first. Free, no obligation, and no password needed.</p>
+  <h2>Scan your store now: <em>results in about 30 seconds</em></h2>
+  <p>Enter your store link. The scan runs here on this page and shows your mobile speed score and the biggest things slowing your store down. Then I review it personally and email you my top fixes. Free, no obligation, no password needed.</p>
   <form id="auditForm" class="calc-lf" aria-label="Free store audit request">
     <input type="hidden" name="access_key" value="fd19a73d-7fdc-4f4a-89e9-0a4c99f1ff1e">
     <input type="hidden" name="subject" value="Free store audit request">
@@ -405,28 +405,28 @@ AUDIT = """
         <option>I am not sure, I just want an expert opinion</option>
       </select></label>
     <label class="calc-wide"><span>Anything else I should know? (optional)</span><textarea name="note" rows="3" maxlength="1000" placeholder="Your niche, goals, what you have tried"></textarea></label>
-    <button type="submit" class="mm-cta"><span class="mm-cta-tx">Send my free audit request</span><span class="mm-cta-ar" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+    <button type="submit" class="mm-cta"><span class="mm-cta-tx">Scan my store now</span><span class="mm-cta-ar" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
     <p class="calc-status" id="auditStatus" role="status"></p>
   </form>
 </section>
 <section class="aud-how">
   <h2>How it works</h2>
   <ol>
-    <li><strong>You send the link.</strong> Takes about a minute. I only need the public store address.</li>
-    <li><strong>I review the store.</strong> Design and trust, product pages, cart and checkout, mobile speed and how it presents to ad traffic.</li>
-    <li><strong>You get 3 fixes by email within 2 business days.</strong> Specific and in priority order. You can do them yourself or ask me to.</li>
+    <li><strong>You enter the link.</strong> I only need the public store address.</li>
+    <li><strong>The scan runs instantly on this page.</strong> You see your mobile speed score, key timings and the biggest speed problems, powered by Google PageSpeed Insights.</li>
+    <li><strong>I send my personal fixes by email within 24 hours.</strong> The scan covers speed. My review also covers design, trust, product pages, cart and checkout.</li>
   </ol>
   <p class="aud-talk">Prefer to talk it through? <a href="https://calendly.com/onwenmoses/30min" rel="noopener" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;">Book a free strategy call</a> instead.</p>
-  <details><summary>Is it really free?</summary><p>Yes. The audit is free and there is no obligation. If you want help with the fixes, I will send a fixed quote, and you can say no.</p></details>
-  <details><summary>Will you need access to my store?</summary><p>No. I review the public store. Please never send passwords in the form.</p></details>
-  <details><summary>Do you guarantee results?</summary><p>No one can honestly promise a sales increase. The audit points out real problems and what to fix first; results depend on your product, traffic and market.</p></details>
+  <details><summary>Is it really free?</summary><p>Yes. The scan and my review are free and there is no obligation. If you want help with the fixes, I will send a fixed quote, and you can say no.</p></details>
+  <details><summary>Will you need access to my store?</summary><p>No. The scan and my review use the public store. Please never send passwords in the form.</p></details>
+  <details><summary>Do you guarantee results?</summary><p>No one can honestly promise a sales increase. The scan and review point out real problems and what to fix first; results depend on your product, traffic and market.</p></details>
 </section>
 """
-page = head("Free Shopify Store Audit | Moses Mastery", "Get a free Shopify store audit: send your store link and receive the 3 biggest fixes within 2 business days. No obligation.", url, p, OG, "website")
+page = head("Free Shopify Store Audit | Moses Mastery", "Free Shopify store scan: enter your store link and see your mobile speed score and biggest problems in about 30 seconds, then get my personal fixes by email. No obligation.", url, p, OG, "website")
 page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">
-    <section class="bl-hero"><p class="bl-kicker"><span></span>Free offer</p><h1>Find out what is <em>costing you sales.</em></h1></section>
+    <section class="bl-hero"><p class="bl-kicker"><span></span>Free offer</p><h1>Scan your store and see what is <em>costing you sales.</em></h1></section>
     <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem">{AUDIT}</section>
   </main>
   {footer(p)}
