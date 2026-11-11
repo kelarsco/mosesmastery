@@ -7,7 +7,7 @@ To also score **Trust & Credibility**, **Conversion** and **Product SEO**, deplo
 1. Open your Supabase project, then **Edge Functions**, then **Deploy a new function**, then **Via Editor**.
 2. Name it exactly `scan`.
 3. Paste the full contents of `supabase/functions/scan/index.ts` and click **Deploy**.
-4. Open the function's **Details** and make sure **Verify JWT** is ON (the site sends your public key automatically).
+4. Open the function's **Settings** tab and turn **Verify JWT with legacy secret** OFF, then **Save changes**. The site uses a new-style publishable key, which the legacy JWT check rejects (401). The function protects itself with a CORS allow-list and a private-address block.
 5. Reload `audit.html` and scan a store. The three extra categories now show scores.
 
 It only reads public pages, refuses private and internal addresses, stores nothing, and only answers requests that come from mosesmastery.com.
