@@ -169,6 +169,26 @@
       box.appendChild(fl);
     }
 
+
+    /* revenue scenario: all inputs are the owner's own; the lift is an adjustable assumption */
+    var rv = el('div', 'aud-rev'); rv.appendChild(el('h3', null, 'What this could be costing you'));
+    rv.appendChild(el('p', 'aud-revp', 'Enter your own numbers. This is a what-if scenario, not a prediction or a promise.'));
+    var g = el('div', 'aud-revg'), inp = {};
+    [['visitors', 'Monthly visitors', '5000', '1'], ['cr', 'Conversion rate (%)', '1.5', '0.1'], ['aov', 'Average order value ($)', '60', '1']].forEach(function (m) { var l = el('label'); l.appendChild(el('span', null, m[1])); var i = el('input'); i.type = 'number'; i.inputMode = 'decimal'; i.min = '0'; i.step = m[3]; i.placeholder = m[2]; l.appendChild(i); g.appendChild(l); inp[m[0]] = i; });
+    var lf = el('label', 'aud-revwide'); var lt = el('span', null, 'If fixes lift your conversion rate by: 10%'); lf.appendChild(lt); var lift = el('input'); lift.type = 'range'; lift.min = '5'; lift.max = '30'; lift.step = '5'; lift.value = '10'; lf.appendChild(lift); g.appendChild(lf); rv.appendChild(g);
+    var out = el('div', 'aud-revout'); out.setAttribute('aria-live', 'polite'); rv.appendChild(out);
+    rv.appendChild(el('p', 'aud-fine', 'Revenue = visitors x conversion rate x order value. The lift percentage is an assumption you can change; the right figure depends on your store, traffic and which fixes are made.'));
+    function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+    function calc() {
+      var v = parseFloat(inp.visitors.value), c = parseFloat(inp.cr.value), a = parseFloat(inp.aov.value), l = +lift.value; lt.textContent = 'If fixes lift your conversion rate by: ' + l + '%';
+      out.innerHTML = '';
+      if (!(v > 0 && c > 0 && a > 0)) { out.appendChild(el('p', 'aud-revhint', 'Fill in the three boxes to see your numbers.')); return; }
+      var cur = v * (c / 100) * a, extra = cur * (l / 100);
+      [[money(cur), 'Estimated revenue per month now'], ['+' + money(extra), 'Extra per month at a ' + l + '% lift'], ['+' + money(extra * 12), 'Extra per year at a ' + l + '% lift']].forEach(function (m) { var d = el('div'); d.appendChild(el('strong', null, m[0])); d.appendChild(el('span', null, m[1])); out.appendChild(d); });
+    }
+    [inp.visitors, inp.cr, inp.aov, lift].forEach(function (i) { i.addEventListener('input', calc); }); calc();
+    box.appendChild(rv);
+
     var cta = el('div', 'aud-cta'); cta.appendChild(el('h3', null, 'Want these fixed properly?'));
     cta.appendChild(el('p', null, 'I will walk through your results, show what matters most for your store and give you a fixed quote. No obligation.'));
     var row = el('div', 'aud-ctarow'); row.appendChild(calBtn('Book a free strategy call'));
