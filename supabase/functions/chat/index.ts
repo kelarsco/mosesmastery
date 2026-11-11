@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
     if (v === 'day') return json({ ok: false, error: 'busy' }, 429, origin);
   } catch (e) { return json({ ok: false, error: 'unavailable', detail: 'rate-limit call failed: ' + String(e).slice(0, 100) }, 503, origin); }
 
-  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 25000);
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 45000);
   try {
     let reply = '';
     if (akey) {
@@ -85,7 +85,11 @@ Deno.serve(async (req) => {
       const j = await r.json();
       reply = ((j.content || []).filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n') || '').trim();
     } else {
-      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent', { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 1500, temperature: 0.3 } }) });
+      const gUrl = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent';
+      const gBody = (think: boolean) => JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 1500, temperature: 0.3, ...(think ? { thinkingConfig: { thinkingLevel: 'low' } } : {}) } });
+      const gCall = (think: boolean) => fetch(gUrl, { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: gBody(think) });
+      let r = await gCall(true);
+      if (r.status === 400) r = await gCall(false);   // model does not accept the "think less" option: retry plainly
       if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Gemini ' + r.status + ': ' + (await r.text()).replace(/AQ\.[A-Za-z0-9_\-]+|AIza[A-Za-z0-9_\-]+/g, '[key]').slice(0, 200) }, 502, origin);
       const j = await r.json();
       const cand: any = (j.candidates || [])[0] || {};

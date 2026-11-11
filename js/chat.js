@@ -54,7 +54,7 @@
     busy = true; send.disabled = true; chips.style.display = 'none'; inp.value = '';
     msgs.push({ role: 'user', content: text }); userCount++; add('user', text); save(); track('chat_message', { n: userCount });
     var ty = typing();
-    var ctl = ('AbortController' in window) ? new AbortController() : null, tm = setTimeout(function () { if (ctl) ctl.abort(); }, 30000);
+    var ctl = ('AbortController' in window) ? new AbortController() : null, tm = setTimeout(function () { if (ctl) ctl.abort(); }, 55000);
     fetch(URL_, { method: 'POST', signal: ctl ? ctl.signal : undefined, headers: { 'Content-Type': 'application/json', apikey: C.supabaseAnonKey || '', Authorization: 'Bearer ' + (C.supabaseAnonKey || '') }, body: JSON.stringify({ messages: msgs.slice(-10) }) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (j && !j.ok && !j.detail) j.detail = 'HTTP ' + r.status; return j; }); })
       .then(function (j) {
