@@ -42,7 +42,9 @@ HOW TO ANSWER
 function cors(origin: string) {
   return { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Headers': 'content-type, authorization, apikey, x-client-info', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Vary': 'Origin' };
 }
-function json(o: unknown, status: number, origin: string) { return new Response(JSON.stringify(o), { status, headers: { ...cors(origin), 'Content-Type': 'application/json' } }); }
+function json(o: any, status: number, origin: string) { if (o && o.ok === false) console.error('chat error', status, o.error, o.detail || '');
+  return json2(o, status, origin); }
+function json2(o: unknown, status: number, origin: string) { return new Response(JSON.stringify(o), { status, headers: { ...cors(origin), 'Content-Type': 'application/json' } }); }
 async function sha(s: string) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s + (Deno.env.get('CHAT_SALT') || ''))); return Array.from(new Uint8Array(b)).slice(0, 12).map((x) => x.toString(16).padStart(2, '0')).join(''); }
 
 Deno.serve(async (req) => {
@@ -53,7 +55,8 @@ Deno.serve(async (req) => {
   if (req.method !== 'POST') return json({ ok: false, error: 'method' }, 405, origin);
 
   const akey = Deno.env.get('ANTHROPIC_API_KEY'), key = akey || GEMINI, sbUrl = Deno.env.get('SUPABASE_URL'), sbKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  if (!key || !sbUrl || !sbKey) return json({ ok: false, error: 'unavailable' }, 503, origin);
+  if (!key) return json({ ok: false, error: 'unavailable', detail: 'no API key secret found (name must be GEMINI_API_KEY or ANTHROPIC_API_KEY)' }, 503, origin);
+  if (!sbUrl || !sbKey) return json({ ok: false, error: 'unavailable', detail: 'Supabase env missing' }, 503, origin);
 
   let body: any; try { body = await req.json(); } catch (_) { return json({ ok: false, error: 'bad' }, 400, origin); }
   let msgs = Array.isArray(body && body.messages) ? body.messages : [];
@@ -65,27 +68,27 @@ Deno.serve(async (req) => {
   const ip = (req.headers.get('cf-connecting-ip') || (req.headers.get('x-forwarded-for') || '').split(',')[0] || 'unknown').trim();
   try {
     const r = await fetch(sbUrl.replace(/\/$/, '') + '/rest/v1/rpc/chat_hit', { method: 'POST', headers: { apikey: sbKey, Authorization: 'Bearer ' + sbKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_ip: await sha(ip), p_ip_limit: IP_LIMIT, p_day_limit: DAY_LIMIT }) });
-    if (!r.ok) return json({ ok: false, error: 'unavailable' }, 503, origin);
+    if (!r.ok) return json({ ok: false, error: 'unavailable', detail: 'rate-limit SQL not installed or failed (' + r.status + '): run supabase/chat.sql in the SQL Editor' }, 503, origin);
     const v = await r.json();
     if (v === 'ip') return json({ ok: false, error: 'limit' }, 429, origin);
     if (v === 'day') return json({ ok: false, error: 'busy' }, 429, origin);
-  } catch (_) { return json({ ok: false, error: 'unavailable' }, 503, origin); }
+  } catch (e) { return json({ ok: false, error: 'unavailable', detail: 'rate-limit call failed: ' + String(e).slice(0, 100) }, 503, origin); }
 
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 25000);
   try {
     let reply = '';
     if (akey) {
       const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', signal: ctl.signal, headers: { 'x-api-key': akey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' }, body: JSON.stringify({ model: MODEL, max_tokens: 320, temperature: 0.3, system: SYSTEM, messages: msgs }) });
-      if (!r.ok) return json({ ok: false, error: 'upstream' }, 502, origin);
+      if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200) }, 502, origin);
       const j = await r.json();
       reply = ((j.content || []).filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n') || '').trim();
     } else {
       const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent', { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 400, temperature: 0.3 } }) });
-      if (!r.ok) return json({ ok: false, error: 'upstream' }, 502, origin);
+      if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Gemini ' + r.status + ' (model ' + MODEL + '): ' + (await r.text()).slice(0, 200) }, 502, origin);
       const j = await r.json();
       reply = (((j.candidates || [])[0] || {}).content?.parts || []).map((c: any) => c.text || '').join('\n').trim();
     }
-    if (!reply) return json({ ok: false, error: 'empty' }, 502, origin);
+    if (!reply) return json({ ok: false, error: 'empty', detail: 'model returned no text' }, 502, origin);
     return json({ ok: true, reply }, 200, origin);
-  } catch (_) { return json({ ok: false, error: 'upstream' }, 502, origin); } finally { clearTimeout(t); }
+  } catch (e) { return json({ ok: false, error: 'upstream', detail: 'call failed: ' + String(e).slice(0, 100) }, 502, origin); } finally { clearTimeout(t); }
 });

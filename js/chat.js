@@ -56,11 +56,11 @@
     var ty = typing();
     var ctl = ('AbortController' in window) ? new AbortController() : null, tm = setTimeout(function () { if (ctl) ctl.abort(); }, 30000);
     fetch(URL_, { method: 'POST', signal: ctl ? ctl.signal : undefined, headers: { 'Content-Type': 'application/json', apikey: C.supabaseAnonKey || '', Authorization: 'Bearer ' + (C.supabaseAnonKey || '') }, body: JSON.stringify({ messages: msgs.slice(-10) }) })
-      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (j && !j.ok && !j.detail) j.detail = 'HTTP ' + r.status; return j; }); })
       .then(function (j) {
         ty.remove();
         if (j && j.ok && j.reply) { msgs.push({ role: 'assistant', content: j.reply }); add('assistant', j.reply); if (userCount >= 2) leadBox(); }
-        else { msgs.pop(); userCount--; add('assistant', j && j.error === 'limit' ? 'You have reached today\'s message limit here. Please message Moses directly on WhatsApp: https://wa.me/15818095630' : 'I cannot answer right now. Please message Moses on WhatsApp: https://wa.me/15818095630 or use https://www.mosesmastery.com/contact.html'); }
+        else { msgs.pop(); userCount--; var dt = j && j.detail ? ' [' + String(j.detail).slice(0, 220) + ']' : ''; add('assistant', j && j.error === 'limit' ? 'You have reached today\'s message limit here. Please message Moses directly on WhatsApp: https://wa.me/15818095630' : 'I cannot answer right now. Please message Moses on WhatsApp: https://wa.me/15818095630 or use https://www.mosesmastery.com/contact.html' + dt); }
       }).catch(function () { ty.remove(); msgs.pop(); userCount--; add('assistant', 'I could not connect. Please try again, or message Moses on WhatsApp: https://wa.me/15818095630'); })
       .then(function () { clearTimeout(tm); busy = false; send.disabled = false; save(); if (open) inp.focus(); });
   }
