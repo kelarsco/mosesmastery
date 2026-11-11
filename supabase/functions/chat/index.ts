@@ -85,10 +85,12 @@ Deno.serve(async (req) => {
       const j = await r.json();
       reply = ((j.content || []).filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n') || '').trim();
     } else {
-      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent', { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 400, temperature: 0.3 } }) });
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent', { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 1500, temperature: 0.3 } }) });
       if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Gemini ' + r.status + ': ' + (await r.text()).replace(/AQ\.[A-Za-z0-9_\-]+|AIza[A-Za-z0-9_\-]+/g, '[key]').slice(0, 200) }, 502, origin);
       const j = await r.json();
-      reply = (((j.candidates || [])[0] || {}).content?.parts || []).map((c: any) => c.text || '').join('\n').trim();
+      const cand: any = (j.candidates || [])[0] || {};
+      reply = (cand.content?.parts || []).map((c: any) => c.text || '').join('\n').trim();
+      if (cand.finishReason === 'MAX_TOKENS' && reply) { const k = Math.max(reply.lastIndexOf('. '), reply.lastIndexOf('! '), reply.lastIndexOf('? '), reply.lastIndexOf('.\n')); if (k > 40) reply = reply.slice(0, k + 1); }
     }
     if (!reply) return json({ ok: false, error: 'empty', detail: 'model returned no text' }, 502, origin);
     return json({ ok: true, reply }, 200, origin);
