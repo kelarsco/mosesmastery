@@ -420,3 +420,12 @@
     waCheck();
   }
 })();
+
+/* AI chat assistant loader: only when MM_CONFIG.chat is true (set after the chat function is deployed) */
+(function () {
+  try {
+    var C = window.MM_CONFIG || {}; if (!C.chat) return;
+    var me = document.currentScript, base = me && me.src ? me.src.replace(/sections\.js.*$/, '') : 'js/';
+    var s = document.createElement('script'); s.src = base + 'chat.js'; s.defer = true; document.head.appendChild(s);
+  } catch (_) {}
+})();
