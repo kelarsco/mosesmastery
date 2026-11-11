@@ -1,7 +1,8 @@
 // Moses Mastery website chat assistant. Calls Anthropic server-side so the API key never reaches the browser.
-// Deploy: see SETUP-CHAT.md. Needs secret ANTHROPIC_API_KEY and the chat_hit() SQL from supabase/schema.sql.
+// Deploy: see SETUP-CHAT.md. Needs secret ANTHROPIC_API_KEY (paid) or GEMINI_API_KEY (free tier) and the chat_hit() SQL from supabase/schema.sql.
 const ALLOW = ['https://www.mosesmastery.com', 'https://mosesmastery.com', 'https://kelarsco.github.io', 'http://localhost', 'http://127.0.0.1'];
-const MODEL = Deno.env.get('CHAT_MODEL') || 'claude-haiku-5-5';
+const GEMINI = Deno.env.get('GEMINI_API_KEY');   // free option: key from aistudio.google.com
+const MODEL = Deno.env.get('CHAT_MODEL') || (GEMINI && !Deno.env.get('ANTHROPIC_API_KEY') ? 'gemini-2.5-flash' : 'claude-haiku-5-5');
 const IP_LIMIT = parseInt(Deno.env.get('CHAT_IP_LIMIT') || '30');      // messages per visitor per day
 const DAY_LIMIT = parseInt(Deno.env.get('CHAT_DAY_LIMIT') || '500');   // messages for the whole site per day (your spending cap)
 
@@ -51,7 +52,7 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
   if (req.method !== 'POST') return json({ ok: false, error: 'method' }, 405, origin);
 
-  const key = Deno.env.get('ANTHROPIC_API_KEY'), sbUrl = Deno.env.get('SUPABASE_URL'), sbKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const akey = Deno.env.get('ANTHROPIC_API_KEY'), key = akey || GEMINI, sbUrl = Deno.env.get('SUPABASE_URL'), sbKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   if (!key || !sbUrl || !sbKey) return json({ ok: false, error: 'unavailable' }, 503, origin);
 
   let body: any; try { body = await req.json(); } catch (_) { return json({ ok: false, error: 'bad' }, 400, origin); }
@@ -72,10 +73,18 @@ Deno.serve(async (req) => {
 
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 25000);
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', signal: ctl.signal, headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' }, body: JSON.stringify({ model: MODEL, max_tokens: 320, temperature: 0.3, system: SYSTEM, messages: msgs }) });
-    if (!r.ok) return json({ ok: false, error: 'upstream' }, 502, origin);
-    const j = await r.json();
-    const reply = ((j.content || []).filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n') || '').trim();
+    let reply = '';
+    if (akey) {
+      const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', signal: ctl.signal, headers: { 'x-api-key': akey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' }, body: JSON.stringify({ model: MODEL, max_tokens: 320, temperature: 0.3, system: SYSTEM, messages: msgs }) });
+      if (!r.ok) return json({ ok: false, error: 'upstream' }, 502, origin);
+      const j = await r.json();
+      reply = ((j.content || []).filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n') || '').trim();
+    } else {
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent', { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 400, temperature: 0.3 } }) });
+      if (!r.ok) return json({ ok: false, error: 'upstream' }, 502, origin);
+      const j = await r.json();
+      reply = (((j.candidates || [])[0] || {}).content?.parts || []).map((c: any) => c.text || '').join('\n').trim();
+    }
     if (!reply) return json({ ok: false, error: 'empty' }, 502, origin);
     return json({ ok: true, reply }, 200, origin);
   } catch (_) { return json({ ok: false, error: 'upstream' }, 502, origin); } finally { clearTimeout(t); }

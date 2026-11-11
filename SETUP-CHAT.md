@@ -2,7 +2,12 @@
 
 The chat is already in the site code but switched OFF (`chat: false` in `js/config.js`). Nothing shows to visitors until you finish these steps and I flip it on.
 
-## 1. Get an Anthropic API key and cap the spending
+## 1A. FREE option: Google Gemini key (no card needed)
+1. Go to aistudio.google.com, sign in with Google, tap **Get API key** -> **Create API key**. Copy it.
+2. In step 4 below, add the secret named `GEMINI_API_KEY` instead of `ANTHROPIC_API_KEY`.
+3. The free tier has rate limits (the 30 per visitor and 500 per day caps stay as extra protection), and Google may use free-tier messages to improve its products. If AI Studio shows a different current free Flash model name, add a secret `CHAT_MODEL` with that name (default is `gemini-2.5-flash`).
+
+## 1B. Paid option: Anthropic key and spending cap
 1. Go to console.anthropic.com, sign in, add a small credit (for example $10).
 2. Settings -> Limits: set a **monthly spend limit** (for example $10). This is your hard stop.
 3. API Keys -> Create key. Copy it (starts with `sk-ant-`). Do not paste it in chat or in the website code.
