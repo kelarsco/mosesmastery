@@ -3891,3 +3891,4 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 @media(max-width:599px){.mmc-btn{left:max(14px,env(safe-area-inset-left));right:auto;bottom:max(14px,env(safe-area-inset-bottom))}.mmc-panel{inset:0;width:auto;max-width:none;height:100dvh;border-radius:0;border:0}.mmc-lock,.mmc-lock body{overflow:hidden}}
 @media(prefers-reduced-motion:reduce){.mmc-t i{animation:none}}
 .mmc-a a{font:inherit;color:#f7cb1a;word-break:break-all}
+@media(max-width:599px){.mmc-btn{padding:.55rem .85rem;gap:.35rem;font-size:.8rem;box-shadow:0 6px 18px rgba(0,0,0,.35)}.mmc-btn svg{width:17px;height:17px}}
