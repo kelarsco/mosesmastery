@@ -52,7 +52,7 @@
     var ax = pc('accessibility'); if (ax != null) cats.push({ name: 'UX & Accessibility', w: 10, score: ax, items: failing(lr, 'accessibility', 4).concat(ax >= 90 ? [{ label: 'Contrast, labels and structure look good', ok: true }] : []), hint: 'Contrast, labels, usability' });
     var nr = (A['network-requests'] && A['network-requests'].details && A['network-requests'].details.items) || [], urls = nr.map(function (x) { return x.url || ''; }).join(' ').toLowerCase();
     if (nr.length) {
-      var tools = [['Analytics (Google Analytics / Tag Manager) not detected', 'Analytics detected', /googletagmanager|google-analytics|gtag/], ['No ad pixel (Meta or TikTok) detected', 'Ad pixel detected', /connect\.facebook|facebook\.net|analytics\.tiktok|snap(chat)?\.com\/scevent/], ['No email / SMS capture tool detected', 'Email / SMS capture tool detected', /klaviyo|omnisend|mailchimp|privy|attentive|postscript|smsbump/], ['No reviews app detected', 'Reviews app detected', /judge\.me|loox|yotpo|stamped|okendo|junip|trustpilot/]];
+      var tools = [['Analytics (Google Analytics / Tag Manager) not detected on page load', 'Analytics detected', /googletagmanager|google-analytics|gtag/], ['No ad pixel (Meta or TikTok) detected on page load', 'Ad pixel detected', /connect\.facebook|facebook\.net|analytics\.tiktok|snap(chat)?\.com\/scevent/], ['No email / SMS capture tool detected on page load', 'Email / SMS capture tool detected', /klaviyo|omnisend|mailchimp|privy|attentive|postscript|smsbump/], ['No reviews app detected on page load', 'Reviews app detected', /judge\.me|loox|yotpo|stamped|okendo|junip|trustpilot/]];
       var found = tools.map(function (t) { var ok = t[2].test(urls); return { label: ok ? t[1] : t[0], ok: ok }; });
       cats.push({ name: 'Marketing Tools', w: 10, score: Math.round(found.filter(function (x) { return x.ok; }).length / found.length * 100), items: found, hint: 'Tracking and growth tools', note: 'Detected when the page loads. Tools that load only after cookie consent or run server-side may not show.' });
     }
@@ -72,8 +72,68 @@
     res.cats.forEach(function (c) { c.items.forEach(function (i) { if (!i.ok) all.push({ cat: c.name, label: i.label, impact: c.w * (100 - c.score) }); }); });
     all.sort(function (a, b) { return b.impact - a.impact; });
     all = all.slice(0, 10);
-    all.forEach(function (x, i) { x.sev = i < 3 && x.impact >= 250 ? 'High' : i < 7 && x.impact >= 100 ? 'Medium' : 'Low'; });
+    all.forEach(function (x, i) { x.sev = i < 3 && x.impact >= 250 ? 'High' : i < 7 && x.impact >= 100 ? 'Medium' : 'Low'; if (x.cat === 'Marketing Tools' && x.sev === 'High') x.sev = 'Medium'; });
     return all;
+  }
+
+
+  /* ---------- PDF report ---------- */
+  function loadPdf() {
+    if (window.jspdf) return Promise.resolve();
+    return new Promise(function (ok, no) { var sc = document.createElement('script'); sc.src = 'js/vendor/jspdf.min.js'; sc.onload = ok; sc.onerror = no; document.head.appendChild(sc); });
+  }
+  function ascii(t) { return String(t).replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, '-').replace(/[^\x20-\x7E]/g, ''); }
+  function makePdf(res, host, overall, fx) {
+    var J = window.jspdf.jsPDF, d = new J({ unit: 'pt', format: 'a4' }), W = 595, H = 842, M = 44, y = 0;
+    var COL = { good: [34, 160, 90], mid: [235, 150, 20], bad: [220, 60, 60] };
+    function rgb(t) { return COL[t]; }
+    function need(h) { if (y + h > H - 60) { d.addPage(); y = 50; } }
+    function text(t, x, size, bold, color, maxW) { d.setFont('helvetica', bold ? 'bold' : 'normal'); d.setFontSize(size); d.setTextColor.apply(d, color || [30, 30, 30]); var lines = d.splitTextToSize(ascii(t), maxW || (W - M * 2)); lines.forEach(function (ln) { d.text(ln, x, y); y += size * 1.3; }); return lines.length; }
+    // header
+    d.setFillColor(20, 20, 20); d.rect(0, 0, W, 96, 'F');
+    d.setFont('helvetica', 'bold'); d.setFontSize(20); d.setTextColor(255, 255, 255); d.text('Store Audit Report', M, 46);
+    d.setFont('helvetica', 'normal'); d.setFontSize(10); d.setTextColor(200, 200, 200); d.text(ascii(host) + '   |   ' + new Date().toISOString().slice(0, 10) + '   |   by Moses Mastery', M, 68);
+    // score
+    y = 154; var tn = tone(overall);
+    d.setDrawColor.apply(d, rgb(tn)); d.setLineWidth(5); d.circle(M + 36, y - 6, 34, 'S');
+    d.setFont('helvetica', 'bold'); d.setFontSize(26); d.setTextColor.apply(d, rgb(tn)); d.text(String(overall), M + 36, y + 3, { align: 'center' });
+    d.setFontSize(14); d.setTextColor(30, 30, 30); d.text('Overall store score: ' + label(overall), M + 92, y - 10);
+    d.setFont('helvetica', 'normal'); d.setFontSize(10); d.setTextColor(90, 90, 90);
+    var hi = fx.filter(function (x) { return x.sev === 'High'; }).length, md = fx.filter(function (x) { return x.sev === 'Medium'; }).length;
+    d.text(hi + ' high priority   |   ' + md + ' medium   |   ' + (fx.length - hi - md) + ' low   |   ' + res.cats.length + ' areas scanned', M + 92, y + 8);
+    y += 58;
+    // categories
+    text('Category breakdown', M, 14, true); y += 4;
+    res.cats.forEach(function (c) {
+      need(34); var t = tone(c.score);
+      d.setFont('helvetica', 'bold'); d.setFontSize(10.5); d.setTextColor(30, 30, 30); d.text(ascii(c.name), M, y);
+      d.setTextColor.apply(d, rgb(t)); d.text(c.score + '  ' + label(c.score), W - M, y, { align: 'right' });
+      d.setFillColor(232, 232, 232); d.roundedRect(M, y + 6, W - M * 2, 6, 3, 3, 'F');
+      d.setFillColor.apply(d, rgb(t)); d.roundedRect(M, y + 6, Math.max(6, (W - M * 2) * c.score / 100), 6, 3, 3, 'F'); y += 27;
+    });
+    res.missing.forEach(function (n) { need(20); d.setFont('helvetica', 'normal'); d.setFontSize(10); d.setTextColor(130, 130, 130); d.text(ascii(n) + ': needs a personal review (not measurable from outside)', M, y); y += 18; });
+    // fixes
+    y += 10; need(60); text('Top ' + fx.length + ' priority fixes', M, 14, true); y += 4;
+    var SC = { High: [220, 60, 60], Medium: [235, 150, 20], Low: [60, 120, 220] };
+    fx.forEach(function (x, i) {
+      var lines = d.splitTextToSize(ascii(x.label), W - M * 2 - 70); need(lines.length * 13 + 26);
+      d.setFillColor.apply(d, SC[x.sev]); d.roundedRect(M, y - 9, 52, 14, 3, 3, 'F'); d.setFont('helvetica', 'bold'); d.setFontSize(8); d.setTextColor(255, 255, 255); d.text(x.sev.toUpperCase(), M + 26, y + 1, { align: 'center' });
+      d.setFont('helvetica', 'bold'); d.setFontSize(10.5); d.setTextColor(30, 30, 30); lines.forEach(function (ln, k) { d.text((i + 1) + '. ' + (k ? '   ' : '') + ln, M + 62, y + k * 13); });
+      y += lines.length * 13; d.setFont('helvetica', 'normal'); d.setFontSize(8.5); d.setTextColor(120, 120, 120); d.text(ascii(x.cat), M + 62, y); y += 20;
+    });
+    // detail checklists
+    y += 16; need(120); text('Detailed checklist', M, 14, true); y += 4;
+    res.cats.forEach(function (c) {
+      need(40); d.setFont('helvetica', 'bold'); d.setFontSize(11); d.setTextColor(30, 30, 30); d.text(ascii(c.name) + '  (' + c.score + ')', M, y); y += 15;
+      c.items.forEach(function (i) { var lines = d.splitTextToSize(ascii(i.label), W - M * 2 - 22); need(lines.length * 12 + 4); d.setFont('helvetica', 'bold'); d.setFontSize(9.5); d.setTextColor.apply(d, i.ok ? COL.good : COL.bad); d.text(i.ok ? 'PASS' : 'FIX', M, y); d.setFont('helvetica', 'normal'); d.setTextColor(50, 50, 50); lines.forEach(function (ln) { d.text(ln, M + 34, y); y += 12; }); y += 2; });
+      y += 8;
+    });
+    // closing
+    need(120); y += 6; d.setFillColor(247, 203, 26); d.roundedRect(M, y, W - M * 2, 78, 8, 8, 'F');
+    d.setFont('helvetica', 'bold'); d.setFontSize(13); d.setTextColor(20, 20, 20); d.text('Want these fixed properly?', M + 16, y + 26);
+    d.setFont('helvetica', 'normal'); d.setFontSize(10); d.text('Book a free call: calendly.com/onwenmoses/30min   |   WhatsApp: +1 581 809 5630', M + 16, y + 46); d.text('info@mosesecom.com   |   www.mosesmastery.com', M + 16, y + 62); y += 96;
+    need(50); text('Data comes from Google PageSpeed Insights (mobile lab test) plus automated checks of public store pages. Scores vary between runs. This automated report cannot see design quality, offer strength, checkout or private settings, and it does not guarantee sales results.', M, 8, false, [130, 130, 130]);
+    d.save('store-audit-' + host.replace(/[^a-z0-9.-]/gi, '') + '-' + new Date().toISOString().slice(0, 10) + '.pdf');
   }
 
   function render(box, res, host) {
@@ -113,6 +173,7 @@
     cta.appendChild(el('p', null, 'I will walk through your results, show what matters most for your store and give you a fixed quote. No obligation.'));
     var row = el('div', 'aud-ctarow'); row.appendChild(calBtn('Book a free strategy call'));
     var wa = el('a', 'aud-btn2', 'Message me on WhatsApp'); wa.href = 'https://wa.me/15818095630?text=' + encodeURIComponent('Hi Moses, I just scanned ' + host + ' on your site (score ' + overall + '). Can you help me fix it?'); wa.target = '_blank'; wa.rel = 'noopener'; row.appendChild(wa);
+    var dl = el('button', 'aud-btn2', 'Download full report (PDF)'); dl.type = 'button'; dl.onclick = function () { var o = dl.textContent; dl.textContent = 'Preparing PDF...'; dl.disabled = true; loadPdf().then(function () { makePdf(res, host, overall, fx); if (window.mmTrack) window.mmTrack('audit_pdf', { store: host }); }).catch(function () { alert('Could not create the PDF. Please try again.'); }).then(function () { dl.textContent = o; dl.disabled = false; }); }; row.appendChild(dl);
     var again = el('button', 'aud-btn2', 'Scan another store'); again.type = 'button'; again.onclick = function () { box.remove(); f.style.display = ''; f.elements.store.value = ''; f.elements.store.focus(); running = false; }; row.appendChild(again);
     cta.appendChild(row); box.appendChild(cta);
     box.appendChild(el('p', 'aud-fine', 'Speed, SEO, mobile and technical data come from Google PageSpeed Insights (mobile, lab test), plus my own checks of your public pages. Scores shift a little between runs. This is an automated check of what can be measured from outside your store, not a guarantee of sales.'));
