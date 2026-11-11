@@ -265,7 +265,7 @@ PRIV = """<h2>The short version</h2>
 <h2>Session recordings and heatmaps</h2>
 <p>If switched on, this site uses Microsoft Clarity to show me anonymised recordings and heatmaps of how pages are used. Everything typed into form fields is masked. Clarity is not started for visitors in European time zones. Microsoft\u2019s privacy statement is at <a href="https://privacy.microsoft.com/privacystatement" rel="noopener noreferrer">privacy.microsoft.com</a>.</p>
 <h2>When you contact me</h2>
-<p>If you send the contact form, the free audit form or the calculator review form, your answers, name and email are delivered to me by Web3Forms and are also saved in my database (Supabase) so a request is never lost. They are used only to reply to you. If you book a call, Calendly handles that booking under its own privacy policy.</p>
+<p>The free store scan needs only a public store link, which is checked through Google PageSpeed Insights and my scanning function and is not tied to your name or email. If you send the contact form or the calculator review form, your answers, name and email are delivered to me by Web3Forms and are also saved in my database (Supabase) so a request is never lost. They are used only to reply to you. If you book a call, Calendly handles that booking under its own privacy policy.</p>
 <h2>Your choices</h2>
 <ul>
 <li>If your browser sends <strong>Do Not Track</strong>, no analytics are recorded. Automated visitors such as search crawlers and speed-test tools are not counted.</li>
@@ -384,28 +384,11 @@ legal_page("cookie-policy.html", "Cookie Policy", "Legal", "Cookie <em>Policy.</
 p = ""; url = SITE + "/audit.html"
 AUDIT = """
 <section class="calc-lead aud" id="audit">
-  <h2>Scan your store now: <em>results in about 30 seconds</em></h2>
-  <p>Enter your store link. The scan runs here on this page and shows your mobile speed score and the biggest things slowing your store down. Then I review it personally and email you my top fixes. Free, no obligation, no password needed.</p>
-  <form id="auditForm" class="calc-lf" aria-label="Free store audit request">
-    <input type="hidden" name="access_key" value="fd19a73d-7fdc-4f4a-89e9-0a4c99f1ff1e">
-    <input type="hidden" name="subject" value="Free store audit request">
-    <input type="hidden" name="from_name" value="Moses Mastery audit">
-    <input type="checkbox" name="botcheck" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <label><span>Your name</span><input name="name" required autocomplete="name"></label>
-    <label><span>Email</span><input name="email" type="email" required autocomplete="email"></label>
-    <label class="calc-wide"><span>Store link</span><input name="store" type="text" inputmode="url" required placeholder="yourstore.com" autocomplete="url" autocapitalize="off" spellcheck="false" pattern="[^ ]+\\.[^ ]+" title="Enter your store address, for example yourstore.com"></label>
-    <label class="calc-wide"><span>Biggest problem right now</span>
-      <select name="problem" required>
-        <option value="">Choose one</option>
-        <option>Visitors do not buy (low conversion)</option>
-        <option>Not enough traffic</option>
-        <option>My ads are not profitable</option>
-        <option>The store looks outdated or untrustworthy</option>
-        <option>The store is slow or hard to use on mobile</option>
-        <option>I am not sure, I just want an expert opinion</option>
-      </select></label>
-    <label class="calc-wide"><span>Anything else I should know? (optional)</span><textarea name="note" rows="3" maxlength="1000" placeholder="Your niche, goals, what you have tried"></textarea></label>
-    <button type="submit" class="mm-cta"><span class="mm-cta-tx">Scan my store now</span><span class="mm-cta-ar" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+  <h2>Paste your store link. <em>See your results in seconds.</em></h2>
+  <p>No signup, no email, no waiting. The scan runs right here and shows your score, what is hurting sales and what to fix first. Free.</p>
+  <form id="auditForm" class="aud-form" aria-label="Free store scan">
+    <input name="store" type="text" inputmode="url" required placeholder="yourstore.com" autocomplete="url" autocapitalize="off" spellcheck="false" pattern="[^ ]+\\.[^ ]+" title="Enter your store address, for example yourstore.com" aria-label="Your store link">
+    <button type="submit" class="mm-cta"><span class="mm-cta-tx">Scan my store</span><span class="mm-cta-ar" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
     <p class="calc-status" id="auditStatus" role="status"></p>
   </form>
 </section>
@@ -423,17 +406,17 @@ AUDIT = """
 <section class="aud-how">
   <h2>How it works</h2>
   <ol>
-    <li><strong>You enter the link.</strong> I only need the public store address.</li>
-    <li><strong>The scan runs instantly on this page.</strong> You get an overall score plus a score and checklist for each area, powered by Google PageSpeed Insights and my own store checks.</li>
-    <li><strong>I send my personal fixes by email within 24 hours.</strong> The scan measures what can be checked from outside. My review adds design judgment, offer and checkout.</li>
+    <li><strong>You paste the link.</strong> Only the public store address. No name, no email.</li>
+    <li><strong>The scan runs on this page.</strong> Within seconds you get an overall score, a score for each area and a ranked list of fixes, powered by Google PageSpeed Insights and my own store checks.</li>
+    <li><strong>Want help with the fixes?</strong> Book a free call or message me on WhatsApp. The scan measures what can be checked from outside; a personal review adds design, offer and checkout.</li>
   </ol>
   <p class="aud-talk">Prefer to talk it through? <a href="https://calendly.com/onwenmoses/30min" rel="noopener" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'});return false;">Book a free strategy call</a> instead.</p>
-  <details><summary>Is it really free?</summary><p>Yes. The scan and my review are free and there is no obligation. If you want help with the fixes, I will send a fixed quote, and you can say no.</p></details>
-  <details><summary>Will you need access to my store?</summary><p>No. The scan and my review use the public store. Please never send passwords in the form.</p></details>
+  <details><summary>Is it really free?</summary><p>Yes. The scan is free and there is no obligation. If you want help with the fixes, I will send a fixed quote, and you can say no.</p></details>
+  <details><summary>Will you need access to my store?</summary><p>No. The scan only reads your public store. Never share passwords with anyone.</p></details>
   <details><summary>Do you guarantee results?</summary><p>No one can honestly promise a sales increase. The scan and review point out real problems and what to fix first; results depend on your product, traffic and market.</p></details>
 </section>
 """
-page = head("Free Shopify Store Audit | Moses Mastery", "Free Shopify store scanner: enter your store link and see an overall score plus speed, mobile, SEO, trust and conversion checks in about 30 seconds. No obligation.", url, p, OG, "website")
+page = head("Free Shopify Store Audit | Moses Mastery", "Free Shopify store scanner: paste your store link and see your score plus speed, mobile, SEO, trust and conversion checks on the page in seconds. No signup, no email.", url, p, OG, "website")
 page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">

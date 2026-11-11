@@ -3818,3 +3818,38 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 .aud-soon .aud-sum{grid-template-columns:1fr}
 .aud-what{max-width:1000px;margin:2.5rem auto 0;padding:0 1.4rem}.aud-what h2{font:800 clamp(1.6rem,4vw,2.2rem)/1.1 "Inter",sans-serif;letter-spacing:-.03em;margin:0 0 1rem;text-align:center}
 .aud-wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem}.aud-wg div{background:#141414;border:1px solid #262626;border-radius:14px;padding:1rem;color:#cfcfcf}.aud-wg b{display:block;color:#fff;margin-bottom:.3rem}.aud-wg span{font-size:.86rem;line-height:1.45}
+
+/* audit v2: url-only scanner */
+.aud-form{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.2rem}
+.aud-form input{flex:1 1 220px;min-width:0;padding:1rem 1.1rem;border-radius:14px;border:1px solid #333;background:#111;color:#fff;font:500 1rem "Inter",sans-serif}
+.aud-form input:focus{outline:2px solid #f7cb1a;outline-offset:1px}
+.aud-form .mm-cta{flex:0 0 auto}.aud-form .calc-status{flex:1 0 100%;margin:0}
+.aud-load2{text-align:center;padding:2.2rem 1rem;border:1px solid #2a2a2a;border-radius:20px;background:#0f0f0f}
+.aud-load2 h3{margin:1rem 0 .3rem;font:700 1.25rem "Inter",sans-serif}.aud-load2>p{margin:0 0 1.2rem;color:#aaa}
+.aud-spin{display:block;width:44px;height:44px;margin:0 auto;border-radius:50%;border:3px solid #2a2a2a;border-top-color:#f7cb1a;animation:audspin .9s linear infinite}
+@keyframes audspin{to{transform:rotate(360deg)}}
+.aud-steps{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.5rem;max-width:560px;text-align:left}
+.aud-steps li{padding:.6rem .8rem;border-radius:10px;background:#161616;color:#777;font-size:.88rem;display:flex;gap:.5rem;align-items:center}
+.aud-steps li:before{content:"";width:10px;height:10px;border-radius:50%;border:2px solid #444;flex:none}
+.aud-steps li.now{color:#fff}.aud-steps li.now:before{border-color:#f7cb1a;animation:audpulse 1s ease-in-out infinite}
+.aud-steps li.done{color:#d8d8d8}.aud-steps li.done:before{background:#3ecf8e;border-color:#3ecf8e}
+@keyframes audpulse{50%{opacity:.35}}
+.aud-sumrow{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:1rem 0}
+.aud-sumrow div{background:#141414;border:1px solid #2a2a2a;border-radius:14px;padding:.9rem .5rem;text-align:center}
+.aud-sumrow strong{display:block;font:800 1.6rem "Inter",sans-serif}.aud-sumrow span{font-size:.72rem;color:#aaa}
+.aud-h{font:800 1.2rem "Inter",sans-serif;margin:1.6rem 0 .8rem}
+.aud-bar b{transition:width .9s cubic-bezier(.2,.7,.2,1)}
+.aud-fx{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.aud-fx li{display:flex;gap:.8rem;align-items:flex-start;padding:.8rem .9rem;border-radius:12px;background:#141414;border:1px solid #2a2a2a;border-left:4px solid #888}
+.aud-fx li em{font-style:normal;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:.2rem .5rem;border-radius:99px;background:#222;flex:none}
+.aud-fx .sev-high{border-left-color:#ef4444}.aud-fx .sev-high em{background:#3b1414;color:#ff8d8d}
+.aud-fx .sev-medium{border-left-color:#f59e0b}.aud-fx .sev-medium em{background:#33260a;color:#ffc766}
+.aud-fx .sev-low{border-left-color:#3b82f6}.aud-fx .sev-low em{background:#102038;color:#8db9ff}
+.aud-fx li span b{display:block;font-weight:600;line-height:1.35}.aud-fx li span i{font-style:normal;font-size:.78rem;color:#999}
+.aud-cta{margin:1.8rem 0 1rem;padding:1.5rem;border-radius:20px;background:linear-gradient(135deg,#17331f,#0f1f15);border:1px solid #24503a;text-align:center}
+.aud-cta h3{margin:0 0 .4rem;font:800 1.35rem "Inter",sans-serif}.aud-cta p{margin:0 0 1rem;color:#cfe8d9}
+.aud-ctarow{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.aud-btn2{display:inline-flex;align-items:center;justify-content:center;padding:.85rem 1.2rem;border-radius:99px;border:1px solid #3a6b52;background:transparent;color:#fff;font:600 .95rem "Inter",sans-serif;cursor:pointer;text-decoration:none}
+@media(max-width:560px){.aud-steps{grid-template-columns:1fr}.aud-sumrow{grid-template-columns:repeat(2,1fr)}.aud-form .mm-cta{flex:1 0 100%}}
+@media(prefers-reduced-motion:reduce){.aud-spin,.aud-steps li.now:before{animation:none}.aud-bar b{transition:none}}
+.aud-sumrow strong{color:#fff}.aud-fx li span b{color:#fff}.aud-fx li em{min-width:68px;text-align:center}.aud-h{color:#fff}.aud-cta h3{color:#fff}
