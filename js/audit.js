@@ -11,9 +11,16 @@
   function label(s) { return s >= 80 ? 'Strong' : s >= 55 ? 'Average' : 'Needs work'; }
 
   /* ---------- data sources ---------- */
-  function psi(url) {
+  var lastErr = '';
+  function psi(url, tries) {
+    tries = tries || 0;
     var q = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&category=seo&category=accessibility&category=best-practices&url=' + encodeURIComponent(url) + (C.psiKey ? '&key=' + encodeURIComponent(C.psiKey) : '');
-    return fetch(q).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.lighthouseResult) throw new Error('psi'); return j.lighthouseResult; }); });
+    return fetch(q).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) {
+      if (r.ok && j.lighthouseResult) return j.lighthouseResult;
+      var m = (j.error && j.error.message) || ('HTTP ' + r.status); lastErr = r.status + ': ' + String(m).slice(0, 160);
+      if (r.status >= 500 && tries < 1) return new Promise(function (ok) { setTimeout(ok, 2500); }).then(function () { return psi(url, tries + 1); });
+      throw new Error(lastErr);
+    }); }, function (e) { lastErr = 'network: ' + (e && e.message || 'blocked'); throw e; });
   }
   function server(url) {
     if (!C.supabaseUrl) return Promise.resolve(null);
@@ -144,8 +151,8 @@
       if (window.mmTrack) window.mmTrack('audit_scan', { ok: true, ms: Date.now() - t0, cats: res.cats.length });
     }).catch(function () {
       ld.stop(); box.remove(); f.style.display = ''; running = false;
-      st.className = 'calc-status err'; st.textContent = 'I could not scan that store. Check the link (password-protected stores cannot be scanned) and try again in a minute, or message me on WhatsApp and I will check it for you.';
-      if (window.mmTrack) window.mmTrack('audit_scan', { ok: false, ms: Date.now() - t0 });
+      var quota = /quota|429|rate|limit/i.test(lastErr); st.className = 'calc-status err'; st.textContent = (quota ? 'The free Google speed test is busy right now. ' : 'The scan could not read that store this time. ') + 'Please try again in a minute, or message me on WhatsApp and I will run it for you.' + (lastErr ? ' (Details: ' + lastErr + ')' : '');
+      if (window.mmTrack) window.mmTrack('audit_scan', { ok: false, ms: Date.now() - t0, err: lastErr });
     });
   });
 })();
