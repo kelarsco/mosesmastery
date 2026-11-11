@@ -85,11 +85,16 @@ Deno.serve(async (req) => {
       const j = await r.json();
       reply = ((j.content || []).filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n') || '').trim();
     } else {
-      const gUrl = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent';
+      const FALLBACKS = [MODEL, ...(Deno.env.get('CHAT_FALLBACK') || 'gemini-3.8-flash-lite').split(',').map((x) => x.trim()).filter((x) => /^gemini-[a-z0-9.\-]+$/i.test(x) && x !== MODEL)];
+      const gUrl = (m: string) => 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent';
       const gBody = (think: boolean) => JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 1500, temperature: 0.3, ...(think ? { thinkingConfig: { thinkingLevel: 'low' } } : {}) } });
-      const gCall = (think: boolean) => fetch(gUrl, { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: gBody(think) });
-      let r = await gCall(true);
-      if (r.status === 400) r = await gCall(false);   // model does not accept the "think less" option: retry plainly
+      const gCall = (think: boolean, m: string) => fetch(gUrl(m), { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: gBody(think) });
+      let r: Response = new Response(null, { status: 500 });
+      for (const m of FALLBACKS) {
+        r = await gCall(true, m);
+        if (r.status === 400) r = await gCall(false, m);   // model does not accept the "think less" option: retry plainly
+        if (r.ok || ![404, 429, 500, 503].includes(r.status)) break;   // otherwise try the next model
+      }
       if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Gemini ' + r.status + ': ' + (await r.text()).replace(/AQ\.[A-Za-z0-9_\-]+|AIza[A-Za-z0-9_\-]+/g, '[key]').slice(0, 200) }, 502, origin);
       const j = await r.json();
       const cand: any = (j.candidates || [])[0] || {};

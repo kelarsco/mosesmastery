@@ -60,7 +60,7 @@
       .then(function (j) {
         ty.remove();
         if (j && j.ok && j.reply) { msgs.push({ role: 'assistant', content: j.reply }); add('assistant', j.reply); if (userCount >= 2) leadBox(); }
-        else { msgs.pop(); userCount--; var dt = j && j.detail ? ' [' + String(j.detail).slice(0, 220) + ']' : ''; add('assistant', j && j.error === 'limit' ? 'You have reached today\'s message limit here. Please message Moses directly on WhatsApp: https://wa.me/15818095630' : 'I cannot answer right now. Please message Moses on WhatsApp: https://wa.me/15818095630 or use https://www.mosesmastery.com/contact.html' + dt); }
+        else { msgs.pop(); userCount--; var dt = j && j.detail && /chatdebug/.test(location.search) ? ' [' + String(j.detail).slice(0, 220) + ']' : ''; add('assistant', j && j.error === 'upstream' && /429|quota/i.test(String(j.detail || '')) ? 'Lots of people are asking questions right now. Please try again in a minute, or message Moses directly on WhatsApp: https://wa.me/15818095630' : j && j.error === 'limit' ? 'You have reached today\'s message limit here. Please message Moses directly on WhatsApp: https://wa.me/15818095630' : 'I cannot answer right now. Please message Moses on WhatsApp: https://wa.me/15818095630 or use https://www.mosesmastery.com/contact.html' + dt); }
       }).catch(function () { ty.remove(); msgs.pop(); userCount--; add('assistant', 'I could not connect. Please try again, or message Moses on WhatsApp: https://wa.me/15818095630'); })
       .then(function () { clearTimeout(tm); busy = false; send.disabled = false; save(); if (open) inp.focus(); });
   }
