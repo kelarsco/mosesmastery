@@ -2,7 +2,7 @@
 // Deploy: see SETUP-CHAT.md. Needs secret ANTHROPIC_API_KEY (paid) or GEMINI_API_KEY (free tier) and the chat_hit() SQL from supabase/schema.sql.
 const ALLOW = ['https://www.mosesmastery.com', 'https://mosesmastery.com', 'https://kelarsco.github.io', 'http://localhost', 'http://127.0.0.1'];
 const GEMINI = Deno.env.get('GEMINI_API_KEY');   // free option: key from aistudio.google.com
-const DEFAULT_MODEL = GEMINI && !Deno.env.get('ANTHROPIC_API_KEY') ? 'gemini-2.5-flash' : 'claude-haiku-5-5';
+const DEFAULT_MODEL = GEMINI && !Deno.env.get('ANTHROPIC_API_KEY') ? 'gemini-3.8-flash' : 'claude-haiku-5-5';
 const _m = (Deno.env.get('CHAT_MODEL') || '').trim();
 const MODEL = /^(gemini|claude)-[a-z0-9.\-]+$/i.test(_m) ? _m : DEFAULT_MODEL;   // ignores anything that is not a model name (such as a pasted key)
 const IP_LIMIT = parseInt(Deno.env.get('CHAT_IP_LIMIT') || '30');      // messages per visitor per day
