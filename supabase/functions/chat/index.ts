@@ -2,7 +2,9 @@
 // Deploy: see SETUP-CHAT.md. Needs secret ANTHROPIC_API_KEY (paid) or GEMINI_API_KEY (free tier) and the chat_hit() SQL from supabase/schema.sql.
 const ALLOW = ['https://www.mosesmastery.com', 'https://mosesmastery.com', 'https://kelarsco.github.io', 'http://localhost', 'http://127.0.0.1'];
 const GEMINI = Deno.env.get('GEMINI_API_KEY');   // free option: key from aistudio.google.com
-const MODEL = Deno.env.get('CHAT_MODEL') || (GEMINI && !Deno.env.get('ANTHROPIC_API_KEY') ? 'gemini-2.5-flash' : 'claude-haiku-5-5');
+const DEFAULT_MODEL = GEMINI && !Deno.env.get('ANTHROPIC_API_KEY') ? 'gemini-2.5-flash' : 'claude-haiku-5-5';
+const _m = (Deno.env.get('CHAT_MODEL') || '').trim();
+const MODEL = /^(gemini|claude)-[a-z0-9.\-]+$/i.test(_m) ? _m : DEFAULT_MODEL;   // ignores anything that is not a model name (such as a pasted key)
 const IP_LIMIT = parseInt(Deno.env.get('CHAT_IP_LIMIT') || '30');      // messages per visitor per day
 const DAY_LIMIT = parseInt(Deno.env.get('CHAT_DAY_LIMIT') || '500');   // messages for the whole site per day (your spending cap)
 
@@ -79,12 +81,12 @@ Deno.serve(async (req) => {
     let reply = '';
     if (akey) {
       const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', signal: ctl.signal, headers: { 'x-api-key': akey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' }, body: JSON.stringify({ model: MODEL, max_tokens: 320, temperature: 0.3, system: SYSTEM, messages: msgs }) });
-      if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200) }, 502, origin);
+      if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Anthropic ' + r.status + ': ' + (await r.text()).replace(/sk-ant-[A-Za-z0-9_\-]+/g, '[key]').slice(0, 200) }, 502, origin);
       const j = await r.json();
       reply = ((j.content || []).filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n') || '').trim();
     } else {
       const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent', { method: 'POST', signal: ctl.signal, headers: { 'x-goog-api-key': GEMINI!, 'content-type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: 400, temperature: 0.3 } }) });
-      if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Gemini ' + r.status + ' (model ' + MODEL + '): ' + (await r.text()).slice(0, 200) }, 502, origin);
+      if (!r.ok) return json({ ok: false, error: 'upstream', detail: 'Gemini ' + r.status + ': ' + (await r.text()).replace(/AQ\.[A-Za-z0-9_\-]+|AIza[A-Za-z0-9_\-]+/g, '[key]').slice(0, 200) }, 502, origin);
       const j = await r.json();
       reply = (((j.candidates || [])[0] || {}).content?.parts || []).map((c: any) => c.text || '').join('\n').trim();
     }
