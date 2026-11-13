@@ -66,7 +66,7 @@ def footer(p):
     co = "".join(f'<li><a href="{h}">{t}</a></li>' for t, h, k in links(p))
     sv = "".join(f'<li><a href="{p}services/{sl}/">{t}</a></li>' for sl, t in (
         ("shopify-store-design", "Shopify design &amp; development"), ("shopify-conversion-rate-optimization", "Conversion optimization &amp; audits"), ("shopify-seo", "Shopify SEO"),
-        ("meta-ads-for-shopify", "Meta &amp; Google ads"), ("ai-automation-for-shopify", "AI automation, content &amp; chat")))
+        ("meta-ads-for-shopify", "Meta &amp; Google ads"), ("google-merchant-center-optimization", "Google Merchant Center"), ("etsy-seo-and-store-optimization", "Etsy SEO"), ("ai-automation-for-shopify", "AI automation, content &amp; chat")))
     return f'''<!-- mm-footer -->
   <footer class="mm-foot">
     <div class="mm-foot-in">

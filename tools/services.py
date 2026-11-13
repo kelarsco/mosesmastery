@@ -133,4 +133,62 @@ SERVICES = [
 ],
 "related": ["ai-automation-for-shopify-stores", "shopify-seo-guide"],
 },
+{
+"slug": "google-merchant-center-optimization",
+"nav": "Google Merchant Center",
+"title": "Google Merchant Center Setup, Optimization & Suspension Help",
+"stitle": "Google Merchant Center Setup & Suspension Help | Moses Mastery",
+"h1": "Google Merchant Center setup, optimization & suspension help for Shopify stores",
+"desc": "Google Merchant Center setup, product feed optimization and help with disapproved products or a suspended account for Shopify stores. Quoted to your store.",
+"lead": "Google Merchant Center decides whether your products can appear in free listings and Shopping ads. When it is set up badly, products are disapproved, ads stop or the whole account is suspended. I set it up properly, clean up the feed and fix the store issues behind policy problems.",
+"sections": [
+("What I set up and fix", """<ul><li><strong>Account setup and verification</strong>: business information, website claim and the connection to your Shopify store.</li>
+<li><strong>Product feed quality</strong>: product titles, descriptions, images, product identifiers (such as GTIN or brand where they apply), price and availability that match your product pages.</li>
+<li><strong>Shipping, tax and return settings</strong>: configured in Merchant Center to match what your store really offers.</li>
+<li><strong>Disapproved products</strong>: reading the issue Google reports and fixing it at the source, in the feed or on the page.</li>
+<li><strong>Shopping readiness</strong>: checking the store and feed before you start Google Shopping or Performance Max campaigns.</li></ul>"""),
+("Account suspensions and policy problems", """<p>Merchant Center issues usually come from information that is missing, unclear or does not match: contact details, return and shipping policies, a price in the feed that differs from the page, or a checkout that does not look trustworthy. I review the reason Google shows in your account, fix the store and feed problems behind it, and help you prepare a clear request for review. Google makes the final decision, so I cannot promise reinstatement or how long a review takes.</p>"""),
+("How it works", """<ol><li><strong>Review.</strong> I check your Merchant Center account, feed status and the store pages Google reads.</li>
+<li><strong>Fix list.</strong> You get a plain list of what is wrong and what will change.</li>
+<li><strong>Implement.</strong> I make the fixes in Shopify and in Merchant Center.</li>
+<li><strong>Monitor.</strong> I watch the account for new warnings after the changes.</li></ol>"""),
+("Pricing", "<p>Merchant Center work is quoted to your store, because an account with a few products is very different from a large catalog. Ongoing Google Shopping and ad management is part of the <a href=\"../meta-ads-for-shopify/\">Growth Marketing plans</a>, which start from $2,000 per month (ad spend is paid directly to Google and is not included).</p>"),
+],
+"faqs": [
+("What is Google Merchant Center?", "Google Merchant Center is where you upload your product data so your products can appear in Google free listings and Shopping ads. For Shopify stores it is usually connected through the Google and YouTube channel."),
+("Why was my Merchant Center account suspended?", "Common causes include missing or unclear business and contact information, return or shipping policy gaps, product data that does not match the landing page, and checkout or trust problems. The exact reason is shown in your account, and fixing it correctly is what I help with."),
+("Can you guarantee my account will be reinstated?", "No. Google decides every review. I fix the problems Google reports and help you prepare the request, but I cannot promise an outcome or a timeline."),
+("Do I need Merchant Center to run Google Shopping ads?", "Yes. Shopping and many Performance Max campaigns use the product data in Merchant Center, so a clean feed comes before any ad spend."),
+],
+"related": ["meta-ads-for-shopify-stores", "shopify-seo-guide"],
+},
+{
+"slug": "etsy-seo-and-store-optimization",
+"nav": "Etsy SEO",
+"title": "Etsy SEO Services & Shop Optimization",
+"stitle": "Etsy SEO Services & Shop Optimization | Moses Mastery",
+"h1": "Etsy SEO services & shop optimization",
+"desc": "Etsy SEO and shop optimization: listing titles, tags, attributes, photos and descriptions written around what buyers search. Quoted to your shop.",
+"lead": "Most Etsy buyers find products through search. If your listing titles, tags and photos do not match what they type, good products stay hidden. I optimize Etsy shops so each listing is easier to find and easier to choose.",
+"sections": [
+("What I optimize", """<ul><li><strong>Listing titles</strong>: the phrases a buyer would really search, placed so the title still reads naturally.</li>
+<li><strong>Tags and attributes</strong>: using the tag slots (up to 13 per listing) and the category, attribute and occasion fields Etsy offers.</li>
+<li><strong>Descriptions</strong>: clear details about size, material, personalization and shipping that answer buyer questions before they ask.</li>
+<li><strong>Photos and thumbnails</strong>: guidance on the first image and the order of the others, because the thumbnail decides most clicks.</li>
+<li><strong>Shop pages</strong>: shop title, announcement, about section, sections and policies, so the shop looks trustworthy.</li></ul>"""),
+("How it works", """<ol><li><strong>Shop review.</strong> I look at your listings, categories, current titles and tags, and the competitors buyers see next to you.</li>
+<li><strong>Keyword research.</strong> I use Etsy's own search suggestions and the research tools available at the time, and I only report numbers that a tool actually gave.</li>
+<li><strong>Rewrite.</strong> I update the highest-value listings first, then the rest of the shop.</li>
+<li><strong>Review results.</strong> We check views, clicks, favorites and orders in Etsy Stats and adjust.</li></ol>"""),
+("Etsy and your own store", "<p>Etsy is rented traffic, so many sellers also build their own <a href=\"../shopify-store-design/\">Shopify store</a> and use <a href=\"../shopify-seo/\">Shopify SEO</a> to bring in customers they own. I can help with both, and I will tell you honestly when one makes more sense than the other for your products.</p>"),
+("Pricing", "<p>Etsy SEO is quoted to your shop, based on the number of listings and the work needed. Send your shop link through the contact page and I will reply with a fixed quote.</p>"),
+],
+"faqs": [
+("What is Etsy SEO?", "Etsy SEO is improving your listing titles, tags, attributes, descriptions and photos so Etsy search shows your products to more of the right buyers."),
+("Can you guarantee more sales on Etsy?", "No. Sales depend on your products, prices, reviews, competition and season. Good optimization makes your listings easier to find and more likely to be clicked, but nobody can promise a result."),
+("How long does Etsy SEO take to work?", "Some changes can show in views within days or weeks, but Etsy search also depends on sales history and shop activity, so steady improvement takes longer."),
+("Do you rewrite every listing?", "I start with the listings that matter most, such as your best sellers and the products with the most potential, and then work through the rest."),
+],
+"related": ["shopify-seo-guide", "shopify-store-audit-checklist"],
+},
 ]
