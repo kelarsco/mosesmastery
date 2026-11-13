@@ -77,7 +77,7 @@ TXT = {
 "About me": "Über mich",
 "Who’s Behind Moses Mastery": "Wer hinter Moses Mastery steht",
 "I founded Moses Mastery": "Ich habe Moses Mastery gegründet, um E-Commerce-Marken mit strategischem Branding, conversion-orientiertem Design und leistungsstarker Entwicklung weiterzubringen.",
-"I started solo": "Ich habe allein angefangen, aber schnell gemerkt, dass sich Ergebnisse nur mit einem Team skalieren lassen. Im E-Commerce müssen Strategie, CRO, UX und Marke wie ein System zusammenarbeiten. Deshalb arbeite ich mit Spezialisten zusammen, um Umsetzung und Ergebnisse zu verbessern.",
+"I started solo": "Ich habe allein angefangen, aber schnell gemerkt, dass sich Ergebnisse nur mit einem Team skalieren lassen. Im E-Commerce müssen Strategie, CRO, UX und Marke wie ein System zusammenarbeiten. Deshalb habe ich ein Team aus Spezialisten aufgebaut, das Umsetzung und Ergebnisse auf ein höheres Niveau hebt.",
 "I remain hands-on": "Ich bleibe in jedem Projekt selbst beteiligt, leite die Strategie und arbeite an Design und Marketing mit – denn dort entsteht der Umsatzeffekt.",
 "Founder | Marketing lead": "Gründer | Marketing-Leitung",
 "General Quotes": "Allgemeine Angebote",
