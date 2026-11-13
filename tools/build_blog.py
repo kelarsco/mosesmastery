@@ -6,6 +6,7 @@ import os, re, sys, json, html
 sys.path.insert(0, os.path.dirname(__file__))
 from chrome import header, footer, header_de, footer_de, SOCIALS
 from de import DE_PAGES
+from de_home import translate as de_translate
 from articles import ARTICLES
 from services import SERVICES
 from niches import NICHES
@@ -239,6 +240,7 @@ for sv in SERVICES + NICHES:
 # ---------- 2c. German section (/de/) ----------
 def de_url(d): return SITE + "/de/" + (d["slug"] + "/" if d["slug"] else "")
 for d in DE_PAGES:
+    if not d["slug"]: continue  # German home is generated from the English home below
     p = "../" if not d["slug"] else "../../"
     p = "../" if not d["slug"] else "../../"
     url = de_url(d); en_url = SITE + "/" + d["en_twin"]
@@ -274,6 +276,44 @@ for d in DE_PAGES:
   {footer_de(p)}
 ''' + TAIL % (p, p, p, p)
     W(os.path.join(ROOT, "de", d["slug"], "index.html") if d["slug"] else os.path.join(ROOT, "de", "index.html"), page)
+
+# ---------- 2d. German home = the full English home page with German text ----------
+def build_de_home():
+    t = open(os.path.join(ROOT, "index.html"), encoding="utf8").read()
+    # relative URLs -> one level up
+    def up(m):
+        v = m.group(2)
+        if v.startswith(("http", "/", "#", "mailto:", "tel:", "data:", "javascript:")) or not v: return m.group(0)
+        return f'{m.group(1)}"../{v}"'
+    t = re.sub(r'((?:src|href|data-src|data-src-m|poster|data-img)=)"([^"]*)"', up, t)
+    t = re.sub(r"<!-- mm-header -->.*?<!-- /mm-header -->", lambda m: header_de("../", "home", "index.html"), t, flags=re.S)
+    t = re.sub(r"<!-- mm-footer -->.*?<!-- /mm-footer -->", lambda m: footer_de("../"), t, flags=re.S)
+    head_, body_ = t.split("</head>", 1)
+    body_, miss = de_translate(body_)
+    url = SITE + "/de/"
+    D = [d for d in DE_PAGES if not d["slug"]][0]
+    faqs = [(re.sub(r"<[^>]+>", "", q), re.sub(r"<[^>]+>", "", a_)) for q, a_ in re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body_, re.S)]
+    graph = [ORG, PERSON,
+        {"@type": "Service", "@id": url + "#service", "name": D["title"], "description": D["desc"], "url": url, "inLanguage": "de", "provider": {"@id": SITE + "/#org"}, "areaServed": [{"@type": "Country", "name": "Deutschland"}, {"@type": "Country", "name": "Österreich"}, {"@type": "Country", "name": "Schweiz"}], "serviceType": D["title"]},
+        {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Start", "item": url}]},
+        {"@type": "FAQPage", "inLanguage": "de", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a_}} for q, a_ in faqs]}]
+    head_ = head_.replace('<html lang="en">', '<html lang="de">')
+    head_ = re.sub(r"<title>.*?</title>", lambda m: f"<title>{esc(D['stitle'])}</title>", head_, flags=re.S)
+    head_ = re.sub(r'(<meta name="description" content=")[^"]*"', lambda m: m.group(1) + esc(D["desc"], True) + '"', head_)
+    head_ = re.sub(r'(<meta property="og:title" content=")[^"]*"', lambda m: m.group(1) + esc(D["stitle"], True) + '"', head_)
+    head_ = re.sub(r'(<meta property="og:description" content=")[^"]*"', lambda m: m.group(1) + esc(D["desc"], True) + '"', head_)
+    head_ = re.sub(r'(<meta name="twitter:title" content=")[^"]*"', lambda m: m.group(1) + esc(D["stitle"], True) + '"', head_)
+    head_ = re.sub(r'(<meta name="twitter:description" content=")[^"]*"', lambda m: m.group(1) + esc(D["desc"], True) + '"', head_)
+    head_ = re.sub(r'(<meta property="og:image:alt" content=")[^"]*"', r'\1Moses Mastery: Shopify Design, CRO, Werbung und KI-Automatisierung"', head_)
+    head_ = re.sub(r'(<meta name="twitter:image:alt" content=")[^"]*"', r'\1Moses Mastery: Shopify Design, CRO, Werbung und KI-Automatisierung"', head_)
+    head_ = head_.replace('content="en_US"', 'content="de_DE"')
+    head_ = head_.replace('<link rel="canonical" href="https://www.mosesmastery.com/">', f'<link rel="canonical" href="{url}">')
+    head_ = head_.replace('<meta property="og:url" content="https://www.mosesmastery.com/">', f'<meta property="og:url" content="{url}">')
+    head_ = re.sub(r'  <script type="application/ld\+json">.*?</script>\n', lambda m: ld({"@context": "https://schema.org", "@graph": graph}), head_, flags=re.S)
+    W(os.path.join(ROOT, "de", "index.html"), head_ + "</head>" + body_)
+    return miss
+_miss = build_de_home()
+if _miss: print("German home: still English ->", sorted(set(_miss)))
 
 # hub page
 p = "../"; url = SITE + "/services/"
