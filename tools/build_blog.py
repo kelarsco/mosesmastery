@@ -4,7 +4,8 @@ and rewrites sitemap.xml.   Run from the project root:   python3 tools/build_blo
 --covers also renders asset/blog/<slug>.jpg (needs: pip install playwright && playwright install chromium)."""
 import os, re, sys, json, html
 sys.path.insert(0, os.path.dirname(__file__))
-from chrome import header, footer, SOCIALS
+from chrome import header, footer, header_de, footer_de, SOCIALS
+from de import DE_PAGES
 from articles import ARTICLES
 from services import SERVICES
 from niches import NICHES
@@ -16,6 +17,10 @@ esc = html.escape
 def W(path, text):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     open(path, "w", encoding="utf8", newline="\n").write(text)
+
+def hreflang(en_url, de_url):
+    return (f'  <link rel="alternate" hreflang="en" href="{en_url}">\n  <link rel="alternate" hreflang="de" href="{de_url}">\n'
+            f'  <link rel="alternate" hreflang="x-default" href="{en_url}">\n')
 
 # ---------- 1. shared header / footer on the root pages ----------
 PAGES = {"index.html": "home", "projects.html": "projects", "contact.html": "contact", "thankyou.html": "", "account.html": ""}
@@ -31,6 +36,8 @@ for fn, active in PAGES.items():
         t = re.sub(r"<!-- mm-footer -->.*?<!-- /mm-footer -->", lambda m: f, t, flags=re.S)
     else:
         t, n = re.subn(r'<!-- footer -->.*?<div class="all-right">.*?</div>', lambda m: f, t, count=1, flags=re.S); assert n, fn
+    if fn == "index.html" and 'rel="alternate" hreflang="de"' not in t:
+        t = t.replace('<link rel="canonical" href="https://www.mosesmastery.com/">', '<link rel="canonical" href="https://www.mosesmastery.com/">\n' + hreflang(SITE + "/", SITE + "/de/").rstrip("\n"), 1)
     if fn != "account.html" and "js/track.js" not in t:
         t = t.replace('<script src="js/index.js"></script>', '<script src="js/config.js"></script>\n<script src="js/track.js"></script>\n<script src="js/index.js"></script>')
     open(p, "w", encoding="utf8", newline="").write(t)
@@ -40,9 +47,9 @@ def long_date(iso):
     y, m, d = iso.split("-"); mon = ["January","February","March","April","May","June","July","August","September","October","November","December"][int(m) - 1]
     return f"{mon} {int(d)}, {y}"
 
-def head(title, desc, canon, p, og_img, og_type="website", extra=""):
+def head(title, desc, canon, p, og_img, og_type="website", extra="", lang="en", locale="en_US"):
     return f'''<!DOCTYPE html>
-<html lang="en">
+<html lang="{lang}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -54,7 +61,7 @@ def head(title, desc, canon, p, og_img, og_type="website", extra=""):
   <link rel="canonical" href="{canon}">
   <meta property="og:type" content="{og_type}">
   <meta property="og:site_name" content="Moses Mastery">
-  <meta property="og:locale" content="en_US">
+  <meta property="og:locale" content="{locale}">
   <meta property="og:title" content="{esc(title, True)}">
   <meta property="og:description" content="{esc(desc, True)}">
   <meta property="og:url" content="{canon}">
@@ -197,7 +204,9 @@ for sv in SERVICES + NICHES:
         {"@type": "Service", "@id": url + "#service", "name": sv["title"], "description": sv["desc"], "url": url, "provider": {"@id": SITE + "/#org"}, "areaServed": "Worldwide", "serviceType": sv["title"]},
         {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Services", "item": SITE + "/services/"}, {"@type": "ListItem", "position": 3, "name": sv["title"], "item": url}]},
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a_}} for q, a_ in sv["faqs"]]}]
-    page = head(sv["stitle"], sv["desc"], url, p, OG, "website", ld({"@context": "https://schema.org", "@graph": graph}))
+    _tw = {d["en_twin"].strip("/").split("/")[-1]: d for d in DE_PAGES if d["en_twin"]}
+    _hl = hreflang(url, SITE + "/de/" + _tw[sv["slug"]]["slug"] + "/") if sv["slug"] in _tw else ""
+    page = head(sv["stitle"], sv["desc"], url, p, OG, "website", _hl + ld({"@context": "https://schema.org", "@graph": graph}))
     secs = "".join(f'<h2 id="s{i}">{h}</h2>{b}' for i, (h, b) in enumerate(sv["sections"]))
     faq = "".join(f'<details><summary>{esc(q)}</summary><p>{esc(a_)}</p></details>' for q, a_ in sv["faqs"])
     rel = [a for a in ARTICLES if a["slug"] in sv["related"]]
@@ -226,6 +235,45 @@ for sv in SERVICES + NICHES:
   {footer(p)}
 ''' + TAIL % (p, p, p, p)
     W(os.path.join(ROOT, "services", sv["slug"], "index.html"), page)
+
+# ---------- 2c. German section (/de/) ----------
+def de_url(d): return SITE + "/de/" + (d["slug"] + "/" if d["slug"] else "")
+for d in DE_PAGES:
+    p = "../" if not d["slug"] else "../../"
+    p = "../" if not d["slug"] else "../../"
+    url = de_url(d); en_url = SITE + "/" + d["en_twin"]
+    en_rel = d["en_twin"] if d["en_twin"] else "index.html"
+    active = {"": "home", "shopify-agentur": "agentur", "shopify-seo-agentur": "seo"}[d["slug"]]
+    crumbs = [{"@type": "ListItem", "position": 1, "name": "Start", "item": SITE + "/de/"}] + ([{"@type": "ListItem", "position": 2, "name": d["nav"], "item": url}] if d["slug"] else [])
+    graph = [ORG, PERSON,
+        {"@type": "Service", "@id": url + "#service", "name": d["title"], "description": d["desc"], "url": url, "inLanguage": "de", "provider": {"@id": SITE + "/#org"}, "areaServed": [{"@type": "Country", "name": "Deutschland"}, {"@type": "Country", "name": "Österreich"}, {"@type": "Country", "name": "Schweiz"}], "serviceType": d["title"]},
+        {"@type": "BreadcrumbList", "itemListElement": crumbs},
+        {"@type": "FAQPage", "inLanguage": "de", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a_}} for q, a_ in d["faqs"]]}]
+    page = head(d["stitle"], d["desc"], url, p, OG, "website", hreflang(en_url, url).replace(f'hreflang="en" href="{en_url}"', f'hreflang="en" href="{en_url}"') + ld({"@context": "https://schema.org", "@graph": graph}), lang="de", locale="de_DE")
+    page = page.replace('<link rel="alternate" hreflang="de" href="%s">' % url, '<link rel="alternate" hreflang="de" href="%s">' % url)
+    secs = "".join(f'<h2 id="s{i}">{h}</h2>{b_.replace("{p}", p)}' for i, (h, b_) in enumerate(d["sections"]))
+    faq = "".join(f'<details><summary>{esc(q)}</summary><p>{esc(a_)}</p></details>' for q, a_ in d["faqs"])
+    crumb = f'<nav class="ar-crumbs" aria-label="Brotkrumen"><a href="{p}de/">Start</a>' + (f'<span>/</span><span aria-current="page">{esc(d["nav"])}</span>' if d["slug"] else "") + '</nav>'
+    page += f'''<body class="bl-page">
+  {header_de(p, active, en_rel)}
+  <main id="main">
+    <article class="ar">
+      <header class="ar-head">
+        {crumb}
+        <h1>{esc(d["h1"])}</h1>
+        <p class="ar-by">Von <strong>Moses Daniel</strong>, Gründer von Moses Mastery &middot; <a href="{p}{en_rel}" hreflang="en" lang="en">Read in English</a></p>
+        <p class="bl-lead">{esc(d["lead"])}</p>
+      </header>
+      <div class="ar-wrap sv-wrap"><div class="ar-body prose">{secs}
+        <h2 id="faq">Häufige Fragen</h2><div class="sv-faq">{faq}</div>
+      </div></div>
+      <section class="ar-cta"><h2>Bereit für den <em>nächsten Schritt</em>?</h2><p>Senden Sie den Link zu Ihrem Shop und Ihre Ziele. Sie erhalten eine klare Antwort, wo ich anfangen würde, und ein Festpreis-Angebot.</p>
+        <div><a class="bl-btn" href="{p}contact.html">Angebot anfragen <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a> <a class="bl-btn bl-btn-ghost" href="{p}audit.html">Kostenloser Store-Scan</a></div></section>
+    </article>
+  </main>
+  {footer_de(p)}
+''' + TAIL % (p, p, p, p)
+    W(os.path.join(ROOT, "de", d["slug"], "index.html") if d["slug"] else os.path.join(ROOT, "de", "index.html"), page)
 
 # hub page
 p = "../"; url = SITE + "/services/"
@@ -479,7 +527,7 @@ page += f'''<body class="bl-page">
 W(os.path.join(ROOT, "calculator.html"), page)
 
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/audit.html", "0.8", "2026-11-10"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/audit.html", "0.8", "2026-11-10"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES] + [("/de/" + (d["slug"] + "/" if d["slug"] else ""), "0.8", "2026-11-13") for d in DE_PAGES]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 
