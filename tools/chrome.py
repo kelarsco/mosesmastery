@@ -93,8 +93,8 @@ def footer(p):
 
 # ---------- German variants (used by /de/ pages) ----------
 def header_de(p, active="", en_url="index.html"):
-    nav = [("Start", p + "de/", "home"), ("Shopify Agentur", p + "de/shopify-agentur/", "agentur"), ("Shopify SEO", p + "de/shopify-seo-agentur/", "seo"),
-           ("Kostenloser Scan", p + "audit.html", "scan"), ("Kontakt", p + "contact.html", "contact")]
+    nav = [("Start", p + "de/", "home"), ("Leistungen", p + "de/leistungen/", "leist"),
+           ("Kostenloser Scan", p + "audit.html", "scan"), ("Kontakt", p + "de/kontakt/", "contact")]
     des = "".join(f'<a href="{h}"{" aria-current=\"page\"" if k == active else ""}>{t}</a>' for t, h, k in nav[1:])
     des += f'<a href="{p}{en_url}" hreflang="en" lang="en">English</a>'
     mob = "".join(f'<a href="{h}"{" class=\"is-active\" aria-current=\"page\"" if k == active else ""} style="--i:{i}">{t}</a>' for i, (t, h, k) in enumerate(nav))
@@ -124,8 +124,8 @@ def header_de(p, active="", en_url="index.html"):
     </div>
     <nav class="mm-menu-links" aria-label="Menü">
       {mob}
-      <a href="{p}{en_url}" hreflang="en" lang="en" style="--i:5">English version</a>
-      <a href="{p}audit.html" class="mm-menu-cta" style="--i:6">Gratis Store-Scan <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      <a href="{p}{en_url}" hreflang="en" lang="en" style="--i:4">English version</a>
+      <a href="{p}audit.html" class="mm-menu-cta" style="--i:5">Gratis Store-Scan <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
     </nav>
     <div class="mm-menu-foot">
       <div class="mm-menu-soc">{"".join(f'<a href="{u}" target="_blank" rel="noopener noreferrer" aria-label="{l}">{s}</a>' for l, s, i, u in SOCIALS)}</div>
@@ -136,8 +136,8 @@ def header_de(p, active="", en_url="index.html"):
 
 def footer_de(p):
     soc = "".join(f'<a href="{u}" target="_blank" rel="noopener noreferrer" aria-label="{l}"><i class="{i}" aria-hidden="true"></i></a>' for l, s, i, u in SOCIALS)
-    sv = "".join(f'<li><a href="{h}">{t}</a></li>' for h, t in ((p + "de/shopify-agentur/", "Shopify Agentur &amp; Webdesign"), (p + "de/shopify-seo-agentur/", "Shopify SEO Agentur"), (p + "services/", "Alle Leistungen (Englisch)")))
-    co = "".join(f'<li><a href="{h}">{t}</a></li>' for h, t in ((p + "de/", "Start"), (p + "contact.html", "Kontakt"), (p + "audit.html", "Kostenloser Store-Scan"), (p + "index.html", "English version")))
+    sv = "".join(f'<li><a href="{h}">{t}</a></li>' for h, t in ((p + "de/shopify-agentur/", "Shopify Agentur &amp; Webdesign"), (p + "de/shopify-seo-agentur/", "Shopify SEO Agentur"), (p + "de/shopify-conversion-optimierung/", "Conversion-Optimierung"), (p + "de/meta-google-werbung-shopify/", "Meta- &amp; Google-Werbung"), (p + "de/ki-automatisierung-shopify/", "KI-Automatisierung"), (p + "de/google-merchant-center-hilfe/", "Google Merchant Center"), (p + "de/etsy-seo-und-shop-optimierung/", "Etsy SEO")))
+    co = "".join(f'<li><a href="{h}">{t}</a></li>' for h, t in ((p + "de/", "Start"), (p + "de/kontakt/", "Kontakt"), (p + "audit.html", "Kostenloser Store-Scan"), (p + "index.html", "English version")))
     return f'''<!-- mm-footer -->
   <footer class="mm-foot">
     <div class="mm-foot-in">

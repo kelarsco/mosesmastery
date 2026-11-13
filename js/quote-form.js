@@ -1,4 +1,5 @@
 (function () {
+  var DE = document.documentElement.lang === 'de';
   var f = document.querySelector('form.qf');
   if (!f) return;
   var panes = [].slice.call(f.querySelectorAll('.qf-pane')), step = 1, N = panes.length;
@@ -9,7 +10,7 @@
   function show(n) {
     step = n;
     panes.forEach(function (p, i) { p.classList.toggle('is-on', i + 1 === n); });
-    lab.textContent = 'Step ' + n + ' of ' + N;
+    lab.textContent = DE ? 'Schritt ' + n + ' von ' + N : 'Step ' + n + ' of ' + N;
     bar.style.width = (n / N * 100) + '%';
     back.hidden = n === 1; next.hidden = n === N; send.hidden = n !== N;
     st.textContent = ''; st.className = 'cont-status';
@@ -21,7 +22,7 @@
   function ok(n) {
     var p = panes[n - 1];
     if (n === 1) {
-      if (!p.querySelector('input:checked')) { st.className = 'cont-status err'; st.textContent = 'Please pick at least one option.'; return false; }
+      if (!p.querySelector('input:checked')) { st.className = 'cont-status err'; st.textContent = (DE ? 'Bitte wählen Sie mindestens eine Option.' : 'Please pick at least one option.'); return false; }
       return true;
     }
     var els = [].slice.call(p.querySelectorAll('input[required],textarea[required],select[required],input[type=url],input[type=email]'));
@@ -29,7 +30,7 @@
       if (!els[i].checkValidity()) {
         var isRadio = els[i].type === 'radio';
         st.className = 'cont-status err';
-        st.textContent = isRadio ? 'Please choose one option in each question.' : (els[i].validationMessage || 'Please check this field.');
+        st.textContent = isRadio ? (DE ? 'Bitte wählen Sie bei jeder Frage eine Option.' : 'Please choose one option in each question.') : (els[i].validationMessage || (DE ? 'Bitte prüfen Sie dieses Feld.' : 'Please check this field.'));
         if (!isRadio) els[i].focus();
         return false;
       }

@@ -37,8 +37,10 @@ for fn, active in PAGES.items():
         t = re.sub(r"<!-- mm-footer -->.*?<!-- /mm-footer -->", lambda m: f, t, flags=re.S)
     else:
         t, n = re.subn(r'<!-- footer -->.*?<div class="all-right">.*?</div>', lambda m: f, t, count=1, flags=re.S); assert n, fn
-    if fn == "index.html" and 'rel="alternate" hreflang="de"' not in t:
-        t = t.replace('<link rel="canonical" href="https://www.mosesmastery.com/">', '<link rel="canonical" href="https://www.mosesmastery.com/">\n' + hreflang(SITE + "/", SITE + "/de/").rstrip("\n"), 1)
+    _de_twin = {"index.html": "/de/", "contact.html": "/de/kontakt/"}
+    if fn in _de_twin and 'rel="alternate" hreflang="de"' not in t:
+        _m = re.search(r'<link rel="canonical" href="([^"]+)">', t)
+        t = t.replace(_m.group(0), _m.group(0) + "\n" + hreflang(_m.group(1), SITE + _de_twin[fn]).rstrip("\n"), 1)
     if fn != "account.html" and "js/track.js" not in t:
         t = t.replace('<script src="js/index.js"></script>', '<script src="js/config.js"></script>\n<script src="js/track.js"></script>\n<script src="js/index.js"></script>')
     open(p, "w", encoding="utf8", newline="").write(t)
@@ -245,7 +247,7 @@ for d in DE_PAGES:
     p = "../" if not d["slug"] else "../../"
     url = de_url(d); en_url = SITE + "/" + d["en_twin"]
     en_rel = d["en_twin"] if d["en_twin"] else "index.html"
-    active = {"": "home", "shopify-agentur": "agentur", "shopify-seo-agentur": "seo"}[d["slug"]]
+    active = "leist"
     crumbs = [{"@type": "ListItem", "position": 1, "name": "Start", "item": SITE + "/de/"}] + ([{"@type": "ListItem", "position": 2, "name": d["nav"], "item": url}] if d["slug"] else [])
     graph = [ORG, PERSON,
         {"@type": "Service", "@id": url + "#service", "name": d["title"], "description": d["desc"], "url": url, "inLanguage": "de", "provider": {"@id": SITE + "/#org"}, "areaServed": [{"@type": "Country", "name": "Deutschland"}, {"@type": "Country", "name": "Österreich"}, {"@type": "Country", "name": "Schweiz"}], "serviceType": d["title"]},
@@ -277,43 +279,72 @@ for d in DE_PAGES:
 ''' + TAIL % (p, p, p, p)
     W(os.path.join(ROOT, "de", d["slug"], "index.html") if d["slug"] else os.path.join(ROOT, "de", "index.html"), page)
 
+# ---------- 2e. German services hub ----------
+_p = "../../"; _url = SITE + "/de/leistungen/"
+_svc = [x for x in DE_PAGES if x["slug"]]
+_cards = "".join('<article class="bl-card"><div class="bl-card-body"><h2><a href="%sde/%s/">%s</a></h2><p>%s</p><a class="bl-more" href="%sde/%s/">Mehr erfahren <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>' % (_p, d["slug"], esc(d["title"]), esc(d["desc"]), _p, d["slug"]) for d in _svc)
+_graph = [ORG, PERSON, {"@type": "CollectionPage", "@id": _url + "#page", "name": "Shopify-Leistungen", "url": _url, "inLanguage": "de", "isPartOf": {"@id": SITE + "/#org"}},
+    {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": SITE + "/de/" + d["slug"] + "/", "name": d["title"]} for i, d in enumerate(_svc)]},
+    {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Start", "item": SITE + "/de/"}, {"@type": "ListItem", "position": 2, "name": "Leistungen", "item": _url}]}]
+page = head("Shopify Leistungen: Design, CRO, SEO, Werbung & KI | Moses Mastery", "Shopify Webdesign, Conversion-Optimierung, SEO, Meta- und Google-Werbung, Google Merchant Center, Etsy SEO und KI-Automatisierung für E-Commerce-Marken, von Moses Mastery.", _url, _p, OG, "website", hreflang(SITE + "/services/", _url) + ld({"@context": "https://schema.org", "@graph": _graph}), lang="de", locale="de_DE")
+page += f'''<body class="bl-page">
+  {header_de(_p, "leist", "services/")}
+  <main id="main">
+    <section class="bl-hero"><p class="bl-kicker"><span></span>Leistungen</p><h1>Shopify <em>Leistungen.</em></h1>
+      <p class="bl-lead">Design, Conversion, Suche, Werbung und KI-Automatisierung für Shopify-Shops, von einem Spezialisten. Wählen Sie, was Sie brauchen, oder senden Sie den Link zu Ihrem Shop, dann sage ich Ihnen, wo ich anfangen würde. Projekte und Support laufen auf Englisch.</p></section>
+    <section class="bl-list" aria-label="Leistungen"><div class="bl-grid">{_cards}</div></section>
+    <section class="bl-cta"><h2>Unsicher, wo Sie <em>anfangen</em> sollen?</h2><p>Senden Sie mir den Link zu Ihrem Shop, dann sage ich Ihnen, was ich zuerst beheben würde.</p><a class="bl-btn" href="{_p}de/kontakt/">Shop-Check anfragen <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></section>
+  </main>
+  {footer_de(_p)}
+''' + TAIL % (_p, _p, _p, _p)
+W(os.path.join(ROOT, "de", "leistungen", "index.html"), page)
+
 # ---------- 2d. German home = the full English home page with German text ----------
-def build_de_home():
-    t = open(os.path.join(ROOT, "index.html"), encoding="utf8").read()
-    # relative URLs -> one level up
+def build_de_page(src, out, de_path, en_url, title, desc, active, en_rel, faqs=None, noindex=False, mark_form=False):
+    """Generate a German twin of an English root page (same design/JS), with German text, header, footer and head."""
+    t = open(os.path.join(ROOT, src), encoding="utf8").read()
+    P = "../" * (len(out) - 1)
     def up(m):
         v = m.group(2)
         if v.startswith(("http", "/", "#", "mailto:", "tel:", "data:", "javascript:")) or not v: return m.group(0)
-        return f'{m.group(1)}"../{v}"'
+        return f'{m.group(1)}"{P}{v}"'
     t = re.sub(r'((?:src|href|data-src|data-src-m|poster|data-img)=)"([^"]*)"', up, t)
-    t = re.sub(r"<!-- mm-header -->.*?<!-- /mm-header -->", lambda m: header_de("../", "home", "index.html"), t, flags=re.S)
-    t = re.sub(r"<!-- mm-footer -->.*?<!-- /mm-footer -->", lambda m: footer_de("../"), t, flags=re.S)
+    for _d in DE_PAGES:
+        if _d["en_twin"]: t = t.replace('"' + P + _d["en_twin"] + '"', '"' + P + 'de/' + _d["slug"] + '/"')
+    t = t.replace('"' + P + 'services/"', '"' + P + 'de/leistungen/"').replace('"' + P + 'contact.html"', '"' + P + 'de/kontakt/"')
+    t = re.sub(r"<!-- mm-header -->.*?<!-- /mm-header -->", lambda m: header_de(P, active, en_rel), t, flags=re.S)
+    t = re.sub(r"<!-- mm-footer -->.*?<!-- /mm-footer -->", lambda m: footer_de(P), t, flags=re.S)
+    if mark_form: t = t.replace('name="redirect" value="../thankyou.html"', 'name="redirect" value="https://www.mosesmastery.com/de/danke/"').replace('name="redirect" value="thankyou.html"', 'name="redirect" value="https://www.mosesmastery.com/de/danke/"')
     head_, body_ = t.split("</head>", 1)
     body_, miss = de_translate(body_)
-    url = SITE + "/de/"
-    D = [d for d in DE_PAGES if not d["slug"]][0]
-    faqs = [(re.sub(r"<[^>]+>", "", q), re.sub(r"<[^>]+>", "", a_)) for q, a_ in re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body_, re.S)]
-    graph = [ORG, PERSON,
-        {"@type": "Service", "@id": url + "#service", "name": D["title"], "description": D["desc"], "url": url, "inLanguage": "de", "provider": {"@id": SITE + "/#org"}, "areaServed": [{"@type": "Country", "name": "Deutschland"}, {"@type": "Country", "name": "Österreich"}, {"@type": "Country", "name": "Schweiz"}], "serviceType": D["title"]},
-        {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Start", "item": url}]},
-        {"@type": "FAQPage", "inLanguage": "de", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a_}} for q, a_ in faqs]}]
+    url = SITE + de_path
+    def setm(h, pat, val): return re.sub(pat, lambda m: m.group(1) + val + '"', h)
     head_ = head_.replace('<html lang="en">', '<html lang="de">')
-    head_ = re.sub(r"<title>.*?</title>", lambda m: f"<title>{esc(D['stitle'])}</title>", head_, flags=re.S)
-    head_ = re.sub(r'(<meta name="description" content=")[^"]*"', lambda m: m.group(1) + esc(D["desc"], True) + '"', head_)
-    head_ = re.sub(r'(<meta property="og:title" content=")[^"]*"', lambda m: m.group(1) + esc(D["stitle"], True) + '"', head_)
-    head_ = re.sub(r'(<meta property="og:description" content=")[^"]*"', lambda m: m.group(1) + esc(D["desc"], True) + '"', head_)
-    head_ = re.sub(r'(<meta name="twitter:title" content=")[^"]*"', lambda m: m.group(1) + esc(D["stitle"], True) + '"', head_)
-    head_ = re.sub(r'(<meta name="twitter:description" content=")[^"]*"', lambda m: m.group(1) + esc(D["desc"], True) + '"', head_)
-    head_ = re.sub(r'(<meta property="og:image:alt" content=")[^"]*"', r'\1Moses Mastery: Shopify Design, CRO, Werbung und KI-Automatisierung"', head_)
-    head_ = re.sub(r'(<meta name="twitter:image:alt" content=")[^"]*"', r'\1Moses Mastery: Shopify Design, CRO, Werbung und KI-Automatisierung"', head_)
+    head_ = re.sub(r"<title>.*?</title>", lambda m: f"<title>{esc(title)}</title>", head_, flags=re.S)
+    for pat in (r'(<meta name="description" content=")[^"]*"', r'(<meta property="og:description" content=")[^"]*"', r'(<meta name="twitter:description" content=")[^"]*"'): head_ = setm(head_, pat, esc(desc, True))
+    for pat in (r'(<meta property="og:title" content=")[^"]*"', r'(<meta name="twitter:title" content=")[^"]*"'): head_ = setm(head_, pat, esc(title, True))
     head_ = head_.replace('content="en_US"', 'content="de_DE"')
-    head_ = head_.replace('<link rel="canonical" href="https://www.mosesmastery.com/">', f'<link rel="canonical" href="{url}">')
-    head_ = head_.replace('<meta property="og:url" content="https://www.mosesmastery.com/">', f'<meta property="og:url" content="{url}">')
-    head_ = re.sub(r'  <script type="application/ld\+json">.*?</script>\n', lambda m: ld({"@context": "https://schema.org", "@graph": graph}), head_, flags=re.S)
-    W(os.path.join(ROOT, "de", "index.html"), head_ + "</head>" + body_)
+    head_ = re.sub(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{url}">', head_)
+    head_ = re.sub(r'<meta property="og:url" content="[^"]*">', f'<meta property="og:url" content="{url}">', head_)
+    head_ = re.sub(r'\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*">', "", head_)
+    if not noindex:
+        head_ = head_.replace(f'<link rel="canonical" href="{url}">', f'<link rel="canonical" href="{url}">\n' + hreflang(en_url, url).rstrip("\n"))
+    graph = [ORG, PERSON, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Start", "item": SITE + "/de/"}] + ([{"@type": "ListItem", "position": 2, "name": title.split("|")[0].strip(), "item": url}] if de_path != "/de/" else [])}]
+    if de_path == "/de/":
+        D = [d for d in DE_PAGES if not d["slug"]][0]
+        graph.insert(2, {"@type": "Service", "@id": url + "#service", "name": D["title"], "description": D["desc"], "url": url, "inLanguage": "de", "provider": {"@id": SITE + "/#org"}, "areaServed": [{"@type": "Country", "name": "Deutschland"}, {"@type": "Country", "name": "Österreich"}, {"@type": "Country", "name": "Schweiz"}], "serviceType": D["title"]})
+        fq = [(re.sub(r"<[^>]+>", "", q), re.sub(r"<[^>]+>", "", a_)) for q, a_ in re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body_, re.S)]
+        graph.append({"@type": "FAQPage", "inLanguage": "de", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a_}} for q, a_ in fq]})
+    head_ = re.sub(r'  <script type="application/ld\+json">.*?</script>\n?', "", head_, flags=re.S)
+    head_ = head_.rstrip() + "\n" + ld({"@context": "https://schema.org", "@graph": graph}).rstrip("\n") + "\n"
+    W(os.path.join(ROOT, *out), head_ + "</head>" + body_)
     return miss
-_miss = build_de_home()
-if _miss: print("German home: still English ->", sorted(set(_miss)))
+
+_miss = build_de_page("index.html", ("de", "index.html"), "/de/", SITE + "/", [d for d in DE_PAGES if not d["slug"]][0]["stitle"], [d for d in DE_PAGES if not d["slug"]][0]["desc"], "home", "index.html")
+_miss += build_de_page("contact.html", ("de", "kontakt", "index.html"), "/de/kontakt/", SITE + "/contact.html", "Kontakt: Angebot für Ihren Shopify-Shop anfragen | Moses Mastery", "Erzählen Sie Moses Mastery von Ihrem Shopify-Shop oder E-Commerce-Projekt. Buchen Sie ein Strategiegespräch oder fragen Sie ein Festpreis-Angebot an. Projekte und Support laufen auf Englisch.", "contact", "contact.html", mark_form=True)
+_miss += build_de_page("thankyou.html", ("de", "danke", "index.html"), "/de/danke/", SITE + "/thankyou.html", "Danke | Moses Mastery", "Danke für Ihre Nachricht an Moses Mastery.", "contact", "thankyou.html", noindex=True, mark_form=True)
+_miss = [m for m in _miss if m]
+if _miss: print("German pages: still English ->", sorted(set(_miss)))
 
 # hub page
 p = "../"; url = SITE + "/services/"
@@ -322,7 +353,7 @@ hub_ld = {"@context": "https://schema.org", "@graph": [ORG, PERSON,
     {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{SITE}/services/{sv["slug"]}/', "name": sv["title"]} for i, sv in enumerate(SERVICES)]},
     {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "Services", "item": url}]}]}
 ncards = "".join(f'''<article class="bl-card"><div class="bl-card-body"><h2><a href="{n["slug"]}/">{esc(n["title"])}</a></h2><p>{esc(n["desc"])}</p><a class="bl-more" href="{n["slug"]}/">Learn more <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>''' for n in NICHES)
-page = head("Shopify Services: Design, CRO, SEO, Ads & AI | Moses Mastery", "Shopify store design, conversion optimization, SEO, Meta and Google ads, and AI automation for eCommerce brands, from Moses Mastery.", url, p, OG, "website", ld(hub_ld))
+page = head("Shopify Services: Design, CRO, SEO, Ads & AI | Moses Mastery", "Shopify store design, conversion optimization, SEO, Meta and Google ads, and AI automation for eCommerce brands, from Moses Mastery.", url, p, OG, "website", hreflang(url, SITE + "/de/leistungen/") + ld(hub_ld))
 cards = "".join(f'''<article class="bl-card"><div class="bl-card-body"><h2><a href="{sv["slug"]}/">{esc(sv["title"])}</a></h2><p>{esc(sv["desc"])}</p><a class="bl-more" href="{sv["slug"]}/">Learn more <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>''' for sv in SERVICES)
 page += f'''<body class="bl-page">
   {header(p, "services")}
@@ -567,7 +598,7 @@ page += f'''<body class="bl-page">
 W(os.path.join(ROOT, "calculator.html"), page)
 
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/audit.html", "0.8", "2026-11-10"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES] + [("/de/" + (d["slug"] + "/" if d["slug"] else ""), "0.8", "2026-11-13") for d in DE_PAGES]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/audit.html", "0.8", "2026-11-10"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES] + [("/de/" + (d["slug"] + "/" if d["slug"] else ""), "0.8", "2026-11-13") for d in DE_PAGES] + [("/de/leistungen/", "0.8", "2026-11-14"), ("/de/kontakt/", "0.7", "2026-11-14")]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 

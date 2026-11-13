@@ -54,7 +54,7 @@
       fd.forEach(function (val, k) { data[k] = data[k] ? data[k] + ', ' + val : val; });
       delete data.botcheck; delete data.redirect;
       if (window.mmLead) window.mmLead({ source: 'contact', name: data.name, email: data.email, link: data.link, services: data.services, stage: data.stage, budget: data.budget, timeline: data.timeline, heard: data.source, mesg: data.mesg || data['mesg'] });
-      var label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending...';
+      var label = btn.textContent; btn.disabled = true; btn.textContent = document.documentElement.lang === 'de' ? 'Wird gesendet...' : 'Sending...';
       if (st) { st.className = 'cont-status'; st.textContent = ''; }
       fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })
         .then(function (r) { return r.json(); })
@@ -62,16 +62,16 @@
           if (!j.success) throw new Error(j.message || 'Could not send');
           try { sessionStorage.setItem('mmName', String(data.name || '').trim().split(/\s+/)[0]); } catch (_) {}
           if (window.mmTrack) window.mmTrack('form_submit', { form: 'contact' });
-          if (window.mmGo) window.mmGo('thankyou'); else window.location.href = 'thankyou.html';
+          if (window.mmGo) window.mmGo('thankyou'); else window.location.href = document.documentElement.lang === 'de' ? '/de/danke/' : 'thankyou.html';
         })
         .catch(function () {
           btn.disabled = false; btn.textContent = label;
-          if (st) { st.className = 'cont-status err'; st.textContent = 'Sorry, that did not send. Please try again, or email info@mosesecom.com.'; }
+          if (st) { st.className = 'cont-status err'; st.textContent = document.documentElement.lang === 'de' ? 'Leider ist das nicht angekommen. Bitte versuchen Sie es erneut oder schreiben Sie an info@mosesecom.com.' : 'Sorry, that did not send. Please try again, or email info@mosesecom.com.'; }
         });
     });
   }
   var tt = document.getElementById('thkTitle');
-  if (tt) { try { var nm = sessionStorage.getItem('mmName'); if (nm) tt.textContent = 'Thank you, ' + nm + '.'; } catch (_) {} }
+  if (tt) { try { var nm = sessionStorage.getItem('mmName'); if (nm) tt.textContent = (document.documentElement.lang === 'de' ? 'Danke, ' : 'Thank you, ') + nm + '.'; } catch (_) {} }
 
   /* ---------- brands: two-row auto-scrolling gallery ---------- */
   var bt = document.getElementById('brandTrack');

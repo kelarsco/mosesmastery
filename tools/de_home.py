@@ -185,6 +185,63 @@ ATTR = {
 "Client Instagram message": "Instagram-Nachricht eines Kunden mit Dank und Shopify-Umsatzbericht",
 "Client WhatsApp message reporting": "WhatsApp-Nachricht eines Kunden zu den Umsätzen am ersten Tag der Werbung, mit Shopify-Bericht",
 }
+
+TXT.update({
+"Want to get started?": "Möchten Sie loslegen?",
+"what are your objectives?": "Was sind Ihre Ziele?",
+"increase sale": "Mehr Umsatz",
+"Get A higher ROI": "Höherer ROI",
+"Increase (CRO)": "Bessere Conversion-Rate (CRO)",
+"All Of The Above": "Alles davon",
+"Step 1 of 3": "Schritt 1 von 3",
+"What do you need help with?": "Wobei brauchen Sie Hilfe?",
+"Pick all that apply.": "Wählen Sie alles Zutreffende aus.",
+"Store design & build": "Store-Design & Aufbau",
+"Conversion optimization": "Conversion-Optimierung",
+"Meta & Google ads": "Meta- & Google-Werbung",
+"AI automation & content": "KI-Automatisierung & Inhalte",
+"Not sure yet": "Noch unsicher",
+"Tell me about your store": "Erzählen Sie mir von Ihrem Shop",
+"Where are you at?": "Wo stehen Sie gerade?",
+"New store, not launched": "Neuer Shop, noch nicht gestartet",
+"Live, under $10k/month": "Live, unter 10.000 $/Monat",
+"Live, $10k+/month": "Live, über 10.000 $/Monat",
+"Budget": "Budget",
+"Under $500": "Unter 500 $",
+"$500 - $2k": "500 – 2.000 $",
+"$2k - $5k": "2.000 – 5.000 $",
+"$5k+": "Über 5.000 $",
+"When do you want to start?": "Wann möchten Sie starten?",
+"As soon as possible": "So bald wie möglich",
+"In 1-2 months": "In 1–2 Monaten",
+"Just exploring": "Ich informiere mich nur",
+"Store link (optional)": "Shop-Link (optional)",
+"Where should I send my reply?": "Wohin soll ich meine Antwort senden?",
+"Full name": "Vollständiger Name",
+"Email": "E-Mail",
+"Anything else I should know?": "Gibt es noch etwas, das ich wissen sollte? (optional)",
+"How did you hear about me?": "Wie haben Sie von mir erfahren? (optional)",
+"Choose one": "Bitte wählen",
+"Shopify experts": "Shopify Experts",
+"Friend or past client": "Freunde oder frühere Kunden",
+"Other": "Sonstiges",
+"Back": "Zurück",
+"Next": "Weiter",
+"Send my request": "Anfrage senden",
+"Message received": "Nachricht erhalten",
+"Thank you for reaching out.": "Danke für Ihre Nachricht.",
+"Your message is in my inbox.": "Ihre Nachricht ist in meinem Postfach. Ich lese sie persönlich und antworte so bald wie möglich an die angegebene E-Mail-Adresse. Schauen Sie im Spam-Ordner nach, falls Sie keine Antwort sehen.",
+"1. I review your store": "1. Ich prüfe Ihren Shop",
+"I look at the link and goals": "Ich sehe mir den Link und die Ziele an, die Sie geschickt haben.",
+"2. I reply by email": "2. Ich antworte per E-Mail",
+"With questions or a suggested next step.": "Mit Rückfragen oder einem Vorschlag für den nächsten Schritt.",
+"3. We talk": "3. Wir sprechen",
+"On a short call": "In einem kurzen Gespräch, wenn es passt.",
+"Book a strategy call": "Strategiegespräch buchen",
+"See projects": "Projekte ansehen",
+"Read the blog": "Blog lesen",
+})
+
 CAT = {"Apparel":"Mode","Jewelry":"Schmuck","Wellness":"Wellness","Skincare":"Hautpflege","Food &amp; Drink":"Food &amp; Getränke","Pet":"Haustiere"}
 
 def _norm(s): return " ".join(html.unescape(s).split())
@@ -215,7 +272,7 @@ def translate(t):
                     if mm: return f'{m.group(1)}"{mm.group(1)} Shopify-Shop auf einem Smartphone"'
                     return m.group(0)
                 return f'{m.group(1)}"{html.escape(v, True)}"'
-            parts[i] = re.sub(r'((?:aria-label|alt|data-title|data-words)=)"([^"]*)"', ra, s)
+            parts[i] = re.sub(r'((?:aria-label|alt|data-title|data-words|title)=)"([^"]*)"', ra, s)
             parts[i] = re.sub(r'(data-desc=)"([^"]*)"', lambda m: f'{m.group(1)}"{html.escape(_look(TXT, m.group(2)) or html.unescape(m.group(2)), True)}"', parts[i])
         else:
             if not s.strip(): continue
