@@ -13,7 +13,7 @@ from niches import NICHES
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SITE = "https://www.mosesmastery.com"
-OG = SITE + "/asset/og-image.jpg"
+OG = SITE + "/asset/og-image-v2.jpg"
 esc = html.escape
 def W(path, text):
     os.makedirs(os.path.dirname(path), exist_ok=True)
