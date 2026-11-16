@@ -155,6 +155,10 @@ STITLES = {
     "meta-ads-for-shopify-stores": "Meta Ads for Shopify: Setup, Creative & Scaling",
     "shopify-store-audit-checklist": "Shopify Store Audit Checklist (Before You Run Ads)",
     "shopify-redesign-or-optimize": "Shopify Redesign vs Optimization: Which to Choose",
+    "google-merchant-center-suspended": "Google Merchant Center Suspended? Causes & Fixes",
+    "etsy-seo-titles-and-tags": "Etsy SEO: Titles & Tags That Match Buyer Searches",
+    "shopify-product-page-seo": "Shopify Product Page SEO Checklist",
+    "shopify-store-design-cost": "How Much Does Shopify Store Design Cost?",
 }
 for idx, a in enumerate(ARTICLES):
     p = "../../"; url = f'{SITE}/blog/{a["slug"]}/'; img = f'{SITE}/asset/blog/{a["slug"]}.jpg'

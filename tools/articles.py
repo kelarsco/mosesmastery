@@ -330,3 +330,7 @@ ARTICLES = [
 """
 },
 ]
+
+
+from articles_new import NEW as _NEW
+ARTICLES += _NEW

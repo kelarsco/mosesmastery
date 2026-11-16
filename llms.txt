@@ -33,6 +33,10 @@ Social: https://www.instagram.com/moses__mastery, https://x.com/moses_mastery, h
 - [AI Automation for Shopify Stores](https://www.mosesmastery.com/blog/ai-automation-for-shopify-stores/)
 - [Shopify Store Audit Checklist](https://www.mosesmastery.com/blog/shopify-store-audit-checklist/)
 - [Shopify Redesign vs Optimization](https://www.mosesmastery.com/blog/shopify-redesign-or-optimize/)
+- [Google Merchant Center suspended: causes and fixes](https://www.mosesmastery.com/blog/google-merchant-center-suspended/)
+- [Etsy SEO: titles and tags](https://www.mosesmastery.com/blog/etsy-seo-titles-and-tags/)
+- [Shopify product page SEO checklist](https://www.mosesmastery.com/blog/shopify-product-page-seo/)
+- [How much does Shopify store design cost?](https://www.mosesmastery.com/blog/shopify-store-design-cost/)
 
 ## German (Deutsch)
 - [Shopify Agentur: Start](https://www.mosesmastery.com/de/): Leistungen, Ablauf und Preise auf Deutsch (Projekte und Support laufen auf Englisch)

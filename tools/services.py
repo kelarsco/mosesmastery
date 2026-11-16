@@ -30,7 +30,7 @@ SERVICES = [
 ("Will my store work well on mobile?", "Yes. Stores are designed mobile first and checked on real phone sizes, because most Shopify traffic arrives on mobile devices."),
 ("Can you redesign my existing Shopify store?", "Yes. Redesigns keep your products, apps and data, and improve the layout, product pages and shopping flow."),
 ],
-"related": ["shopify-redesign-or-optimize", "shopify-store-audit-checklist"],
+"related": ["shopify-store-design-cost", "shopify-redesign-or-optimize", "shopify-store-audit-checklist"],
 },
 {
 "slug": "shopify-conversion-rate-optimization",
@@ -83,7 +83,7 @@ SERVICES = [
 ("What is Google Merchant Center and do I need it?", "Google Merchant Center is where you upload your product feed so products can appear in Google Shopping and free listings. Most product-based stores benefit from setting it up."),
 ("Do you guarantee first-page rankings?", "No. Nobody can guarantee rankings. I focus on the work that improves your chances and report progress with real data."),
 ],
-"related": ["shopify-seo-guide", "shopify-store-audit-checklist"],
+"related": ["shopify-product-page-seo", "shopify-seo-guide", "shopify-store-audit-checklist"],
 },
 {
 "slug": "meta-ads-for-shopify",
@@ -160,7 +160,7 @@ SERVICES = [
 ("Can you guarantee my account will be reinstated?", "No. Google decides every review. I fix the problems Google reports and help you prepare the request, but I cannot promise an outcome or a timeline."),
 ("Do I need Merchant Center to run Google Shopping ads?", "Yes. Shopping and many Performance Max campaigns use the product data in Merchant Center, so a clean feed comes before any ad spend."),
 ],
-"related": ["meta-ads-for-shopify-stores", "shopify-seo-guide"],
+"related": ["google-merchant-center-suspended", "meta-ads-for-shopify-stores", "shopify-seo-guide"],
 },
 {
 "slug": "etsy-seo-and-store-optimization",
@@ -189,6 +189,6 @@ SERVICES = [
 ("How long does Etsy SEO take to work?", "Some changes can show in views within days or weeks, but Etsy search also depends on sales history and shop activity, so steady improvement takes longer."),
 ("Do you rewrite every listing?", "I start with the listings that matter most, such as your best sellers and the products with the most potential, and then work through the rest."),
 ],
-"related": ["shopify-seo-guide", "shopify-store-audit-checklist"],
+"related": ["etsy-seo-titles-and-tags", "shopify-seo-guide", "shopify-store-audit-checklist"],
 },
 ]
