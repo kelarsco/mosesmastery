@@ -159,6 +159,7 @@ STITLES = {
     "etsy-seo-titles-and-tags": "Etsy SEO: Titles & Tags That Match Buyer Searches",
     "shopify-product-page-seo": "Shopify Product Page SEO Checklist",
     "shopify-store-design-cost": "How Much Does Shopify Store Design Cost?",
+    "seo-geo-aeo-explained": "SEO vs GEO vs AEO Explained for Shopify Stores",
 }
 for idx, a in enumerate(ARTICLES):
     p = "../../"; url = f'{SITE}/blog/{a["slug"]}/'; img = f'{SITE}/asset/blog/{a["slug"]}.jpg'
