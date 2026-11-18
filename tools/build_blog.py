@@ -409,6 +409,55 @@ page += f'''<body class="bl-page">
 ''' + TAIL % (p, p, p, p)
 W(os.path.join(ROOT, "privacy.html"), page)
 
+
+# ---------- 2f. About page ----------
+ABOUT_BODY = """<p><strong>Moses Mastery is a Shopify growth studio led by Moses Daniel.</strong> We design, optimize and grow online stores: better design, faster pages, clearer offers, search visibility and paid ads that send the right people to a store that is ready for them.</p>
+<figure style="margin:1.6rem 0"><img src="asset/founder.webp" srcset="asset/founder-600.webp 600w, asset/founder.webp 1000w" sizes="(max-width: 720px) 92vw, 520px" width="1000" height="1333" alt="Moses Daniel, founder of Moses Mastery" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:18px"><figcaption>Moses Daniel, founder of Moses Mastery</figcaption></figure>
+
+<h2>Who is behind Moses Mastery?</h2>
+<p>I&rsquo;m Moses Daniel, the founder. I started Moses Mastery to help online brands get more from the store they already have, through strategic branding, conversion-focused design and high-performance development.</p>
+<p>I started solo and now work with a team of specialists, because strategy, conversion optimization, user experience and brand have to work together as one system. I stay hands-on in every project, leading strategy and getting into design and marketing, because that is where a store&rsquo;s results are decided.</p>
+
+<h2>What do we do?</h2>
+<ul>
+<li><a href="services/shopify-store-design/">Shopify store design and development</a></li>
+<li><a href="services/shopify-conversion-rate-optimization/">Conversion rate optimization and store audits</a></li>
+<li><a href="services/shopify-seo/">Shopify SEO</a> and <a href="services/google-merchant-center-optimization/">Google Merchant Center</a></li>
+<li><a href="services/meta-ads-for-shopify/">Meta and Google ads</a></li>
+<li><a href="services/etsy-seo-and-store-optimization/">Etsy SEO and shop optimization</a></li>
+<li><a href="services/ai-automation-for-shopify/">AI automation for eCommerce stores</a></li>
+</ul>
+
+<h2>Who do we work with?</h2>
+<p>Online brands across many niches, including pet, apparel, drinks, restaurants, skincare and supplements. You can see examples of the stores we have worked on on the <a href="projects.html">projects page</a>. We work with clients worldwide, and parts of this site are available in <a href="de/">German</a>.</p>
+
+<h2>How do we work?</h2>
+<ul>
+<li><strong>We start with a free scan.</strong> The <a href="audit.html">store scanner</a> shows what can be measured from outside your store, and a personal review adds design, offer and checkout.</li>
+<li><strong>Fixed quotes.</strong> You get a clear scope and price before work starts. Store packages are one-time project fees, and marketing packages are monthly.</li>
+<li><strong>Honest expectations.</strong> We don&rsquo;t guarantee sales or rankings, because no one can. We show you what we change and why.</li>
+</ul>
+
+<h2>Where to find us</h2>
+<p>You can find Moses Mastery on <a href="https://www.linkedin.com/in/moses-daniel-89029b41b/" rel="me noopener" target="_blank">LinkedIn</a>, <a href="https://x.com/moses_mastery" rel="me noopener" target="_blank">X</a>, <a href="https://www.instagram.com/moses__mastery" rel="me noopener" target="_blank">Instagram</a> and <a href="https://www.producthunt.com/@mosesmastery" rel="me noopener" target="_blank">Product Hunt</a>.</p>
+
+<h2>Talk to us</h2>
+<p>Have a store that should be growing faster? <a href="contact.html">Book a free strategy call</a>, run the <a href="audit.html">free store scan</a>, or email <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>.</p>"""
+p = ""; url = SITE + "/about.html"
+_ab_ld = ld({"@context": "https://schema.org", "@graph": [ORG, dict(PERSON, jobTitle="Founder", image=SITE + "/asset/founder.webp", sameAs=ORG["sameAs"] + ["https://www.producthunt.com/@mosesmastery"]),
+    {"@type": "AboutPage", "@id": url + "#page", "url": url, "name": "About Moses Mastery", "about": {"@id": SITE + "/#org"}, "mainEntity": {"@id": SITE + "/#person"}},
+    {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "About", "item": url}]}]})
+pg = head("About Moses Mastery | Shopify Growth Studio", "Moses Mastery is a Shopify growth studio led by founder Moses Daniel. Who we are, what we do, who we work with and how we work.", url, p, OG, "website", _ab_ld)
+pg += f'''<body class="bl-page">
+  {header(p, "")}
+  <main id="main">
+    <section class="bl-hero"><p class="bl-kicker"><span></span>About</p><h1>About Moses Mastery</h1></section>
+    <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem"><div class="prose">{ABOUT_BODY}</div></section>
+  </main>
+  {footer(p)}
+''' + TAIL % (p, p, p, p)
+W(os.path.join(ROOT, "about.html"), pg)
+
 # legal pages (terms, refund, cookies) -- plain-language, kept consistent with privacy.html
 LEGAL_UPDATED = "8 November 2026"
 def legal_page(fname, title, kicker, h1, desc, body):
@@ -603,7 +652,7 @@ page += f'''<body class="bl-page">
 W(os.path.join(ROOT, "calculator.html"), page)
 
 # ---------- 3. sitemap ----------
-urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/audit.html", "0.8", "2026-11-10"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES] + [("/de/" + (d["slug"] + "/" if d["slug"] else ""), "0.8", "2026-11-13") for d in DE_PAGES] + [("/de/leistungen/", "0.8", "2026-11-14"), ("/de/kontakt/", "0.7", "2026-11-14")]
+urls = [("/", "1.0", "2026-10-28"), ("/services/", "0.9", "2026-10-28"), ("/projects.html", "0.8", "2026-10-27"), ("/contact.html", "0.7", "2026-10-27"), ("/about.html", "0.7", "2026-11-18"), ("/privacy.html", "0.2", "2026-10-28"), ("/terms.html", "0.2", "2026-11-08"), ("/refund-policy.html", "0.2", "2026-11-08"), ("/cookie-policy.html", "0.2", "2026-11-08"), ("/calculator.html", "0.7", "2026-10-29"), ("/audit.html", "0.8", "2026-11-10"), ("/blog/", "0.9", "2026-10-28")] + [(f'/services/{sv["slug"]}/', "0.9", "2026-10-28") for sv in SERVICES] + [(f'/services/{sv["slug"]}/', "0.8", "2026-11-08") for sv in NICHES] + [(f'/blog/{a["slug"]}/', "0.8", a["date"]) for a in ARTICLES] + [("/de/" + (d["slug"] + "/" if d["slug"] else ""), "0.8", "2026-11-13") for d in DE_PAGES] + [("/de/leistungen/", "0.8", "2026-11-14"), ("/de/kontakt/", "0.7", "2026-11-14")]
 W(os.path.join(ROOT, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>\n" for u, pr, d in urls) + "</urlset>\n")
 print("built:", len(ARTICLES), "articles; header/footer refreshed on", ", ".join(PAGES))
 
