@@ -336,6 +336,14 @@ def build_de_page(src, out, de_path, en_url, title, desc, active, en_rel, faqs=N
         if v.startswith(("http", "/", "#", "mailto:", "tel:", "data:", "javascript:")) or not v: return m.group(0)
         return f'{m.group(1)}"{P}{v}"'
     t = re.sub(r'((?:src|href|data-src|data-src-m|poster|data-img)=)"([^"]*)"', up, t)
+    def up_set(m):
+        parts = []
+        for item in m.group(2).split(","):
+            item = item.strip()
+            if item and not item.startswith(("http", "/", "data:")): item = P + item
+            parts.append(item)
+        return f'{m.group(1)}"{", ".join(parts)}"'
+    t = re.sub(r'((?:srcset|data-srcset)=)"([^"]*)"', up_set, t)
     for _d in DE_PAGES:
         if _d["en_twin"]: t = t.replace('"' + P + _d["en_twin"] + '"', '"' + P + 'de/' + _d["slug"] + '/"')
     t = t.replace('"' + P + 'services/"', '"' + P + 'de/leistungen/"').replace('"' + P + 'contact.html"', '"' + P + 'de/kontakt/"')
