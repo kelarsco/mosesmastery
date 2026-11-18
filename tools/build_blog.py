@@ -161,6 +161,28 @@ STITLES = {
     "shopify-store-design-cost": "How Much Does Shopify Store Design Cost?",
     "seo-geo-aeo-explained": "SEO vs GEO vs AEO Explained for Shopify Stores",
 }
+
+# icon decoration for article bodies (original icons, no stock images)
+ICON_RULES = [("common questions", "circle-question"), ("question", "circle-question"), ("get help", "life-ring"), ("help with", "life-ring"), ("want a fixed", "life-ring"), ("mistake", "triangle-exclamation"), ("risk", "triangle-exclamation"), ("cause", "magnifying-glass-chart"), ("read the reason", "magnifying-glass-chart"),
+    ("prevent", "shield-halved"), ("trust", "shield-halved"), ("policies", "shield-halved"), ("request a review", "paper-plane"), ("measur", "chart-line"), ("track", "chart-line"), ("numbers", "chart-line"), ("report", "chart-line"), ("recover", "rotate-left"), ("retention", "rotate-left"),
+    ("speed", "gauge-high"), ("fast", "gauge-high"), ("mobile", "mobile-screen"), ("photo", "camera"), ("image", "camera"), ("video", "camera"), ("price", "tag"), ("cost", "tag"), ("charge", "tag"), ("quote", "tag"), ("ongoing", "tag"),
+    ("keyword", "magnifying-glass"), ("seo", "magnifying-glass"), ("title", "heading"), ("structure", "sitemap"), ("navigation", "compass"), ("link", "link"), ("cart", "cart-shopping"), ("checkout", "credit-card"), ("shipping", "truck-fast"),
+    ("social proof", "star"), ("review", "star"), ("product", "bag-shopping"), ("email", "envelope"), ("support", "headset"), ("inventory", "boxes-stacked"), ("order", "boxes-stacked"), ("creative", "palette"), ("design", "palette"), ("offer", "gift"), ("ad ", "bullhorn"), ("test", "flask"),
+    ("scale", "arrow-trend-up"), ("decide", "scale-balanced"), ("differ", "scale-balanced"), ("which", "scale-balanced"), ("difference", "scale-balanced"), ("signs", "flag"), ("process", "list-check"), ("goal", "bullseye"), ("first screen", "bullseye"), ("start", "flag-checkered"), ("what ", "circle-info"), ("before you spend", "circle-info"), ("fix", "screwdriver-wrench"), ("prioritize", "list-check"), ("simplify", "wand-magic-sparkles")]
+def _h2_icon(txt):
+    t = re.sub(r"^\d+\.\s*", "", strip_tags_s(txt)).lower() + " "
+    for k, ic in ICON_RULES:
+        if k in t: return ic
+    return "lightbulb"
+def strip_tags_s(t): return re.sub(r"<[^>]+>", "", html.unescape(t)).strip()
+def decorate(body):
+    body = re.sub(r'<h2 id="([^"]+)">(.*?)</h2>', lambda m: f'<h2 id="{m.group(1)}"><span class="ar-ico" aria-hidden="true"><i class="fa-solid fa-{_h2_icon(m.group(2))}"></i></span>{m.group(2)}</h2>', body)
+    m = re.match(r"\s*<p>(.*?)</p>", body, re.S)
+    if m:
+        quick = f'<div class="ar-quick"><span class="ar-ico" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span><div><p class="ar-quick-l">Quick answer</p><p>{m.group(1)}</p></div></div>'
+        body = quick + body[m.end():]
+    return body
+
 for idx, a in enumerate(ARTICLES):
     p = "../../"; url = f'{SITE}/blog/{a["slug"]}/'; img = f'{SITE}/asset/blog/{a["slug"]}.jpg'
     toc = re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', a["body"])
@@ -191,7 +213,7 @@ for idx, a in enumerate(ARTICLES):
       <figure class="ar-cover">{cover_img(a, p, eager=True)}</figure>
       <div class="ar-wrap">
         <aside class="ar-toc" aria-label="On this page"><p>On this page</p><ol>{toc_html}</ol></aside>
-        <div class="ar-body prose" itemprop="articleBody">{a["body"]}</div>
+        <div class="ar-body prose" itemprop="articleBody">{decorate(a["body"])}</div>
       </div>
       <section class="ar-cta"><h2>Need help with your <em>Shopify store</em>?</h2><p>I design, optimize and grow Shopify stores and set up AI automation for them. Book a free strategy call or send your store link.</p>
         <div><a class="bl-btn" href="https://calendly.com/onwenmoses/30min" onclick="Calendly.initPopupWidget({{url: 'https://calendly.com/onwenmoses/30min?hide_gdpr_banner=1&primary_color=f7cb1a'}});return false;">Book a call <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a> <a class="bl-btn bl-btn-ghost" href="{p}contact.html">Contact me</a></div></section>
