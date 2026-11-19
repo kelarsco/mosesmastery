@@ -46,6 +46,13 @@ SERVICES = [
 <li><strong>Prioritized fixes</strong>: a ranked list, so the highest-impact changes come first.</li>
 <li><strong>Implementation</strong>: I make the changes, not just a report.</li>
 <li><strong>Measurement</strong>: each change is checked against your numbers, so you know what worked.</li></ul>"""),
+("What is a Shopify CRO audit?", """<p>A Shopify CRO audit is a review of your store that finds where visitors drop off before buying, and ranks the fixes by likely impact. It looks at the same places shoppers do: the homepage, navigation, collection and product pages, cart, checkout, speed on mobile and trust signals such as reviews, policies and contact details.</p>
+<p>You can start with the <a href="../../audit.html">free store scanner</a>, which checks what can be measured from outside your store in seconds. A personal CRO audit goes further, because it adds the things an automated scan cannot judge: your design, offer and checkout, and what your own analytics say about where people leave.</p>"""),
+("What you get from a CRO audit", """<ul><li><strong>A ranked list of fixes</strong>, highest impact first, so you know what to do before spending on more traffic.</li>
+<li><strong>Plain-language findings</strong>: what is wrong, why it costs sales and how to fix it.</li>
+<li><strong>The option to have me implement the fixes</strong>, or hand the list to your own developer.</li>
+<li><strong>A clear next step</strong>, with a quote for any work you want me to do.</li></ul>
+<p>I do not promise a specific increase in sales. An audit shows where the problems are, and results depend on your store, your traffic and which fixes are made.</p>"""),
 ("Typical problems I find", """<p>Slow mobile pages, product pages that bury the add-to-cart button, unclear shipping and returns, weak product photography, reviews placed far from the price, and checkouts with unnecessary friction. The <a href="../../blog/shopify-conversion-rate-optimization-checklist/">12-fix Shopify CRO checklist</a> and the <a href="../../blog/shopify-store-audit-checklist/">store audit checklist</a> show the approach in detail.</p>"""),
 ("What I need from you", "<p>Your store link and, ideally, read-only access to Shopify analytics. If you have no tracking set up yet, setting it up is the first step, because it is impossible to improve what is not measured.</p>"),
 ("Pricing", "<p>Audits and one-off optimization fixes are quoted to your store. Ongoing Growth Marketing plans, which include conversion optimization, start from $2,000 per month (ad spend is paid directly to the ad platforms and is not included). <a href=\"../../contact.html\">Send your store link</a> for a quote.</p>"),
@@ -54,6 +61,8 @@ SERVICES = [
 ("What is conversion rate optimization for Shopify?", "Conversion rate optimization (CRO) is improving your store so a bigger share of visitors become customers, by fixing product pages, navigation, cart, checkout, speed and trust, using your own store data."),
 ("How long does CRO take to show results?", "Some fixes, like speed and clearer product pages, can be measured within weeks. Reliable conclusions need enough traffic, so smaller stores need longer test periods. No honest agency can promise a specific lift."),
 ("Do I need a lot of traffic for CRO to work?", "More traffic makes testing faster, but many fixes are obvious usability problems that help at any size. Low-traffic stores focus on clear fixes rather than A/B tests."),
+("What is a Shopify CRO audit?", "A Shopify CRO audit is a review of your store that finds where visitors drop off before buying and ranks the fixes by likely impact. It covers the homepage, product pages, cart, checkout, mobile speed and trust signals."),
+("How is a CRO audit different from the free store scanner?", "The free scanner checks what can be measured from outside your store, such as speed, mobile, SEO and trust signals. A personal CRO audit adds design, offer, checkout and what your own analytics show about where visitors leave."),
 ("Can you audit my Shopify store first?", "Yes. Send your store link through the contact page and describe what you want improved. The audit shows where I would start."),
 ],
 "related": ["shopify-conversion-rate-optimization-checklist", "shopify-store-audit-checklist"],
