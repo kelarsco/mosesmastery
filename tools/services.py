@@ -36,9 +36,9 @@ SERVICES = [
 "slug": "shopify-conversion-rate-optimization",
 "nav": "Conversion optimization",
 "title": "Shopify Conversion Rate Optimization (CRO)",
-"stitle": "Shopify Conversion Rate Optimization (CRO) | Moses Mastery",
-"h1": "Shopify conversion rate optimization (CRO) & store audits",
-"desc": "Shopify CRO and store audits: find where visitors drop off and fix product pages, cart, checkout, speed and trust. Growth plans from $2,000 per month.",
+"stitle": "Shopify CRO Audit & Conversion Optimization | Moses Mastery",
+"h1": "Shopify CRO audit & conversion rate optimization",
+"desc": "Shopify CRO audit and conversion rate optimization: find where visitors drop off and fix product pages, cart, checkout, speed and trust. Growth plans from $2,000 per month.",
 "lead": "If your store already gets traffic but few orders, the fastest win is usually not more ads. It is fixing the steps where shoppers leave. I audit your funnel, find the biggest leaks and fix them in order of impact.",
 "sections": [
 ("What a CRO engagement covers", """<ul><li><strong>Funnel analysis</strong>: sessions, product views, add to cart, checkout and purchase, to see where people drop off.</li>
@@ -114,9 +114,9 @@ SERVICES = [
 "slug": "ai-automation-for-shopify",
 "nav": "AI automation",
 "title": "AI Automation for Shopify Stores",
-"stitle": "AI Automation for Shopify Stores | Moses Mastery",
-"h1": "AI automation, content & chatbots for Shopify stores",
-"desc": "AI automation for Shopify: workflows for orders and support, AI-assisted product copy and ad creative, and chatbots that answer customer questions.",
+"stitle": "Shopify AI Automation: Workflows & Chatbots | Moses Mastery",
+"h1": "Shopify AI automation: workflows, content & chatbots",
+"desc": "Shopify AI automation for orders, support, product copy and ads. Save hours each week with AI workflows and chatbots, reviewed by a human. Start with a free store scan.",
 "lead": "Most store owners spend hours each week on repetitive work: answering the same questions, writing product copy, chasing follow-ups. I set up AI workflows that take on this work, with a human reviewing anything customer-facing.",
 "sections": [
 ("Three ways I use AI in stores", """<ul><li><strong>AI automation and workflows</strong>: automating repetitive operations such as order and support flows, follow-ups and reporting.</li>
