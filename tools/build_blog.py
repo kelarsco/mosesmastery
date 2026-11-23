@@ -160,6 +160,8 @@ STITLES = {
     "shopify-product-page-seo": "Shopify Product Page SEO Checklist",
     "shopify-store-design-cost": "How Much Does Shopify Store Design Cost?",
     "seo-geo-aeo-explained": "SEO vs GEO vs AEO Explained for Shopify Stores",
+    "shopify-speed-optimization": "Shopify Speed Optimization: Fix a Slow Mobile Store",
+    "ai-chatbot-shopify-support": "AI Chatbots for Shopify Support: What They Can Do",
 }
 
 # icon decoration for article bodies (original icons, no stock images)

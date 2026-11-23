@@ -283,4 +283,149 @@ NEW = [
 <p>You do not need to treat them as three projects. Strong SEO basics, clear answers and real proof cover most of what all three reward.</p>
 """
 },
+{
+"slug": "shopify-speed-optimization",
+"ctitle": "Shopify speed: what slows a store on mobile and how to fix it",
+"chi": ["Speed", "Mobile"],
+"title": "Shopify Speed Optimization: What Slows a Store on Mobile and How to Fix It",
+"cover": "FAST", "hi": ["Store", "Speed"], "tag": "SPEED",
+"desc": "What slows a Shopify store on mobile and how to fix it: images, apps, theme code, third-party scripts and fonts. A practical checklist with no promised scores.",
+"mins": 6, "date": "2026-11-23",
+"body": """
+<p>Most Shopify stores are slow on mobile for the same few reasons: oversized images, too many apps, heavy theme features and third-party scripts such as chat widgets and ad pixels. Fix those in that order, measure after each change, and keep only what earns its weight. Speed matters because shoppers leave slow pages before they see your products.</p>
+
+<h2 id="measure">1. How do you measure Shopify store speed?</h2>
+<p><strong>Test your store on mobile with Google PageSpeed Insights, because that is the view that matters most.</strong> Paste your homepage, a collection page and a product page, since each loads differently. Look at the largest content paint (how long the main content takes to appear), layout shifts and the list of opportunities. Google publishes &ldquo;good&rdquo; targets for these measures; as a rough guide, the main content should show in about 2.5 seconds or less.</p>
+<p>Scores move a little between runs, so test several times and focus on the biggest items in the report instead of the headline number. You can also run our <a href="../../audit.html">free store scanner</a> to see your speed result next to your SEO, mobile and conversion checks.</p>
+
+<h2 id="images">2. Are images slowing your store down?</h2>
+<p><strong>Oversized images are the most common cause, and the easiest to fix.</strong> A product photo uploaded at a very large size forces a phone to download far more data than it needs.</p>
+<ul>
+<li>Resize images to the size they are actually shown at, before uploading.</li>
+<li>Use modern formats such as WebP where your theme supports them.</li>
+<li>Do not lazy-load the main image at the top of the page; load it first.</li>
+<li>Lazy-load images further down the page.</li>
+</ul>
+
+<h2 id="apps">3. Do too many apps slow a Shopify store?</h2>
+<p><strong>Yes, often. Many apps add scripts that load on every page, even where they are not used.</strong> Review your app list and ask what each one does, whether you still use it, and whether the theme could do the same thing natively.</p>
+<ul>
+<li>Remove apps you no longer use, and check that they left no code behind in your theme.</li>
+<li>Replace several small apps with one tool, or with a built-in theme feature.</li>
+<li>Test your speed before and after removing an app, so you know what it cost.</li>
+</ul>
+
+<h2 id="theme">4. Can your theme be the problem?</h2>
+<p><strong>Yes. Heavy sliders, autoplay videos, animations and many sections on the homepage all add weight.</strong> A simpler homepage usually loads faster and often converts better, because shoppers find the main message and products sooner.</p>
+<ul>
+<li>Cut the hero slider down to one strong image or a single short video.</li>
+<li>Remove sections nobody scrolls to.</li>
+<li>Keep the theme updated, and avoid adding custom code that duplicates what it already does.</li>
+</ul>
+
+<h2 id="scripts">5. How do third-party scripts affect speed?</h2>
+<p><strong>Chat widgets, ad pixels, review widgets, popups and analytics all load extra code, and together they can add up.</strong> You need some of them, but not all of them need to load immediately.</p>
+<ul>
+<li>List every tracking and marketing script on your store.</li>
+<li>Remove duplicates, such as the same pixel installed twice by two apps.</li>
+<li>Delay non-essential scripts until after the page has loaded where possible.</li>
+</ul>
+
+<h2 id="fonts">6. What about fonts?</h2>
+<p><strong>Too many fonts and font weights slow the first paint.</strong> Use one or two font families, only the weights you need, and let text show in a fallback font while the custom one loads.</p>
+
+<h2 id="mistakes">Common speed mistakes</h2>
+<ul>
+<li>Chasing a perfect score instead of fixing the biggest items first.</li>
+<li>Installing a &ldquo;speed booster&rdquo; app that adds its own scripts.</li>
+<li>Testing only the homepage and ignoring product and collection pages.</li>
+<li>Testing on a fast office connection instead of a typical phone.</li>
+<li>Making many changes at once, so you cannot tell what helped.</li>
+</ul>
+
+<h2 id="help">Want help with this?</h2>
+<p>Speed is one of the first things we check in a <a href="../../services/shopify-conversion-rate-optimization/">Shopify CRO audit</a>, along with product pages, cart and checkout. If your store is slow and you are not sure why, <a href="../../contact.html">send us your store link</a> and we will tell you what to fix first. Our <a href="../shopify-conversion-rate-optimization-checklist/">CRO checklist</a> shows where speed fits among the other fixes.</p>
+
+<h2 id="faq">Common questions</h2>
+<h3>What is a good speed for a Shopify store on mobile?</h3>
+<p>Google&rsquo;s guidance is for the main content to appear in about 2.5 seconds or less on mobile. Your real-world numbers depend on your theme, apps and visitors&rsquo; devices, so treat the lab score as a guide.</p>
+<h3>Why is my Shopify store slow even with a fast theme?</h3>
+<p>Usually because of apps, third-party scripts and large images added on top of the theme. The theme is only part of what loads.</p>
+<h3>Will deleting an app make my store faster?</h3>
+<p>Often, if the app loaded scripts on every page. Some apps leave code behind after removal, so check your theme files or ask a developer to clean up.</p>
+<h3>Does page speed affect Google rankings?</h3>
+<p>Google uses page experience as one of many signals, and speed also affects whether shoppers stay and buy. Do not expect speed alone to change your rankings.</p>
+<h3>How often should I test my store speed?</h3>
+<p>Test after every app install, theme change or big content update, and run a full check monthly.</p>
+"""
+},
+{
+"slug": "ai-chatbot-shopify-support",
+"ctitle": "AI chatbots for Shopify support: what they can and cannot do",
+"chi": ["AI", "Chatbot"],
+"title": "AI Chatbots for Shopify Support: What They Can and Cannot Do",
+"cover": "AI", "hi": ["AI", "Chatbot"], "tag": "AI",
+"desc": "What an AI chatbot can and cannot do for Shopify customer support, how to set one up safely, and the mistakes that cost stores customers. No hype.",
+"mins": 6, "date": "2026-11-23",
+"body": """
+<p>An AI chatbot can answer repetitive questions on a Shopify store, such as shipping times, return policy and product details, and can hand harder cases to a person. It cannot be trusted to make refund decisions, handle upset customers alone or answer questions your store data does not cover. The best setups are narrow, use your own policies as the source, and always offer a human.</p>
+
+<h2 id="can">1. What can an AI chatbot do for a Shopify store?</h2>
+<p><strong>It can handle the repetitive questions that take up most support time.</strong> Typical jobs:</p>
+<ul>
+<li>Answer shipping, delivery and returns questions from your policy pages.</li>
+<li>Answer product questions using your product descriptions, sizes and materials.</li>
+<li>Point customers to the right collection or product.</li>
+<li>Collect an order number and email before passing the case to a person.</li>
+<li>Answer outside business hours, so customers are not left waiting.</li>
+</ul>
+
+<h2 id="cannot">2. What can an AI chatbot not do?</h2>
+<p><strong>It cannot replace judgment, and it can be confidently wrong.</strong> Keep these with a person:</p>
+<ul>
+<li>Refund, exchange and exception decisions.</li>
+<li>Upset or frustrated customers.</li>
+<li>Anything involving health, legal or safety claims about your products.</li>
+<li>Questions your store data does not answer. Without the facts, a chatbot may guess.</li>
+<li>Orders with unusual problems, such as damaged, lost or disputed items.</li>
+</ul>
+
+<h2 id="setup">3. How do you set up an AI chatbot safely?</h2>
+<ol>
+<li><strong>Start with your top 10 questions.</strong> Read your recent support emails and list the questions that repeat.</li>
+<li><strong>Write clear source answers.</strong> Update your shipping, returns and FAQ pages first, because the chatbot is only as accurate as what it reads.</li>
+<li><strong>Limit what it can say.</strong> Tell it to answer only from your approved content, and to say it does not know when it does not.</li>
+<li><strong>Add a human handoff.</strong> Customers should be able to reach a person in one step, with the conversation passed along.</li>
+<li><strong>Review conversations weekly.</strong> Read what customers asked and how it answered, then fix the gaps.</li>
+<li><strong>Be clear it is an AI.</strong> Say so in the chat window, and do not present it as a person.</li>
+</ol>
+
+<h2 id="mistakes">4. What mistakes should you avoid?</h2>
+<ul>
+<li>Launching without testing it against real customer questions.</li>
+<li>Giving it permission to issue refunds or discounts on its own.</li>
+<li>Hiding the human contact option.</li>
+<li>Never reviewing the conversations after launch.</li>
+<li>Treating it as a replacement for a clear returns and shipping policy.</li>
+</ul>
+
+<h2 id="worth">5. Is an AI chatbot worth it for a small store?</h2>
+<p><strong>It depends on how many repetitive questions you get.</strong> If you answer the same ten questions every day, a chatbot can save real time. If you get a few messages a week, a clear FAQ page and a fast personal reply are usually better. Count your support messages for a few weeks before deciding.</p>
+
+<h2 id="help">Want help setting this up?</h2>
+<p>We set up <a href="../../services/ai-automation-for-shopify/">AI automation for Shopify stores</a>, including support chatbots with a human handoff, and we review anything customer-facing. For other tasks AI can take off your plate, see our guide to <a href="../ai-automation-for-shopify-stores/">AI automation workflows for Shopify</a>. <a href="../../contact.html">Send us your store link</a> and tell us which questions take up most of your time.</p>
+
+<h2 id="faq">Common questions</h2>
+<h3>Can an AI chatbot replace customer support for my Shopify store?</h3>
+<p>Not fully. It can handle repetitive questions, but a person should handle refunds, complaints and unusual cases.</p>
+<h3>Will an AI chatbot give wrong answers?</h3>
+<p>It can, especially if it is not limited to your approved content or does not have the facts. That is why testing, clear source pages and weekly review matter.</p>
+<h3>Do customers mind talking to a chatbot?</h3>
+<p>Most do not mind for simple questions, as long as they get a correct answer quickly and can reach a person when they need one.</p>
+<h3>How long does it take to set up?</h3>
+<p>It depends on the tool and how clear your policies and product information already are. The writing and testing usually take longer than the technical setup.</p>
+<h3>What should I prepare before adding a chatbot?</h3>
+<p>Your top repeated questions, up-to-date shipping and returns pages, accurate product details and a rule for when a conversation goes to a person.</p>
+"""
+},
 ]
