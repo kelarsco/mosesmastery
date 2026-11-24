@@ -8,7 +8,7 @@ TXT = {
 "We transform brands": "Wir machen aus Marken Umsatzquellen.",
 "Now building": "Aktuell im Bau",
 "Shopify stores": "Shopify-Shops",
-"We build high-converting eCommerce": "Wir bauen E-Commerce-Erlebnisse, die gut konvertieren und Ihren Umsatz steigern. Ihr Shop ist nicht nur eine Website, sondern Ihr Vertriebskanal rund um die Uhr: Er soll Kunden anziehen, überzeugen und mit Ihnen wachsen.",
+"We build high converting eCommerce": "Wir bauen E-Commerce-Erlebnisse, die gut konvertieren und Ihren Umsatz steigern. Ihr Shop ist nicht nur eine Website, sondern Ihr Vertriebskanal rund um die Uhr: Er soll Kunden anziehen, überzeugen und mit Ihnen wachsen.",
 "Ecommerce website": "E-Commerce-Website",
 "conversion rate (CRO)": "Conversion-Optimierung (CRO)",
 "Brand Identity Design": "Markenidentität",
