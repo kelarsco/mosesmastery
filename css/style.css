@@ -230,7 +230,7 @@ overflow: hidden;
   object-fit: cover;
   filter: brightness(0.4);
   z-index: 0;
-  background-image: url(../asset/hero-still-d.webp);
+  background-image: url(../asset/hero-still-d2.webp);
   /* make it fill the screen */
   background-size: cover; /* cover ensures it fills screen proportionally */
   background-position: center; /* center the image */
@@ -3499,12 +3499,12 @@ html.mm-lock, html.mm-lock body { overflow: hidden; }
 }
 
 /* ---- hero: real footage (not a blended shape) with a dark scrim so the white headline stays readable ---- */
-.bg-image { background-image: url(../asset/hero-still-d.webp); filter: none; }
+.bg-image { background-image: url(../asset/hero-still-d2.webp); filter: none; }
 .bg-video { mix-blend-mode: normal; }
 .hero::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background: linear-gradient(180deg, rgba(8,8,8,.55) 0%, rgba(8,8,8,.38) 35%, rgba(8,8,8,.72) 100%); }
 @media (max-width: 769px) {
-  .bg-image { background-image: url(../asset/hero-still-m.webp); }
+  .bg-image { background-image: url(../asset/hero-still-m2.webp); }
   .hero::after { background: linear-gradient(180deg, rgba(8,8,8,.5) 0%, rgba(8,8,8,.45) 40%, rgba(8,8,8,.8) 100%); }
 }
 body:not(.bl-page) .hd-sign { color: #fff; }
@@ -3513,7 +3513,7 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 /* mobile hero: service list hidden (too much text over the footage); still in the HTML, desktop unchanged */
 @media (max-width: 769px) { .hero-content .right { display: none; } }
 /* portrait-shaped screens (phones in "desktop site" mode, tablets) get the portrait still too */
-@media (max-aspect-ratio: 1/1) { .bg-image { background-image: url(../asset/hero-still-m.webp); } }
+@media (max-aspect-ratio: 1/1) { .bg-image { background-image: url(../asset/hero-still-m2.webp); } }
 
 /* ---- tablet + phone side by side ---- */
 .psec-list .ps-li-img.ph-stage { gap: 3.2%; }
