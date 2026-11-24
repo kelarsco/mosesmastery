@@ -3892,3 +3892,9 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
 @media(prefers-reduced-motion:reduce){.mmc-t i{animation:none}}
 .mmc-a a{font:inherit;color:#f7cb1a;word-break:break-all}
 @media(max-width:599px){.mmc-btn{padding:.55rem .85rem;gap:.35rem;font-size:.8rem;box-shadow:0 6px 18px rgba(0,0,0,.35)}.mmc-btn svg{width:17px;height:17px}}
+
+/* services list on phones: number sits beside the title instead of on top of it */
+@media (max-width: 768px) {
+  .skill-list li { justify-content: space-between; align-items: flex-start; gap: .75rem; font-size: clamp(19px, 5.6vw, 25px); line-height: 1.2; }
+  .skill-list li .bx-rgt-no { position: static; flex: 0 0 auto; margin-left: auto; padding-top: .2em; font-size: 14px; }
+}
