@@ -3898,3 +3898,6 @@ body:not(.bl-page) .hd-sign:hover { color: var(--secondary); }
   .skill-list li { justify-content: space-between; align-items: flex-start; gap: .75rem; font-size: clamp(19px, 5.6vw, 25px); line-height: 1.2; }
   .skill-list li .bx-rgt-no { position: static; flex: 0 0 auto; margin-left: auto; padding-top: .2em; font-size: 14px; }
 }
+
+/* section logo mark: keep its aspect ratio (width/height attributes were stretching it to 190px tall) */
+.ser-log img { height: auto; }
