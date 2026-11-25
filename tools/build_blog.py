@@ -621,7 +621,7 @@ AUDIT = """
   <details><summary>Do you guarantee results?</summary><p>No one can honestly promise a sales increase. The scan and review point out real problems and what to fix first; results depend on your product, traffic and market.</p></details>
 </section>
 """
-page = head("Free Shopify Store Audit | Moses Mastery", "Free Shopify store scanner: paste your store link and see your score plus speed, mobile, SEO, trust and conversion checks on the page in seconds. No signup, no email.", url, p, OG, "website")
+page = head("Free Shopify Audit: Store, CRO & SEO Scanner | Moses Mastery", "Free Shopify audit: paste your store link and see your score plus speed, mobile, SEO, trust and conversion checks on the page in seconds. No signup, no email.", url, p, OG, "website")
 page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">
@@ -672,7 +672,7 @@ CALC = """
   </form>
 </section>
 """
-page = head("Free Shopify Revenue Calculator | Moses Mastery", "See how much more revenue your Shopify store could make from a better conversion rate. Free calculator, plus a free store review.", url, p, OG, "website")
+page = head("Free Shopify Revenue Checker & Calculator | Moses Mastery", "See how much more revenue your Shopify store could make from a better conversion rate. Free calculator, plus a free store review.", url, p, OG, "website")
 page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">
