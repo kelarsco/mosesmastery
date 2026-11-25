@@ -621,11 +621,12 @@ AUDIT = """
   <details><summary>Do you guarantee results?</summary><p>No one can honestly promise a sales increase. The scan and review point out real problems and what to fix first; results depend on your product, traffic and market.</p></details>
 </section>
 """
-page = head("Free Shopify Audit: Store, CRO & SEO Scanner | Moses Mastery", "Free Shopify audit: paste your store link and see your score plus speed, mobile, SEO, trust and conversion checks on the page in seconds. No signup, no email.", url, p, OG, "website")
+page = head("Free Ecommerce Audit: Shopify Conversion & SEO Scanner | Moses Mastery", "Free ecommerce and website conversion audit for Shopify: paste your store link and see your score plus speed, mobile, SEO, trust and conversion checks in seconds. No signup, no email.", url, p, OG, "website")
 page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">
     <section class="bl-hero"><p class="bl-kicker"><span></span>Free offer</p><h1>Scan your store and see what is <em>costing you sales.</em></h1></section>
+    <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:0"><p class="ar-quick"><strong>Free ecommerce audit.</strong> This website conversion audit checks your Shopify store for speed, mobile, SEO, trust and conversion problems, and ranks what to fix first. It reads only your public pages. No signup, no email.</p></section>
     <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem">{AUDIT}</section>
   </main>
   {footer(p)}
@@ -672,11 +673,12 @@ CALC = """
   </form>
 </section>
 """
-page = head("Free Shopify Revenue Checker & Calculator | Moses Mastery", "See how much more revenue your Shopify store could make from a better conversion rate. Free calculator, plus a free store review.", url, p, OG, "website")
+page = head("Shopify Revenue Checker: Free Conversion Calculator | Moses Mastery", "Free Shopify revenue checker: enter your traffic, conversion rate and order value to see how much more revenue a better conversion rate could add. Plus a free store review.", url, p, OG, "website")
 page += f'''<body class="bl-page">
   {header(p, "")}
   <main id="main">
     <section class="bl-hero"><p class="bl-kicker"><span></span>Free tool</p><h1>How much is your store <em>leaving on the table?</em></h1></section>
+    <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:0"><p class="ar-quick"><strong>Shopify revenue checker.</strong> Enter your monthly visitors, conversion rate and average order value to see what a small conversion lift could add in revenue. These are estimates from your own numbers, not a promise of results.</p></section>
     <section class="ar-wrap sv-wrap legal-wrap" style="padding-bottom:4rem">{CALC}</section>
   </main>
   {footer(p)}
