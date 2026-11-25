@@ -90,7 +90,7 @@ def head(title, desc, canon, p, og_img, og_type="website", extra="", lang="en", 
 '''
 
 def ld(obj): return '  <script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
-ORG = {"@type": ["Organization", "ProfessionalService"], "@id": SITE + "/#org", "name": "Moses Mastery", "url": SITE + "/", "logo": SITE + "/asset/icon-512.png", "areaServed": "Worldwide", "email": "info@mosesecom.com", "telephone": "+15818095630", "founder": {"@id": SITE + "/#person"}, "sameAs": ["https://www.linkedin.com/in/moses-daniel-89029b41b/"] + [u for _l, _s, _i, u in SOCIALS if "linkedin" not in u and "wa.me" not in u], "knowsAbout": ["Shopify store design", "Shopify conversion rate optimization", "Shopify SEO", "Meta ads for Shopify", "Google ads for Shopify", "AI automation for eCommerce"]}
+ORG = {"@type": ["Organization", "ProfessionalService"], "@id": SITE + "/#org", "name": "Moses Mastery", "url": SITE + "/", "logo": SITE + "/asset/icon-512.png", "areaServed": "Worldwide", "email": "info@mosesecom.com", "telephone": "+15818095630", "founder": {"@id": SITE + "/#person"}, "sameAs": ["https://www.linkedin.com/in/moses-daniel-89029b41b/", "https://x.com/moses_mastery", "https://www.instagram.com/moses__mastery", "https://www.producthunt.com/@mosesmastery", "https://maps.google.com/?cid=4546486134499120893"] + [u for _l, _s, _i, u in SOCIALS if "linkedin" not in u and "wa.me" not in u], "knowsAbout": ["Shopify store design", "Shopify conversion rate optimization", "Shopify SEO", "Meta ads for Shopify", "Google ads for Shopify", "AI automation for eCommerce"]}
 PERSON = {"@type": "Person", "@id": SITE + "/#person", "name": "Moses Daniel", "url": SITE + "/", "worksFor": {"@id": SITE + "/#org"}}
 TAIL = '''<script src="%sjs/config.js"></script>
 <script src="%sjs/track.js"></script>
@@ -471,12 +471,12 @@ ABOUT_BODY = """<p><strong>Moses Mastery is a Shopify growth studio led by Moses
 </ul>
 
 <h2>Where to find us</h2>
-<p>You can find Moses Mastery on <a href="https://www.linkedin.com/in/moses-daniel-89029b41b/" rel="me noopener" target="_blank">LinkedIn</a>, <a href="https://x.com/moses_mastery" rel="me noopener" target="_blank">X</a>, <a href="https://www.instagram.com/moses__mastery" rel="me noopener" target="_blank">Instagram</a> and <a href="https://www.producthunt.com/@mosesmastery" rel="me noopener" target="_blank">Product Hunt</a>.</p>
+<p>You can find Moses Mastery on <a href="https://www.linkedin.com/in/moses-daniel-89029b41b/" rel="me noopener" target="_blank">LinkedIn</a>, <a href="https://x.com/moses_mastery" rel="me noopener" target="_blank">X</a>, <a href="https://www.instagram.com/moses__mastery" rel="me noopener" target="_blank">Instagram</a> and <a href="https://www.producthunt.com/@mosesmastery" rel="me noopener" target="_blank">Product Hunt</a>. You can also find our <a href="https://maps.google.com/?cid=4546486134499120893" rel="me noopener" target="_blank">Google Business Profile</a>.</p>
 
 <h2>Talk to us</h2>
 <p>Have a store that should be growing faster? <a href="contact.html">Book a free strategy call</a>, run the <a href="audit.html">free store scan</a>, or email <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>.</p>"""
 p = ""; url = SITE + "/about.html"
-_ab_ld = ld({"@context": "https://schema.org", "@graph": [ORG, dict(PERSON, jobTitle="Founder", image=SITE + "/asset/founder.webp", sameAs=ORG["sameAs"] + ["https://www.producthunt.com/@mosesmastery"]),
+_ab_ld = ld({"@context": "https://schema.org", "@graph": [ORG, dict(PERSON, jobTitle="Founder", image=SITE + "/asset/founder.webp", sameAs=ORG["sameAs"]),
     {"@type": "AboutPage", "@id": url + "#page", "url": url, "name": "About Moses Mastery", "about": {"@id": SITE + "/#org"}, "mainEntity": {"@id": SITE + "/#person"}},
     {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}, {"@type": "ListItem", "position": 2, "name": "About", "item": url}]}]})
 pg = head("About Moses Mastery | Shopify Growth Studio", "Moses Mastery is a Shopify growth studio led by founder Moses Daniel. Who we are, what we do, who we work with and how we work.", url, p, OG, "website", _ab_ld)
