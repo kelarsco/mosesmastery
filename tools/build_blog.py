@@ -471,7 +471,7 @@ ABOUT_BODY = """<p><strong>Moses Mastery is a Shopify growth studio led by Moses
 </ul>
 
 <h2>Where to find us</h2>
-<p>You can find Moses Mastery on <a href="https://www.linkedin.com/in/moses-daniel-89029b41b/" rel="me noopener" target="_blank">LinkedIn</a>, <a href="https://x.com/moses_mastery" rel="me noopener" target="_blank">X</a>, <a href="https://www.instagram.com/moses__mastery" rel="me noopener" target="_blank">Instagram</a> and <a href="https://www.producthunt.com/@mosesmastery" rel="me noopener" target="_blank">Product Hunt</a>. You can also find our <a href="https://maps.google.com/?cid=4546486134499120893" rel="me noopener" target="_blank">Google Business Profile</a>.</p>
+<p>You can find Moses Mastery on <a href="https://www.linkedin.com/in/moses-daniel-89029b41b/" rel="me noopener" target="_blank">LinkedIn</a>, <a href="https://x.com/moses_mastery" rel="me noopener" target="_blank">X</a>, <a href="https://www.instagram.com/moses__mastery" rel="me noopener" target="_blank">Instagram</a> and <a href="https://www.producthunt.com/@mosesmastery" rel="me noopener" target="_blank">Product Hunt</a>. You can also find our <a href="https://maps.google.com/?cid=4546486134499120893" rel="me noopener" target="_blank">Google Business Profile</a>. Worked with us? We would appreciate a <a href="https://g.page/r/Cf0WDw8NXRg_EBM/review" rel="noopener" target="_blank">review on Google</a>.</p>
 
 <h2>Talk to us</h2>
 <p>Have a store that should be growing faster? <a href="contact.html">Book a free strategy call</a>, run the <a href="audit.html">free store scan</a>, or email <a href="mailto:info@mosesecom.com">info@mosesecom.com</a>.</p>"""
