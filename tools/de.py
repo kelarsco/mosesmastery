@@ -197,6 +197,11 @@ DE_PAGES = [
 <li><strong>Versand-, Steuer- und Rückgabeeinstellungen</strong>: im Merchant Center so eingerichtet, wie es Ihr Shop wirklich anbietet.</li>
 <li><strong>Abgelehnte Produkte</strong>: das von Google gemeldete Problem lesen und an der Quelle beheben, im Feed oder auf der Seite.</li>
 <li><strong>Bereitschaft für Shopping</strong>: Shop und Feed prüfen, bevor Sie Google Shopping oder Performance-Max-Kampagnen starten.</li></ul>"""),
+("Google Merchant Center einrichten: die wichtigsten Schritte", """<p>Für Shopify-Shops läuft die Einrichtung in der Regel so ab:</p><ol><li><strong>Konto anlegen.</strong> Sie erstellen das Merchant-Center-Konto mit den korrekten Unternehmensangaben und Ihrer Shop-Domain.</li>
+<li><strong>Shopify verbinden.</strong> Über den Vertriebskanal „Google &amp; YouTube“ verbinden Sie Shop und Konto, sodass Produktdaten automatisch übertragen werden.</li>
+<li><strong>Website bestätigen und beanspruchen.</strong> Google muss sehen, dass die Domain wirklich Ihnen gehört.</li>
+<li><strong>Versand, Steuern und Rückgabe hinterlegen.</strong> Die Angaben müssen mit denen auf Ihrer Website übereinstimmen.</li>
+<li><strong>Produktdaten prüfen.</strong> Titel, Bilder, Preis, Verfügbarkeit und Kennungen müssen zur Produktseite passen, bevor Sie Anzeigen schalten.</li></ol><p>Wenn Sie das nicht selbst erledigen möchten, übernehme ich die Einrichtung und prüfe das Konto danach auf Warnungen.</p>"""),
 ("Kontosperrungen und Richtlinienprobleme", "<p>Probleme im Merchant Center entstehen meist durch fehlende, unklare oder widersprüchliche Angaben: Kontaktdaten, Rückgabe- und Versandrichtlinien, ein Preis im Feed, der von der Seite abweicht, oder ein Checkout, der nicht vertrauenswürdig wirkt. Ich prüfe den Grund, den Google in Ihrem Konto anzeigt, behebe die Probleme in Shop und Feed und helfe Ihnen, einen klaren Antrag auf erneute Prüfung vorzubereiten. Google trifft die endgültige Entscheidung, deshalb kann ich weder eine Wiederfreischaltung noch die Dauer einer Prüfung versprechen.</p>"),
 ("So läuft es ab", """<ol><li><strong>Prüfung.</strong> Ich sehe mir Ihr Merchant-Center-Konto, den Feed-Status und die Shop-Seiten an, die Google liest.</li>
 <li><strong>Maßnahmenliste.</strong> Sie erhalten eine klare Liste, was nicht stimmt und was sich ändert.</li>
@@ -208,6 +213,8 @@ DE_PAGES = [
 ("Was ist das Google Merchant Center?", "Im Google Merchant Center laden Sie Ihre Produktdaten hoch, damit Ihre Produkte in kostenlosen Google-Einträgen und Shopping-Anzeigen erscheinen können. Bei Shopify-Shops wird es meist über den Kanal „Google & YouTube“ verbunden."),
 ("Warum wurde mein Merchant-Center-Konto gesperrt?", "Häufige Ursachen sind fehlende oder unklare Unternehmens- und Kontaktangaben, Lücken bei Rückgabe- oder Versandrichtlinien, Produktdaten, die nicht zur Zielseite passen, sowie Probleme bei Checkout und Vertrauen. Der genaue Grund steht in Ihrem Konto, und ihn richtig zu beheben ist das, wobei ich helfe."),
 ("Können Sie garantieren, dass mein Konto wieder freigeschaltet wird?", "Nein. Google entscheidet jede Prüfung. Ich behebe die von Google gemeldeten Probleme und helfe bei der Vorbereitung des Antrags, kann aber weder ein Ergebnis noch einen Zeitrahmen versprechen."),
+("Wie lege ich ein Merchant-Center-Konto an, und was kostet es?", "Sie legen das Konto kostenlos mit Ihrem Google-Konto an, hinterlegen Unternehmensangaben und Domain und verbinden danach Ihren Shopify-Shop. Kosten entstehen erst durch Werbung oder durch Hilfe bei Einrichtung und Fehlerbehebung."),
+("Bieten Sie laufende Betreuung für Google Shopping an?", "Ja. Die laufende Betreuung von Merchant Center, Feed und Shopping-Kampagnen ist Teil der Growth-Marketing-Pläne. Das Werbebudget zahlen Sie direkt an Google."),
 ("Brauche ich das Merchant Center für Google-Shopping-Anzeigen?", "Ja. Shopping- und viele Performance-Max-Kampagnen nutzen die Produktdaten im Merchant Center, ein sauberer Feed kommt also vor jeder Werbeausgabe."),
 ],
 "related": [],
